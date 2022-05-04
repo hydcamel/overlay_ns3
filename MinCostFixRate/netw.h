@@ -17,6 +17,7 @@ public:
     void read_routing_map(std::string filename);
 
     std::vector<int> src, dest, w, bw, delay;
+    std::map<std::pair<int, int>, int> edges;
     std::vector<std::vector<bool>> adj_mat;
     std::vector<int> loc_overlay_nodes;
     uint32_t n_nodes,n_edges;

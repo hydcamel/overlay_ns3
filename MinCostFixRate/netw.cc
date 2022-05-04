@@ -25,6 +25,11 @@ netw::netw(std::string filename)
 				if (line.substr(0, 5).compare("NODES") == 0)
 				{
 					iss >> temp >> n_nodes;
+					adj_mat.resize(n_nodes);
+					for (uint32_t i = 0; i < n_nodes; i++)
+					{
+						adj_mat[i].resize(n_edges, false);
+					}
 				}
 				else if (line.substr(0, 5).compare("EDGES") == 0)
 				{
@@ -42,6 +47,8 @@ netw::netw(std::string filename)
 				else if (line.substr(0, 5).compare("edge_") == 0)
 				{
 					iss >> temp >> src[idx] >> dest[idx] >> w[idx] >> bw[idx] >> delay[idx];
+					adj_mat[src[idx]][dest[idx]] = true;
+					adj_mat[dest[idx]][src[idx]] = true;
 					++idx;
 				}
 			}
