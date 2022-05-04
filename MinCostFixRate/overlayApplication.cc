@@ -71,11 +71,24 @@ namespace ns3
     overlayApplication::overlayApplication()
     {
         NS_LOG_FUNCTION(this);
-        m_sent = 0;
+        m_sent.resize(1, 0);
         // m_socket = 0;
         m_peerPort = 9;
         recv_socket = 0;
         m_sendEvent = EventId();
+    }
+    overlayApplication::overlayApplication(netw meta)
+    {
+        NS_LOG_FUNCTION(this);
+        m_sent.resize(meta.n_nodes, 0);
+        m_count.resize(meta.n_nodes, 0);
+        tab_socket.resize(meta.n_nodes, 0);
+        tab_peerAddress.resize(meta.n_nodes);
+        // m_socket = 0;
+        m_peerPort = 9;
+        recv_socket = 0;
+        m_sendEvent = EventId();
+
     }
 
     overlayApplication::~overlayApplication()

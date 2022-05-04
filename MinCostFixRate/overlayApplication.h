@@ -9,6 +9,7 @@
 //#include "SDtag.h"
 #include <vector>
 #include "utils.h"
+#include "netw.h"
 
 namespace ns3
 {
@@ -22,6 +23,7 @@ namespace ns3
         static TypeId GetTypeId(void);
 
         overlayApplication();
+        overlayApplication(netw meta);
 
         virtual ~overlayApplication();
 
@@ -45,11 +47,11 @@ namespace ns3
 
         void HandleRead(Ptr<Socket> socket);
 
-        uint32_t m_count;
+        std::vector<uint32_t> m_count;
         Time m_interval;
         uint32_t m_size;
 
-        uint32_t m_sent;
+        std::vector<uint32_t> m_sent;
         std::vector<Ptr<Socket>> tab_socket;
         Ptr<Socket> recv_socket;
         std::vector<Address> tab_peerAddress;

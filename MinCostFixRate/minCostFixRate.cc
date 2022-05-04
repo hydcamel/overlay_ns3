@@ -52,10 +52,9 @@ int main(int argc, char *argv[])
     {
         links[i].SetChannelAttribute("Delay", StringValue(std::to_string(netw_meta.delay[i])));
         links[i].SetDeviceAttribute("DataRate", StringValue(std::to_string(netw_meta.bw[i])));
-        NetDevices[i] = links[i].Install( underlayNodes.Get(netw_meta.src[i]), underlayNodes.Get(netw_meta.dest[i]) );
+        NetDevices[i] = links[i].Install( underlayNodes.Get(netw_meta.edges_vec[i].first), underlayNodes.Get(netw_meta.edges_vec[i].second) );
         address.Assign(NetDevices[i]);
         address.NewNetwork();
-        
     }
 
     Ipv4GlobalRoutingHelper::PopulateRoutingTables ();

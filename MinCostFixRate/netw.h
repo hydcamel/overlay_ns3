@@ -16,8 +16,10 @@ public:
     ~netw();
     void read_routing_map(std::string filename);
 
-    std::vector<int> src, dest, w, bw, delay;
+    std::vector<int> w, bw, delay;
+    //std::vector<int> src, dest;
     std::map<std::pair<int, int>, int> edges;
+    std::vector<std::pair<int, int>> edges_vec;
     std::vector<std::vector<bool>> adj_mat;
     std::vector<int> loc_overlay_nodes;
     uint32_t n_nodes,n_edges;
