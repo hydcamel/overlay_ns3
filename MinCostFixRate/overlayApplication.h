@@ -22,8 +22,8 @@ namespace ns3
     public:
         static TypeId GetTypeId(void);
 
-        overlayApplication();
-        overlayApplication(netw meta);
+        overlayApplication(int id);
+        overlayApplication(int id, netw meta);
 
         virtual ~overlayApplication();
 
@@ -34,6 +34,8 @@ namespace ns3
 
         uint32_t GetDataSize(void) const;
         uint16_t GetPort(void) const;
+        bool is_overlay;
+        int self_id;
 
     protected:
         virtual void DoDispose(void);

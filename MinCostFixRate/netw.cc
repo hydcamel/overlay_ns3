@@ -15,7 +15,9 @@ netw::netw(std::string filename)
     std::string line;
     int idx = 0;
 	int src, dest;
-
+	/**
+	 * Prepare underlay information
+	 * */
 	if (infile.is_open())
 	{
 		while (getline(infile, line))
@@ -60,6 +62,21 @@ netw::netw(std::string filename)
 				}
 			}
 		}
+	}
+	/**
+	 * Prepare overlay information
+	 * */
+	loc_overlay_nodes.resize(n_nodes, false);
+	std::string file_overlay_nodes = "overlay.txt";
+	std::ifstream infile_onodes(file_overlay_nodes);
+	int n_onodes, idx;
+	getline(infile_onodes, line);
+	std::istringstream iss(line);
+	iss >> n_onodes >> temp;
+	for (int i = 0; i < n_onodes; i++)
+	{
+		iss >> idx;
+		loc_overlay_nodes[idx] = true;
 	}
 }
 

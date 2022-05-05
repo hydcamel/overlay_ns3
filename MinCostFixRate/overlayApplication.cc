@@ -68,7 +68,7 @@ namespace ns3
         return tid;
     }
 
-    overlayApplication::overlayApplication()
+    overlayApplication::overlayApplication(int id)
     {
         NS_LOG_FUNCTION(this);
         m_sent.resize(1, 0);
@@ -76,8 +76,9 @@ namespace ns3
         m_peerPort = 9;
         recv_socket = 0;
         m_sendEvent = EventId();
+        self_id = id;
     }
-    overlayApplication::overlayApplication(netw meta)
+    overlayApplication::overlayApplication(int id, netw meta)
     {
         NS_LOG_FUNCTION(this);
         m_sent.resize(meta.n_nodes, 0);
@@ -88,7 +89,8 @@ namespace ns3
         m_peerPort = 9;
         recv_socket = 0;
         m_sendEvent = EventId();
-
+        self_id = id;
+        is_overlay = meta.loc_overlay_nodes[id];
     }
 
     overlayApplication::~overlayApplication()
