@@ -11,10 +11,11 @@ namespace ns3
 class netw
 {
 public:
-    netw();
     netw(std::string filename);
     ~netw();
     void read_routing_map(std::string filename);
+    void read_underlay(std::string filename);
+    void read_overlay();
 
     std::vector<int> w, bw, delay;
     //std::vector<int> src, dest;
@@ -26,7 +27,7 @@ public:
     std::map<std::string, std::vector<int>> routing_map;
 };
 
-
+//extern netw netw_meta;
 
 }
 

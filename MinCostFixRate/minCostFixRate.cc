@@ -16,6 +16,8 @@
 // std::globalInfo meta;
 
 using namespace ns3;
+// extern netw netw_meta;
+// netw netw_meta;
 
 NS_LOG_COMPONENT_DEFINE("p2pTestV1");
 
@@ -27,7 +29,9 @@ int main(int argc, char *argv[])
 
     std::string newt_filename {"/vagrant/Vagrant_shared_folder/Data/toy_one_junction.graph"};
     
-    netw netw_meta = netw(newt_filename);
+    netw netw_meta(newt_filename);
+    // netw_meta.read_underlay(newt_filename);
+    // netw_meta.read_overlay();
 
     CommandLine cmd;
     cmd.Parse (argc, argv);

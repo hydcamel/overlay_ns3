@@ -13,7 +13,8 @@
 
 namespace ns3
 {
-
+    
+    //extern netw netw_meta;
     class Socket;
     class Packet;
 
@@ -22,20 +23,26 @@ namespace ns3
     public:
         static TypeId GetTypeId(void);
 
-        overlayApplication(int id);
-        overlayApplication(int id, netw meta);
+        // overlayApplication(int id);
+        overlayApplication();
 
         virtual ~overlayApplication();
+        void InitApp(netw & meta, uint32_t localId);
 
         void SetRemote(Address ip, uint16_t idx);
         void AddRemote(Address ip);
+        
+        void SetLocalID(uint32_t localID);
+        uint16_t GetLocalID(void) const;
+        void SetCount(uint32_t MaxPackets);
+        void SetInterval(uint32_t idx, uint32_t Interval);
+        //std::vector<uint32_t> GetCount(void) const;
 
         void SetDataSize(uint32_t dataSize);
 
         uint32_t GetDataSize(void) const;
         uint16_t GetPort(void) const;
         bool is_overlay;
-        int self_id;
 
     protected:
         virtual void DoDispose(void);
@@ -50,7 +57,7 @@ namespace ns3
         void HandleRead(Ptr<Socket> socket);
 
         std::vector<uint32_t> m_count;
-        Time m_interval;
+        std::vector<Time> m_interval;
         uint32_t m_size;
 
         std::vector<uint32_t> m_sent;
@@ -60,6 +67,7 @@ namespace ns3
         uint16_t m_peerPort;
         uint16_t ListenPort;
         EventId m_sendEvent;
+        uint16_t m_local_ID;
 
         TracedCallback<Ptr<const Packet>> m_txTrace;
 

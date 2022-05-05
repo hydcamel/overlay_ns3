@@ -7,10 +7,19 @@
 namespace ns3
 {
 
+//extern netw netw_meta;
+
+//netw netw_meta;
 
 netw::netw(std::string filename)
 {
-    std::ifstream infile(filename);
+	read_underlay(filename);
+    read_overlay();
+}
+
+void netw::read_underlay(std::string filename)
+{
+	std::ifstream infile(filename);
     std::string temp;
     std::string line;
     int idx = 0;
@@ -63,17 +72,23 @@ netw::netw(std::string filename)
 			}
 		}
 	}
+}
+
+void netw::read_overlay()
+{
 	/**
 	 * Prepare overlay information
 	 * */
 	loc_overlay_nodes.resize(n_nodes, false);
 	std::string file_overlay_nodes = "overlay.txt";
 	std::ifstream infile_onodes(file_overlay_nodes);
-	int n_onodes, idx;
+	std::string temp;
+    std::string line;
+	int n_onodes;
 	getline(infile_onodes, line);
 	std::istringstream iss(line);
 	iss >> n_onodes >> temp;
-	for (int i = 0; i < n_onodes; i++)
+	for (int idx = 0; idx < n_onodes; idx++)
 	{
 		iss >> idx;
 		loc_overlay_nodes[idx] = true;
