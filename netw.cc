@@ -15,7 +15,7 @@ netw::netw(std::string filename)
 {
 	read_underlay(filename);
     read_overlay();
-	read_routing_map("../route_table.txt");
+	read_routing_map("route_table.txt");
 }
 
 void netw::read_underlay(std::string filename)
@@ -89,6 +89,11 @@ void netw::read_overlay()
 	getline(infile_onodes, line);
 	std::istringstream iss(line);
 	iss >> n_onodes >> temp;
+	if (infile_onodes.is_open())
+	{
+		std::cout << "overlay_file: " << file_overlay_nodes << std::endl;
+	}
+	
 	for (int idx = 0; idx < n_onodes; idx++)
 	{
 		iss >> idx;
@@ -113,6 +118,7 @@ void netw::read_routing_map(std::string filename)
 
 	if (infile.is_open())
 	{
+		std::cout << "route_table: " << filename << std::endl;
 		while (getline(infile, line))
 		{
 			std::istringstream iss(line);

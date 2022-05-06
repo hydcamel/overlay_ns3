@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     LogComponentEnable ("p2pTestV1", LOG_LEVEL_INFO);
     LogComponentEnable ("overlayApplication", LOG_LEVEL_INFO);
 
-    std::string newt_filename {"/vagrant/Vagrant_shared_folder/Data/toy_one_junction.graph"};
+    std::string newt_filename {"toy_one_junction.graph"};
     
     netw netw_meta(newt_filename);
     // netw_meta.read_underlay(newt_filename);
