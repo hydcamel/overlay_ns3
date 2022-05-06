@@ -41,7 +41,7 @@ void netw::read_underlay(std::string filename)
 					adj_mat.resize(n_nodes);
 					for (uint32_t i = 0; i < n_nodes; i++)
 					{
-						adj_mat[i].resize(n_edges, false);
+						adj_mat[i].resize(n_nodes, false);
 					}
 				}
 				else if (line.substr(0, 5).compare("EDGES") == 0)
