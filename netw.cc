@@ -23,7 +23,7 @@ void netw::read_underlay(std::string filename)
 	std::ifstream infile(filename);
     std::string temp;
     std::string line;
-    int idx = 0;
+    int idx = 0, idx_true = 0;
 	int src, dest;
 	/**
 	 * Prepare underlay information
@@ -50,6 +50,7 @@ void netw::read_underlay(std::string filename)
 					iss >> temp >> n_edges;
 					/* src.resize(n_edges);
 					dest.resize(n_edges); */
+					n_edges /= 2;
 					w.resize(n_edges);
 					bw.resize(n_edges);
 					delay.resize(n_edges);
@@ -61,15 +62,20 @@ void netw::read_underlay(std::string filename)
 				}
 				else if (line.substr(0, 5).compare("edge_") == 0)
 				{
-					/* iss >> temp >> src[idx] >> dest[idx] >> w[idx] >> bw[idx] >> delay[idx];
-					adj_mat[src[idx]][dest[idx]] = true;
-					adj_mat[dest[idx]][src[idx]] = true; */
-					iss >> temp >> src >> dest >> w[idx] >> bw[idx] >> delay[idx];
-					edges.insert( std::pair<std::pair<int, int>, int>(std::pair<int, int>(src, dest), idx) );
-					edges_vec[idx] = std::pair<int, int> (src, dest);
-					adj_mat[src][dest] = true;
-					adj_mat[dest][src] = true;
-					++idx;
+					if (idx_true % 2 == 0)
+					{
+						/* iss >> temp >> src[idx] >> dest[idx] >> w[idx] >> bw[idx] >> delay[idx];
+						adj_mat[src[idx]][dest[idx]] = true;
+						adj_mat[dest[idx]][src[idx]] = true; */
+						iss >> temp >> src >> dest >> w[idx] >> bw[idx] >> delay[idx];
+						edges.insert( std::pair<std::string, int>(std::to_string(src) + ' ' + std::to_string(dest), idx) );
+						//edges.insert( std::pair<std::pair<int, int>, int>(std::pair<int, int>(src, dest), idx) );
+						edges_vec[idx] = std::pair<int, int> (src, dest);
+						adj_mat[src][dest] = true;
+						adj_mat[dest][src] = true;
+						++idx;
+					}
+					++idx_true;
 				}
 			}
 		}

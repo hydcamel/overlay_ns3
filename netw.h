@@ -19,7 +19,8 @@ public:
 
     std::vector<int> w, bw, delay;
     //std::vector<int> src, dest;
-    std::map<std::pair<int, int>, int> edges;
+    //std::map<std::pair<int, int>, int> edges;
+    std::map<std::string, int> edges;
     std::vector<std::pair<int, int>> edges_vec;
     std::vector<std::vector<bool>> adj_mat;
     std::vector<bool> loc_overlay_nodes;

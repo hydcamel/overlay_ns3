@@ -51,12 +51,27 @@ int main(int argc, char *argv[])
     internet.Install(underlayNodes);
     std::vector<PointToPointHelper> links(netw_meta.delay.size());
     std::vector<NetDeviceContainer> NetDevices(netw_meta.delay.size());
+    std::vector<Ptr<Ipv4>> linkIpv4(2);
+    std::vector<Ipv4InterfaceAddress> linkIpv4Addr(2);
+    std::vector<uint32_t> n_devices_perNode(2);
     
     for (uint32_t i = 0; i < links.size(); i++)
     {
         links[i].SetChannelAttribute("Delay", StringValue(std::to_string(netw_meta.delay[i])));
         links[i].SetDeviceAttribute("DataRate", StringValue(std::to_string(netw_meta.bw[i])));
         NetDevices[i] = links[i].Install( underlayNodes.Get(netw_meta.edges_vec[i].first), underlayNodes.Get(netw_meta.edges_vec[i].second) );
+
+        for (int k = 0; k < 2; k++)
+        {
+            std::cout << "Node ID = " << NetDevices[i].Get(k)->GetNode()->GetId() << "; ";
+            linkIpv4[k] = NetDevices[i].Get(k)->GetNode()->GetObject<Ipv4> ();
+            n_devices_perNode[k] = NetDevices[i].Get(k)->GetNode()->GetNDevices();
+            linkIpv4Addr[k] = linkIpv4[k]->GetAddress( n_devices_perNode[k]-1, 0 );
+            std::cout << "Address = " << linkIpv4Addr[k].GetLocal() << std::endl;
+        }
+        
+
+
         address.Assign(NetDevices[i]);
         address.NewNetwork();
     }
