@@ -33,8 +33,8 @@ int main(int argc, char *argv[])
     // netw_meta.read_underlay(newt_filename);
     // netw_meta.read_overlay();
 
-    CommandLine cmd;
-    cmd.Parse (argc, argv);
+    // CommandLine cmd;
+    // cmd.Parse (argc, argv);
     //LogComponentEnable ("utils", LOG_LEVEL_INFO);
     // Nodes creation
     uint32_t n_overlay = 2;
