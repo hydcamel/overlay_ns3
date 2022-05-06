@@ -15,6 +15,7 @@ netw::netw(std::string filename)
 {
 	read_underlay(filename);
     read_overlay();
+	read_routing_map("../route_table.txt");
 }
 
 void netw::read_underlay(std::string filename)
