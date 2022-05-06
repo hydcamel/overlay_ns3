@@ -15,7 +15,7 @@ netw::netw(std::string filename)
 {
 	read_underlay(filename);
     read_overlay();
-	read_routing_map("route_table.txt");
+	read_routing_map("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/route_table.txt");
 }
 
 void netw::read_underlay(std::string filename)
@@ -30,6 +30,7 @@ void netw::read_underlay(std::string filename)
 	 * */
 	if (infile.is_open())
 	{
+		std::cout << "underlay_file: " << filename << std::endl;
 		while (getline(infile, line))
 		{
 			if (!line.empty())
@@ -81,7 +82,7 @@ void netw::read_overlay()
 	 * Prepare overlay information
 	 * */
 	loc_overlay_nodes.resize(n_nodes, false);
-	std::string file_overlay_nodes = "overlay.txt";
+	std::string file_overlay_nodes = "/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/overlay.txt";
 	std::ifstream infile_onodes(file_overlay_nodes);
 	std::string temp;
     std::string line;
