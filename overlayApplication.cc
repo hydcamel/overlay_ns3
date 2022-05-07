@@ -89,18 +89,20 @@ namespace ns3
         NS_LOG_FUNCTION(this);
     }
 
-    void overlayApplication::InitApp(netw & meta, uint32_t localId)
+    void overlayApplication::InitApp(netw* netw_meta, uint32_t localId)
     {
-        m_sent.resize(meta.n_nodes, 0);
+        meta = netw_meta;
+        m_sent.resize(meta->n_nodes, 0);
         //m_count.resize(meta.n_nodes, 0);
-        tab_socket.resize(meta.n_nodes, 0);
-        tab_peerAddress.resize(meta.n_nodes);
-        m_interval.resize(meta.n_nodes);
+        tab_socket.resize(meta->n_nodes, 0);
+        //tab_peerAddress.resize(meta.n_nodes);
+        m_interval.resize(meta->n_nodes);
         // m_socket = 0;
         m_peerPort = 9;
         recv_socket = 0;
         m_sendEvent = EventId();
-        is_overlay = meta.loc_overlay_nodes[GetLocalID()];
+        SetLocalID(localId);
+        is_overlay = meta->loc_overlay_nodes[localId];
     }
 
     overlayApplication::~overlayApplication()
@@ -150,7 +152,41 @@ namespace ns3
         NS_LOG_FUNCTION(this);
         return m_peerPort;
     }
-    void overlayApplication::SetRemote(Address ip, uint16_t idx)
+    void overlayApplication::SetSocket(Address ip, uint32_t idx)
+    {
+        NS_LOG_FUNCTION(this);
+        if (tab_socket[idx] == 0)
+        {
+            TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
+            tab_socket[idx] = Socket::CreateSocket(GetNode(), tid);
+            if (Ipv4Address::IsMatchingType(ip) == true)
+            {
+                if (tab_socket.back()->Bind() == -1)
+                {
+                    NS_FATAL_ERROR("Failed to bind socket");
+                }
+                tab_socket.back()->Connect(InetSocketAddress(Ipv4Address::ConvertFrom(ip), m_peerPort));
+            }
+            else if (InetSocketAddress::IsMatchingType(ip) == true)
+            {
+                if (tab_socket.back()->Bind() == -1)
+                {
+                    NS_FATAL_ERROR("Failed to bind socket");
+                }
+                tab_socket.back()->Connect(ip);
+            }
+            else
+            {
+                NS_ASSERT_MSG(false, "Incompatible address type: " << tab_peerAddress[i]);
+            }
+            tab_socket.back()->SetAllowBroadcast(false);
+        }
+        else
+        {
+            std::cout << "create an existing socket" << std::endl;
+        }
+    }
+    /* void overlayApplication::SetRemote(Address ip, uint16_t idx)
     {
         if (tab_peerAddress.size() - 1 < idx)
         {
@@ -162,7 +198,7 @@ namespace ns3
     void overlayApplication::AddRemote(Address ip)
     {
         tab_peerAddress.emplace_back(ip);
-    }
+    } */
     void overlayApplication::StartApplication(void)
     {
         NS_LOG_FUNCTION(this);
@@ -172,29 +208,9 @@ namespace ns3
         if (tab_socket.size() == 0)
         {
             TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
-            for (uint16_t i = 0; i < tab_peerAddress.size(); i++)
+            for (uint16_t i = 0; i < tab_socket.size(); i++)
             {
-                tab_socket.emplace_back(Socket::CreateSocket(GetNode(), tid));
-                if (Ipv4Address::IsMatchingType(tab_peerAddress[i]) == true)
-                {
-                    if (tab_socket.back()->Bind() == -1)
-                    {
-                        NS_FATAL_ERROR("Failed to bind socket");
-                    }
-                    tab_socket.back()->Connect(InetSocketAddress(Ipv4Address::ConvertFrom(tab_peerAddress[i]), m_peerPort));
-                }
-                else if (InetSocketAddress::IsMatchingType(tab_peerAddress[i]) == true)
-                {
-                    if (tab_socket.back()->Bind() == -1)
-                    {
-                        NS_FATAL_ERROR("Failed to bind socket");
-                    }
-                    tab_socket.back()->Connect(tab_peerAddress[i]);
-                }
-                else
-                {
-                    NS_ASSERT_MSG(false, "Incompatible address type: " << tab_peerAddress[i]);
-                }
+                
                 tab_socket.back()->SetAllowBroadcast(false);
                 ScheduleTransmit(Seconds(0.), i);
             }
@@ -266,10 +282,10 @@ namespace ns3
         // call to the trace sinks before the packet is actually sent,
         // so that tags added to the packet can be sent as well
         m_txTrace(p);
-        if (Ipv4Address::IsMatchingType(tab_peerAddress[idx]))
+        /* if (Ipv4Address::IsMatchingType(tab_peerAddress[idx]))
         {
             m_txTraceWithAddresses(p, localAddress, InetSocketAddress(Ipv4Address::ConvertFrom(tab_peerAddress[idx]), m_peerPort));
-        }
+        } */
         SDtag tagToSend;
         tagToSend.SetSourceID(0);
         tagToSend.SetDestID(1);
@@ -282,14 +298,14 @@ namespace ns3
         tab_socket[idx]->Send(p);
         ++m_sent[idx];
 
-        if (Ipv4Address::IsMatchingType(tab_peerAddress[idx]))
+        /* if (Ipv4Address::IsMatchingType(tab_peerAddress[idx]))
         {
             NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " client sent " << m_size << " bytes to " << Ipv4Address::ConvertFrom(tab_peerAddress[idx]) << " port " << m_peerPort);
         }
         else if (InetSocketAddress::IsMatchingType(tab_peerAddress[idx]))
         {
             NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " client sent " << m_size << " bytes to " << InetSocketAddress::ConvertFrom(tab_peerAddress[idx]).GetIpv4() << " port " << InetSocketAddress::ConvertFrom(tab_peerAddress[idx]).GetPort());
-        }
+        } */
 
         if (m_sent[idx] < m_count[idx])
         {

@@ -27,10 +27,11 @@ namespace ns3
         overlayApplication();
 
         virtual ~overlayApplication();
-        void InitApp(netw & meta, uint32_t localId);
+        void InitApp(netw* meta, uint32_t localId);
 
         void SetRemote(Address ip, uint16_t idx);
         void AddRemote(Address ip);
+        void SetSocket(Address ip, uint32_t idx);
         
         void SetLocalID(uint32_t localID);
         uint16_t GetLocalID(void) const;
@@ -63,7 +64,8 @@ namespace ns3
         std::vector<uint32_t> m_sent;
         std::vector<Ptr<Socket>> tab_socket;
         Ptr<Socket> recv_socket;
-        std::vector<Address> tab_peerAddress;
+        netw* meta;
+        //std::vector<Address> tab_peerAddress;
         uint16_t m_peerPort;
         uint16_t ListenPort;
         EventId m_sendEvent;
