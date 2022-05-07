@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
     std::vector<Ptr<Ipv4>> linkIpv4(2);
     std::vector<Ipv4InterfaceAddress> linkIpv4Addr(2);
     std::vector<uint32_t> n_devices_perNode(2);
+    std::vector<Ptr<Node>> endnodes(2);
     
     for (uint32_t i = 0; i < links.size(); i++)
     {
@@ -80,7 +81,17 @@ int main(int argc, char *argv[])
         address.Assign(NetDevices[i]);
         address.NewNetwork();
 
+        endnodes[0] = underlayNodes.Get(netw_meta.edges_vec[i].first);
+        endnodes[1] = underlayNodes.Get(netw_meta.edges_vec[i].second);
         for (int k = 0; k < 2; k++)
+        {
+            linkIpv4[k] = endnodes[k]->GetObject<Ipv4> ();
+            n_devices_perNode[k] = endnodes[k]->GetNDevices();
+            linkIpv4Addr[k] = linkIpv4[k]->GetAddress( n_devices_perNode[k]-1, 0 );
+        }
+        vec_app[netw_meta.edges_vec[i].first]->SetSocket( linkIpv4Addr[1].GetLocal(), netw_meta.edges_vec[i].second );
+        vec_app[netw_meta.edges_vec[i].second]->SetSocket( linkIpv4Addr[0].GetLocal(), netw_meta.edges_vec[i].first );
+        /* for (int k = 0; k < 2; k++)
         {
             std::cout << "Node ID = " << NetDevices[i].Get(k)->GetNode()->GetId() << "; ";
             linkIpv4[k] = NetDevices[i].Get(k)->GetNode()->GetObject<Ipv4> ();
@@ -91,8 +102,7 @@ int main(int argc, char *argv[])
             {
                 std::cout << "device ID: " << l << " with address: " << linkIpv4[k]->GetAddress( l, 0 ).GetLocal() << std::endl;
             }
-            
-        }
+        } */
     }
 
     Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
@@ -104,26 +114,6 @@ int main(int argc, char *argv[])
 
     
     overlayNodes.Create(n_overlay);
-
-
-    // Device setup
-    PointToPointHelper p2pNode1;
-    p2pNode1.SetDeviceAttribute("DataRate", StringValue("10Mbps"));
-    p2pNode1.SetChannelAttribute("Delay", StringValue("0ms"));
-    NetDeviceContainer netDevLan1;
-    netDevLan1 = p2pNode1.Install(overlayNodes.Get(0), underlayNodes.Get(0));
-
-    PointToPointHelper p2pNode2;
-    p2pNode2.SetDeviceAttribute("DataRate", StringValue("10Mbps"));
-    p2pNode2.SetChannelAttribute("Delay", StringValue("0ms"));
-    NetDeviceContainer netDevLan2;
-    netDevLan2 = p2pNode2.Install(overlayNodes.Get(1), underlayNodes.Get(1));
-
-    PointToPointHelper p2pBridge;
-    p2pBridge.SetDeviceAttribute("DataRate", StringValue("10Mbps"));
-    p2pBridge.SetChannelAttribute("Delay", StringValue("5ms"));
-    NetDeviceContainer netDevBridge;
-    netDevBridge = p2pBridge.Install(underlayNodes.Get(1), underlayNodes.Get(0));
 
     // IP address setup
     // InternetStackHelper internet;
