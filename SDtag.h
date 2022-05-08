@@ -24,6 +24,7 @@ public:
     void SetDestID (uint8_t value);
     uint8_t GetDestID (void) const;
     void SetCurrentHop (uint8_t value);
+    void AddCurrentHop (void);
     uint8_t GetCurrentHop (void) const;
 private:
     uint8_t SourceID;

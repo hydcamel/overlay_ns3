@@ -71,6 +71,10 @@ void SDtag::SetCurrentHop (uint8_t value)
 {
     currentHop = value;
 }
+void SDtag::AddCurrentHop (void)
+{
+    currentHop += 1;
+}
 uint8_t SDtag::GetCurrentHop (void) const
 {
     return currentHop;

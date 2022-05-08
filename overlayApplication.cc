@@ -272,14 +272,10 @@ namespace ns3
             else
             {
                 assert( routes[tagPktRecv.GetCurrentHop()] == GetLocalID() );
-                packet->RemoveAllPacketTags();
-                packet->RemoveAllByteTags();
-                 
+                tagPktRecv.AddCurrentHop();
+                packet->ReplacePacketTag( tagPktRecv );
+                tab_socket[routes[tagPktRecv.GetCurrentHop()]]->Send(packet);
             }
-            
-
-            
-
             // NS_LOG_LOGIC("Echoing packet");
             // socket->SendTo(packet, 0, from);
 
