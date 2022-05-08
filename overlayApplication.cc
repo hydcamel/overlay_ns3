@@ -226,18 +226,6 @@ namespace ns3
             }
             
         }
-        
-
-        if (tab_socket.size() == 0)
-        {
-            TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
-            for (uint16_t i = 0; i < tab_socket.size(); i++)
-            {
-                
-                tab_socket.back()->SetAllowBroadcast(false);
-                ScheduleTransmit(Seconds(0.), i);
-            }
-        }
         /**
          * Set up socket for forwarding
          **/
@@ -272,11 +260,25 @@ namespace ns3
 
             SDtag tagPktRecv;
             packet->PeekPacketTag(tagPktRecv);
+            std::vector<int>& routes = meta->routing_map[std::to_string(tagPktRecv.GetSourceID()) + " " + std::to_string(tagPktRecv.GetDestID())];
             // packet->PrintPacketTags(std::cout);
-            tagPktRecv.Print(std::cout);
+            // tagPktRecv.Print(std::cout);
+            if (tagPktRecv.GetDestID() == GetLocalID())
+            {
+                std::cout << "Node ID: " << GetLocalID() << ": A packet received from " << tagPktRecv.GetSourceID() << std::endl;
+                packet->RemoveAllPacketTags();
+                packet->RemoveAllByteTags();
+            }
+            else
+            {
+                assert( routes[tagPktRecv.GetCurrentHop()] == GetLocalID() );
+                packet->RemoveAllPacketTags();
+                packet->RemoveAllByteTags();
+                 
+            }
+            
 
-            packet->RemoveAllPacketTags();
-            packet->RemoveAllByteTags();
+            
 
             // NS_LOG_LOGIC("Echoing packet");
             // socket->SendTo(packet, 0, from);
