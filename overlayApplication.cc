@@ -8,6 +8,7 @@
 #include "ns3/socket-factory.h"
 #include "ns3/packet.h"
 #include "ns3/uinteger.h"
+#include "ns3/random-variable-stream.h"
 #include "ns3/trace-source-accessor.h"
 #include "SDtag.h"
 #include <assert.h>
@@ -142,7 +143,7 @@ namespace ns3
         NS_LOG_FUNCTION(this);
         m_count.assign(tab_socket.size(), MaxPackets);
     }
-    void overlayApplication::SetInterval(uint32_t idx, uint32_t Interval)
+    void overlayApplication::SetInterval(uint32_t idx, float Interval)
     {
         NS_LOG_FUNCTION(this);
         m_interval[idx] = Time( std::to_string(Interval) + 's' );
@@ -205,6 +206,28 @@ namespace ns3
         /**
          * Set up socket for initiating flows
          **/
+        std::map<std::string, float>::iterator it;
+        if (meta->loc_overlay_nodes[GetLocalID()] == true)
+        {
+            for (uint32_t i = 0; i < meta->n_nodes; i++)
+            {
+                if (meta->loc_overlay_nodes[i] == true)
+                {
+                    it = meta->overlay_demands.find( std::to_string(GetLocalID()) + " " + std::to_string(i) );
+                    if (it == meta->overlay_demands.end()) continue; // no such demands
+                    // set interval
+                    SetInterval(i, float(IPPktSize*8) / it->second);
+                    tab_socket[i]->SetAllowBroadcast(false);
+                    Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable> ();
+                    Time random_offset = MicroSeconds (rand->GetValue(50,200));
+                    ScheduleTransmit(random_offset, i);
+                }
+                
+            }
+            
+        }
+        
+
         if (tab_socket.size() == 0)
         {
             TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");

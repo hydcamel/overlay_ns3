@@ -28,8 +28,9 @@ int main(int argc, char *argv[])
     LogComponentEnable ("overlayApplication", LOG_LEVEL_INFO);
 
     std::string newt_filename {"/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/toy_one_junction.graph"};
+    std::string demands_file {"/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/tunnel_demands.txt"};
     
-    netw netw_meta(newt_filename);
+    netw netw_meta(newt_filename, demands_file);
     // netw_meta.read_underlay(newt_filename);
     // netw_meta.read_overlay();
 
@@ -59,7 +60,7 @@ int main(int argc, char *argv[])
     fact.Set ("RemotePort", UintegerValue (9));
     fact.Set ("ListenPort", UintegerValue (9));
     fact.Set ("MaxPackets", UintegerValue (1));
-    fact.Set ("PacketSize", UintegerValue (1024));
+    fact.Set ("PacketSize", UintegerValue (AppPktSize));
     for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
     {
         vec_app[i] = fact.Create <overlayApplication> ();
@@ -106,8 +107,8 @@ int main(int argc, char *argv[])
     }
 
     Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
-    Ptr<OutputStreamWrapper> routingStream = Create<OutputStreamWrapper>(&std::cout);
-    Ipv4RoutingHelper::PrintRoutingTableAllAt( Seconds(0), routingStream, Time::Unit::S);
+    /* Ptr<OutputStreamWrapper> routingStream = Create<OutputStreamWrapper>(&std::cout);
+    Ipv4RoutingHelper::PrintRoutingTableAllAt( Seconds(0), routingStream, Time::Unit::S); */
 
 
     NodeContainer overlayNodes;

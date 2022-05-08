@@ -11,6 +11,9 @@
 #include "utils.h"
 #include "netw.h"
 
+#define AppPktSize 1024
+#define IPPktSize 1052
+
 namespace ns3
 {
     
@@ -36,7 +39,7 @@ namespace ns3
         void SetLocalID(uint32_t localID);
         uint16_t GetLocalID(void) const;
         void SetCount(uint32_t MaxPackets);
-        void SetInterval(uint32_t idx, uint32_t Interval);
+        void SetInterval(uint32_t idx, float Interval);
         //std::vector<uint32_t> GetCount(void) const;
 
         void SetDataSize(uint32_t dataSize);

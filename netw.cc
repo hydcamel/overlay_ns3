@@ -11,11 +11,12 @@ namespace ns3
 
 //netw netw_meta;
 
-netw::netw(std::string filename)
+netw::netw(std::string filename, std::string demands_file)
 {
 	read_underlay(filename);
     read_overlay();
 	read_routing_map("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/route_table.txt");
+	read_demands(demands_file);
 }
 
 void netw::read_underlay(std::string filename)
@@ -138,6 +139,21 @@ void netw::read_routing_map(std::string filename)
 			}
 			routing_map.insert( std::pair<std::string, std::vector<int>>(key, val) );
 		}
+	}
+}
+
+void netw::read_demands(std::string filename)
+{
+	std::ifstream infile(filename);
+    std::string line;
+	int src, dest;
+	float demand_val;
+
+	while (getline(infile, line))
+	{
+		std::istringstream iss(line);
+		iss >> src >> dest >> demand_val;
+		overlay_demands.insert( std::pair<std::string, float>(std::to_string(src) + " " + std::to_string(dest), demand_val) );
 	}
 }
 

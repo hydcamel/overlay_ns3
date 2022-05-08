@@ -39,15 +39,17 @@ void SDtag::Serialize (TagBuffer i) const
 {
     i.WriteU8 (SourceID);
     i.WriteU8 (DestID);
+    i.WriteU8(currentHop);
 }
 void SDtag::Deserialize (TagBuffer i)
 {
     SourceID = i.ReadU8 ();
     DestID = i.ReadU8 ();
+    currentHop = i.ReadU8();
 }
 void SDtag::Print (std::ostream &os) const
 {
-    os << "source=" << (uint32_t)SourceID << ", Dest=" << (uint32_t)DestID << std::endl;
+    os << "source=" << (uint32_t)SourceID << ", Dest=" << (uint32_t)DestID << ", Cur_hop=" << (uint32_t)currentHop << std::endl;
 }
 void SDtag::SetSourceID (uint8_t value)
 {
@@ -64,6 +66,14 @@ void SDtag::SetDestID (uint8_t value)
 uint8_t SDtag::GetDestID (void) const
 {
     return DestID;
+}
+void SDtag::SetCurrentHop (uint8_t value)
+{
+    currentHop = value;
+}
+uint8_t SDtag::GetCurrentHop (void) const
+{
+    return currentHop;
 }
 
 
