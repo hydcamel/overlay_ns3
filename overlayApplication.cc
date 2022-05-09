@@ -90,13 +90,13 @@ namespace ns3
         NS_LOG_FUNCTION(this);
     }
 
-    void overlayApplication::InitApp(netw* netw_meta, uint32_t localId, uint32_t MaxPktSize)
+    void overlayApplication::InitApp(netw *netw_meta, uint32_t localId, uint32_t MaxPktSize)
     {
         meta = netw_meta;
         m_sent.resize(meta->n_nodes, 0);
         m_count.resize(meta->n_nodes, MaxPktSize);
         tab_socket.resize(meta->n_nodes, 0);
-        //tab_peerAddress.resize(meta.n_nodes);
+        // tab_peerAddress.resize(meta.n_nodes);
         m_interval.resize(meta->n_nodes);
         // m_socket = 0;
         m_peerPort = 9;
@@ -146,7 +146,7 @@ namespace ns3
     void overlayApplication::SetInterval(uint32_t idx, float Interval)
     {
         NS_LOG_FUNCTION(this);
-        m_interval[idx] = Time( std::to_string(Interval) + 's' );
+        m_interval[idx] = Time(std::to_string(Interval) + 's');
     }
     uint16_t overlayApplication::GetPort(void) const
     {
@@ -159,6 +159,7 @@ namespace ns3
         if (tab_socket[idx] == 0)
         {
             TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
+            std::cout << "Node ID:" << m_local_ID << "set skt for " << idx << ": " << ip << std::endl;
             tab_socket[idx] = Socket::CreateSocket(GetNode(), tid);
             if (Ipv4Address::IsMatchingType(ip) == true)
             {
@@ -209,36 +210,37 @@ namespace ns3
         std::map<std::string, float>::iterator it;
         if (meta->loc_overlay_nodes[GetLocalID()] == true) // only if self is overlay, it can schedule flows
         {
-            for (uint32_t i = 0; i < meta->n_nodes; i++) 
+            for (uint32_t i = 0; i < meta->n_nodes; i++)
             {
                 if (meta->loc_overlay_nodes[i] == true) // target i
                 {
-                    it = meta->overlay_demands.find( std::to_string(GetLocalID()) + " " + std::to_string(i) );
-                    if (it == meta->overlay_demands.end()) continue; // no such demands
+                    it = meta->overlay_demands.find(std::to_string(GetLocalID()) + " " + std::to_string(i));
+                    if (it == meta->overlay_demands.end())
+                        continue; // no such demands
                     // set interval
-                    SetInterval(i, float(MACPktSize*8) / it->second); //flow rate for the target i
-                    //tab_socket[routes[1]]->SetAllowBroadcast(false);
-                    Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable> ();
-                    Time random_offset = MicroSeconds (rand->GetValue(50,200));
-                    ScheduleTransmit(random_offset,i);
+                    SetInterval(i, float(MACPktSize * 8) / it->second); // flow rate for the target i
+                    // tab_socket[routes[1]]->SetAllowBroadcast(false);
+                    Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable>();
+                    Time random_offset = MicroSeconds(rand->GetValue(50, 200));
+                    ScheduleTransmit(random_offset, i);
                 }
             }
-            
         }
+    }
+
+    void overlayApplication::SetRecvSocket(void)
+    {
         /**
          * Set up socket for forwarding
          **/
-        if (recv_socket == 0)
+        TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
+        recv_socket = Socket::CreateSocket(GetNode(), tid);
+        InetSocketAddress local = InetSocketAddress(Ipv4Address::GetAny(), ListenPort);
+        if (recv_socket->Bind(local) == -1)
         {
-            TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
-            recv_socket = Socket::CreateSocket(GetNode(), tid);
-            InetSocketAddress local = InetSocketAddress(Ipv4Address::GetAny(), ListenPort);
-            if (recv_socket->Bind(local) == -1)
-            {
-                NS_FATAL_ERROR("Failed to bind socket");
-            }
-            recv_socket->SetRecvCallback(MakeCallback(&overlayApplication::HandleRead, this));
+            NS_FATAL_ERROR("Failed to bind socket");
         }
+        recv_socket->SetRecvCallback(MakeCallback(&overlayApplication::HandleRead, this));
     }
     void overlayApplication::HandleRead(Ptr<Socket> socket)
     {
@@ -256,10 +258,10 @@ namespace ns3
             {
                 NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " server received " << packet->GetSize() << " bytes from " << InetSocketAddress::ConvertFrom(from).GetIpv4() << " port " << InetSocketAddress::ConvertFrom(from).GetPort());
             }
-
+            std::cout << "Node ID: " << m_local_ID << "; pkt received" << std::endl;
             SDtag tagPktRecv;
             packet->PeekPacketTag(tagPktRecv);
-            std::vector<int>& routes = meta->routing_map[std::to_string(tagPktRecv.GetSourceID()) + " " + std::to_string(tagPktRecv.GetDestID())];
+            std::vector<int> &routes = meta->routing_map[std::to_string(tagPktRecv.GetSourceID()) + " " + std::to_string(tagPktRecv.GetDestID())];
             // packet->PrintPacketTags(std::cout);
             // tagPktRecv.Print(std::cout);
             if (tagPktRecv.GetDestID() == GetLocalID())
@@ -270,10 +272,10 @@ namespace ns3
             }
             else
             {
-                std::cout << "Source ID: " << tagPktRecv.GetSourceID() << ", target ID: " << tagPktRecv.GetDestID() << ", this hop" << m_local_ID << ", next hop" << routes[tagPktRecv.GetCurrentHop()+1] << std::endl;
-                assert( routes[tagPktRecv.GetCurrentHop()] == m_local_ID );
+                std::cout << "Source ID: " << tagPktRecv.GetSourceID() << ", target ID: " << tagPktRecv.GetDestID() << ", this hop" << m_local_ID << ", next hop" << routes[tagPktRecv.GetCurrentHop() + 1] << std::endl;
+                assert(routes[tagPktRecv.GetCurrentHop()] == m_local_ID);
                 tagPktRecv.AddCurrentHop();
-                packet->ReplacePacketTag( tagPktRecv );
+                packet->ReplacePacketTag(tagPktRecv);
                 tab_socket[routes[tagPktRecv.GetCurrentHop()]]->Send(packet);
             }
             // NS_LOG_LOGIC("Echoing packet");
@@ -294,7 +296,7 @@ namespace ns3
     {
         NS_LOG_FUNCTION(this);
         NS_ASSERT(m_sendEvent[idx].IsExpired());
-        std::vector<int>& routes = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx)];
+        std::vector<int> &routes = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx)];
 
         Ptr<Packet> p;
         p = Create<Packet>(m_size);
@@ -311,8 +313,10 @@ namespace ns3
         tagToSend.SetSourceID(m_local_ID);
         tagToSend.SetDestID(idx);
         tagToSend.SetCurrentHop(1);
-        //tagToSend.Print(std::cout);
+        // std::cout << "before add" << std::endl;
+        // tagToSend.Print(std::cout);
         p->AddPacketTag(tagToSend);
+        // std::cout << "after add" << std::endl;
         /* SDtag tagCheck;
         p->PeekPacketTag(tagCheck);
         tagCheck.Print(std::cout); */

@@ -46,6 +46,7 @@ namespace ns3
         //std::vector<uint32_t> GetCount(void) const;
 
         void SetDataSize(uint32_t dataSize);
+        void SetRecvSocket(void);
 
         uint32_t GetDataSize(void) const;
         uint16_t GetPort(void) const;

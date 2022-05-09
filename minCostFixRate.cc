@@ -57,11 +57,15 @@ int main(int argc, char *argv[])
     fact.Set ("RemotePort", UintegerValue (LISTENPORT));
     fact.Set ("ListenPort", UintegerValue (LISTENPORT));
     //fact.Set ("MaxPackets", UintegerValue (1));
-    fact.Set ("PacketSize", UintegerValue (MACPktSize));
+    fact.Set ("PacketSize", UintegerValue (AppPktSize));
     for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
     {
         vec_app[i] = fact.Create <overlayApplication> ();
         vec_app[i]->InitApp(&netw_meta, i, MAXPKTNUM);
+        vec_app[i]->SetStartTime (Seconds (0));
+        vec_app[i]->SetStopTime (Seconds (5));
+        underlayNodes.Get(i)->AddApplication( vec_app[i] );
+        vec_app[i]->SetRecvSocket();
     }
 
     std::vector<PointToPointHelper> links(netw_meta.delay.size());
@@ -87,8 +91,10 @@ int main(int argc, char *argv[])
             n_devices_perNode[k] = endnodes[k]->GetNDevices();
             linkIpv4Addr[k] = linkIpv4[k]->GetAddress( n_devices_perNode[k]-1, 0 );
         }
-        vec_app[netw_meta.edges_vec[i].first]->SetSocket( linkIpv4Addr[1].GetLocal(), netw_meta.edges_vec[i].second );
-        vec_app[netw_meta.edges_vec[i].second]->SetSocket( linkIpv4Addr[0].GetLocal(), netw_meta.edges_vec[i].first );
+        vec_app[netw_meta.edges_vec[i].first]->SetSocket( linkIpv4Addr[1].GetAddress(), netw_meta.edges_vec[i].second );
+        std::cout << netw_meta.edges_vec[i].first << ": " << linkIpv4Addr[1].GetAddress() << std::endl;
+        vec_app[netw_meta.edges_vec[i].second]->SetSocket( linkIpv4Addr[0].GetAddress(), netw_meta.edges_vec[i].first );
+        std::cout << netw_meta.edges_vec[i].second << ": " << linkIpv4Addr[0].GetAddress() << std::endl;
         /* for (int k = 0; k < 2; k++)
         {
             std::cout << "Node ID = " << NetDevices[i].Get(k)->GetNode()->GetId() << "; ";
@@ -126,22 +132,16 @@ int main(int argc, char *argv[])
 
     std::cout << "before socket" << std::endl;
 
-    // // Schedule SendPacket
-    // Time interPacketInterval = Seconds(packetInterval);
-    // Simulator::ScheduleWithContext(source->GetNode()->GetId(),
-    //                                Seconds(1.0), &SendPacket,
-    //                                source, packetSize, packetCount, interPacketInterval, 0, 1);
-
     // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/Rx", MakeCallback(&rxTraceIpv4) );
     // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/Tx", MakeCallback(&txTraceIpv4) );
     // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/LocalDeliver", MakeCallback(&LocalDeliver) );
-    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTx", MakeCallback(&p2pDevMacTx) );
-    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacRx", MakeCallback(&p2pDevMacRx) );
+    Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTx", MakeCallback(&p2pDevMacTx) );
+    Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacRx", MakeCallback(&p2pDevMacRx) );
     // // Config::Connect( "/NodeList/*/ApplicationList/*/$ns3::UdpEchoClient/Tx", MakeCallback(&trace_udpClient) );
 
-    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxBegin", MakeCallback(&trace_PhyTxBegin) );
-    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxEnd", MakeCallback(&trace_PhyTxEnd) );
-    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyRxEnd", MakeCallback(&trace_PhyRxEnd) );
+    Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxBegin", MakeCallback(&trace_PhyTxBegin) );
+    Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxEnd", MakeCallback(&trace_PhyTxEnd) );
+    Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyRxEnd", MakeCallback(&trace_PhyRxEnd) );
 
     //Config::Connect( "/ChannelList/*/$ns3::PointToPointChannel/TxRxPointToPoint", MakeCallback(&trace_txrxPointToPoint) );
 

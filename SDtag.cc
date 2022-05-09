@@ -33,7 +33,7 @@ TypeId SDtag::GetInstanceTypeId (void) const
 }
 uint32_t SDtag::GetSerializedSize (void) const
 {
-    return 2;
+    return 3;
 }
 void SDtag::Serialize (TagBuffer i) const
 {
