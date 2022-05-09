@@ -162,25 +162,25 @@ namespace ns3
             tab_socket[idx] = Socket::CreateSocket(GetNode(), tid);
             if (Ipv4Address::IsMatchingType(ip) == true)
             {
-                if (tab_socket.back()->Bind() == -1)
+                if (tab_socket[idx]->Bind() == -1)
                 {
                     NS_FATAL_ERROR("Failed to bind socket");
                 }
-                tab_socket.back()->Connect(InetSocketAddress(Ipv4Address::ConvertFrom(ip), m_peerPort));
+                tab_socket[idx]->Connect(InetSocketAddress(Ipv4Address::ConvertFrom(ip), m_peerPort));
             }
             else if (InetSocketAddress::IsMatchingType(ip) == true)
             {
-                if (tab_socket.back()->Bind() == -1)
+                if (tab_socket[idx]->Bind() == -1)
                 {
                     NS_FATAL_ERROR("Failed to bind socket");
                 }
-                tab_socket.back()->Connect(ip);
+                tab_socket[idx]->Connect(ip);
             }
             else
             {
                 NS_ASSERT_MSG(false, "Incompatible address type: " << tab_peerAddress[i]);
             }
-            tab_socket.back()->SetAllowBroadcast(false);
+            tab_socket[idx]->SetAllowBroadcast(false);
         }
         else
         {
@@ -207,7 +207,7 @@ namespace ns3
          * Set up socket for initiating flows
          **/
         std::map<std::string, float>::iterator it;
-        if (meta->loc_overlay_nodes[GetLocalID()] == true)
+        if (meta->loc_overlay_nodes[GetLocalID()] == true) // only if self is overlay, it can schedule flows
         {
             for (uint32_t i = 0; i < meta->n_nodes; i++) 
             {
@@ -222,7 +222,6 @@ namespace ns3
                     Time random_offset = MicroSeconds (rand->GetValue(50,200));
                     ScheduleTransmit(random_offset,i);
                 }
-                
             }
             
         }
@@ -271,7 +270,8 @@ namespace ns3
             }
             else
             {
-                assert( routes[tagPktRecv.GetCurrentHop()] == GetLocalID() );
+                std::cout << "Source ID: " << tagPktRecv.GetSourceID() << ", target ID: " << tagPktRecv.GetDestID() << ", this hop" << m_local_ID << ", next hop" << routes[tagPktRecv.GetCurrentHop()+1] << std::endl;
+                assert( routes[tagPktRecv.GetCurrentHop()] == m_local_ID );
                 tagPktRecv.AddCurrentHop();
                 packet->ReplacePacketTag( tagPktRecv );
                 tab_socket[routes[tagPktRecv.GetCurrentHop()]]->Send(packet);
@@ -316,6 +316,8 @@ namespace ns3
         /* SDtag tagCheck;
         p->PeekPacketTag(tagCheck);
         tagCheck.Print(std::cout); */
+
+        std::cout << "Source ID: " << m_local_ID << ", target ID: " << idx << ", next hop" << routes[1] << std::endl;
 
         tab_socket[routes[1]]->Send(p);
         ++m_sent[idx];
