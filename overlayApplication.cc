@@ -343,10 +343,9 @@ namespace ns3
     void overlayApplication::StopApplication()
     {
         NS_LOG_FUNCTION(this);
-
-        if (tab_socket.size() != 0)
+        for (uint32_t i = 0; i < tab_socket.size(); i++)
         {
-            for (uint16_t i = 0; i < m_count[i]; i++)
+            if (tab_socket[i] != 0)
             {
                 tab_socket[i]->Close();
                 tab_socket[i]->SetRecvCallback(MakeNullCallback<void, Ptr<Socket>>());
