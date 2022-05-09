@@ -56,12 +56,12 @@ int main(int argc, char *argv[])
     fact.SetTypeId ("ns3::overlayApplication");
     fact.Set ("RemotePort", UintegerValue (LISTENPORT));
     fact.Set ("ListenPort", UintegerValue (LISTENPORT));
-    fact.Set ("MaxPackets", UintegerValue (1));
+    //fact.Set ("MaxPackets", UintegerValue (1));
     fact.Set ("PacketSize", UintegerValue (MACPktSize));
     for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
     {
         vec_app[i] = fact.Create <overlayApplication> ();
-        vec_app[i]->InitApp(&netw_meta, i);
+        vec_app[i]->InitApp(&netw_meta, i, MAXPKTNUM);
     }
 
     std::vector<PointToPointHelper> links(netw_meta.delay.size());

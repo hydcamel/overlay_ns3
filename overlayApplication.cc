@@ -90,11 +90,11 @@ namespace ns3
         NS_LOG_FUNCTION(this);
     }
 
-    void overlayApplication::InitApp(netw* netw_meta, uint32_t localId)
+    void overlayApplication::InitApp(netw* netw_meta, uint32_t localId, uint32_t MaxPktSize)
     {
         meta = netw_meta;
         m_sent.resize(meta->n_nodes, 0);
-        //m_count.resize(meta.n_nodes, 0);
+        m_count.resize(meta->n_nodes, MaxPktSize);
         tab_socket.resize(meta->n_nodes, 0);
         //tab_peerAddress.resize(meta.n_nodes);
         m_interval.resize(meta->n_nodes);
@@ -178,7 +178,7 @@ namespace ns3
             }
             else
             {
-                NS_ASSERT_MSG(false, "Incompatible address type: " << tab_peerAddress[i]);
+                NS_ASSERT_MSG(false, "Incompatible address type: " << ip);
             }
             tab_socket[idx]->SetAllowBroadcast(false);
         }

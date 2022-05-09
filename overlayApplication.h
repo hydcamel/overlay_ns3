@@ -15,6 +15,7 @@
 #define IPPktSize 1052
 #define MACPktSize 1054
 #define LISTENPORT 9
+#define MAXPKTNUM 1
 
 namespace ns3
 {
@@ -32,7 +33,7 @@ namespace ns3
         overlayApplication();
 
         virtual ~overlayApplication();
-        void InitApp(netw* meta, uint32_t localId);
+        void InitApp(netw* meta, uint32_t localId, uint32_t MaxPktSize);
 
         void SetRemote(Address ip, uint16_t idx);
         void AddRemote(Address ip);
