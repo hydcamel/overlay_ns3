@@ -36,9 +36,6 @@ int main(int argc, char *argv[])
 
     // CommandLine cmd;
     // cmd.Parse (argc, argv);
-    //LogComponentEnable ("utils", LOG_LEVEL_INFO);
-    // Nodes creation
-    uint32_t n_overlay = 2;
     InternetStackHelper internet;
     Ipv4AddressHelper address;
     address.SetBase ("10.0.0.0", "255.255.255.0");
@@ -57,10 +54,10 @@ int main(int argc, char *argv[])
     std::vector<Ptr<overlayApplication>> vec_app(netw_meta.n_nodes);
     ObjectFactory fact;
     fact.SetTypeId ("ns3::overlayApplication");
-    fact.Set ("RemotePort", UintegerValue (9));
-    fact.Set ("ListenPort", UintegerValue (9));
+    fact.Set ("RemotePort", UintegerValue (LISTENPORT));
+    fact.Set ("ListenPort", UintegerValue (LISTENPORT));
     fact.Set ("MaxPackets", UintegerValue (1));
-    fact.Set ("PacketSize", UintegerValue (AppPktSize));
+    fact.Set ("PacketSize", UintegerValue (MACPktSize));
     for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
     {
         vec_app[i] = fact.Create <overlayApplication> ();
@@ -110,33 +107,6 @@ int main(int argc, char *argv[])
     /* Ptr<OutputStreamWrapper> routingStream = Create<OutputStreamWrapper>(&std::cout);
     Ipv4RoutingHelper::PrintRoutingTableAllAt( Seconds(0), routingStream, Time::Unit::S); */
 
-
-    NodeContainer overlayNodes;
-
-    
-    overlayNodes.Create(n_overlay);
-
-    // IP address setup
-    // InternetStackHelper internet;
-    // internet.Install(underlayNodes);
-    // internet.Install(overlayNodes);
-    // Ipv4AddressHelper address;
-    // // For LAN 1
-    // address.SetBase("10.1.1.0", "255.255.255.0");
-    // Ipv4InterfaceContainer lan1interfaces;
-    // lan1interfaces = address.Assign(netDevLan1);
-    // // For LAN 2
-    // address.SetBase("10.1.2.0", "255.255.255.0");
-    // Ipv4InterfaceContainer lan2interfaces;
-    // lan2interfaces = address.Assign(netDevLan2);
-    // // For PointToPoint
-    // address.SetBase("10.1.100.0", "255.255.255.0");
-    // Ipv4InterfaceContainer routerInterfaces;
-    // routerInterfaces = address.Assign(netDevBridge);
-
-    Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
-    // Ptr<OutputStreamWrapper> routingStream = Create<OutputStreamWrapper>(&std::cout);
-    // Ipv4RoutingHelper::PrintRoutingTableAllAt( Seconds(1), routingStream, Time::Unit::S);
 
     // for (ns3::ChannelList::Iterator it = ns3::ChannelList::Begin(); it != ns3::ChannelList::End(); it++){
     //     std::cout << it->

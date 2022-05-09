@@ -13,6 +13,8 @@
 
 #define AppPktSize 1024
 #define IPPktSize 1052
+#define MACPktSize 1054
+#define LISTENPORT 9
 
 namespace ns3
 {
@@ -71,7 +73,7 @@ namespace ns3
         //std::vector<Address> tab_peerAddress;
         uint16_t m_peerPort;
         uint16_t ListenPort;
-        EventId m_sendEvent;
+        std::vector<EventId> m_sendEvent;
         uint16_t m_local_ID;
 
         TracedCallback<Ptr<const Packet>> m_txTrace;

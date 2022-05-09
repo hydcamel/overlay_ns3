@@ -101,7 +101,7 @@ namespace ns3
         // m_socket = 0;
         m_peerPort = 9;
         recv_socket = 0;
-        m_sendEvent = EventId();
+        m_sendEvent.resize(meta->n_nodes, EventId());
         SetLocalID(localId);
         is_overlay = meta->loc_overlay_nodes[localId];
     }
@@ -216,7 +216,7 @@ namespace ns3
                     it = meta->overlay_demands.find( std::to_string(GetLocalID()) + " " + std::to_string(i) );
                     if (it == meta->overlay_demands.end()) continue; // no such demands
                     // set interval
-                    SetInterval(i, float(IPPktSize*8) / it->second); //flow rate for the target i
+                    SetInterval(i, float(MACPktSize*8) / it->second); //flow rate for the target i
                     //tab_socket[routes[1]]->SetAllowBroadcast(false);
                     Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable> ();
                     Time random_offset = MicroSeconds (rand->GetValue(50,200));
@@ -288,12 +288,12 @@ namespace ns3
     void overlayApplication::ScheduleTransmit(Time dt, uint16_t idx)
     {
         NS_LOG_FUNCTION(this << dt);
-        m_sendEvent = Simulator::Schedule(dt, &overlayApplication::Send, this, idx);
+        m_sendEvent[idx] = Simulator::Schedule(dt, &overlayApplication::Send, this, idx);
     }
     void overlayApplication::Send(uint16_t idx)
     {
         NS_LOG_FUNCTION(this);
-        NS_ASSERT(m_sendEvent.IsExpired());
+        NS_ASSERT(m_sendEvent[idx].IsExpired());
         std::vector<int>& routes = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx)];
 
         Ptr<Packet> p;
