@@ -23,6 +23,11 @@ TypeId SDtag::GetTypeId (void)
                    EmptyAttributeValue (),
                    MakeUintegerAccessor (&SDtag::GetDestID),
                    MakeUintegerChecker<uint8_t> ())
+    .AddAttribute ("CurrentHop",
+                   "Current hop index",
+                   EmptyAttributeValue (),
+                   MakeUintegerAccessor (&SDtag::GetCurrentHop),
+                   MakeUintegerChecker<uint8_t> ())
   ;
   return tid;
 }

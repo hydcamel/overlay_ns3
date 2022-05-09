@@ -258,7 +258,7 @@ namespace ns3
             {
                 NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " server received " << packet->GetSize() << " bytes from " << InetSocketAddress::ConvertFrom(from).GetIpv4() << " port " << InetSocketAddress::ConvertFrom(from).GetPort());
             }
-            std::cout << "Node ID: " << m_local_ID << "; pkt received" << std::endl;
+            //std::cout << "Node ID: " << m_local_ID << "; pkt received" << std::endl;
             SDtag tagPktRecv;
             packet->PeekPacketTag(tagPktRecv);
             std::vector<int> &routes = meta->routing_map[std::to_string(tagPktRecv.GetSourceID()) + " " + std::to_string(tagPktRecv.GetDestID())];
@@ -266,13 +266,13 @@ namespace ns3
             // tagPktRecv.Print(std::cout);
             if (tagPktRecv.GetDestID() == GetLocalID())
             {
-                std::cout << "Node ID: " << GetLocalID() << ": A packet received from " << tagPktRecv.GetSourceID() << std::endl;
+                std::cout << "Node ID: " << GetLocalID() << ": A packet received from " << (uint32_t)tagPktRecv.GetSourceID() << std::endl;
                 packet->RemoveAllPacketTags();
                 packet->RemoveAllByteTags();
             }
             else
             {
-                std::cout << "Source ID: " << tagPktRecv.GetSourceID() << ", target ID: " << tagPktRecv.GetDestID() << ", this hop" << m_local_ID << ", next hop" << routes[tagPktRecv.GetCurrentHop() + 1] << std::endl;
+                std::cout << "Source ID: " << (uint32_t)tagPktRecv.GetSourceID() << ", target ID: " << (uint32_t)tagPktRecv.GetDestID() << ", this hop" << m_local_ID << ", next hop" << routes[tagPktRecv.GetCurrentHop() + 1] << std::endl;
                 assert(routes[tagPktRecv.GetCurrentHop()] == m_local_ID);
                 tagPktRecv.AddCurrentHop();
                 packet->ReplacePacketTag(tagPktRecv);
