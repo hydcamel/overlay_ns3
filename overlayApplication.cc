@@ -209,18 +209,18 @@ namespace ns3
         std::map<std::string, float>::iterator it;
         if (meta->loc_overlay_nodes[GetLocalID()] == true)
         {
-            for (uint32_t i = 0; i < meta->n_nodes; i++)
+            for (uint32_t i = 0; i < meta->n_nodes; i++) 
             {
-                if (meta->loc_overlay_nodes[i] == true)
+                if (meta->loc_overlay_nodes[i] == true) // target i
                 {
                     it = meta->overlay_demands.find( std::to_string(GetLocalID()) + " " + std::to_string(i) );
                     if (it == meta->overlay_demands.end()) continue; // no such demands
                     // set interval
-                    SetInterval(i, float(IPPktSize*8) / it->second);
-                    tab_socket[i]->SetAllowBroadcast(false);
+                    SetInterval(i, float(IPPktSize*8) / it->second); //flow rate for the target i
+                    //tab_socket[routes[1]]->SetAllowBroadcast(false);
                     Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable> ();
                     Time random_offset = MicroSeconds (rand->GetValue(50,200));
-                    ScheduleTransmit(random_offset, i);
+                    ScheduleTransmit(random_offset,i);
                 }
                 
             }
@@ -294,12 +294,12 @@ namespace ns3
     {
         NS_LOG_FUNCTION(this);
         NS_ASSERT(m_sendEvent.IsExpired());
-        assert(idx <= tab_socket.size() - 1);
+        std::vector<int>& routes = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx)];
 
         Ptr<Packet> p;
         p = Create<Packet>(m_size);
-        Address localAddress;
-        tab_socket[idx]->GetSockName(localAddress);
+        // Address localAddress;
+        // tab_socket[routes[1]]->GetSockName(localAddress);
         // call to the trace sinks before the packet is actually sent,
         // so that tags added to the packet can be sent as well
         m_txTrace(p);
@@ -308,15 +308,16 @@ namespace ns3
             m_txTraceWithAddresses(p, localAddress, InetSocketAddress(Ipv4Address::ConvertFrom(tab_peerAddress[idx]), m_peerPort));
         } */
         SDtag tagToSend;
-        tagToSend.SetSourceID(0);
-        tagToSend.SetDestID(1);
-        tagToSend.Print(std::cout);
+        tagToSend.SetSourceID(m_local_ID);
+        tagToSend.SetDestID(idx);
+        tagToSend.SetCurrentHop(1);
+        //tagToSend.Print(std::cout);
         p->AddPacketTag(tagToSend);
-        SDtag tagCheck;
+        /* SDtag tagCheck;
         p->PeekPacketTag(tagCheck);
-        tagCheck.Print(std::cout);
+        tagCheck.Print(std::cout); */
 
-        tab_socket[idx]->Send(p);
+        tab_socket[routes[1]]->Send(p);
         ++m_sent[idx];
 
         /* if (Ipv4Address::IsMatchingType(tab_peerAddress[idx]))
