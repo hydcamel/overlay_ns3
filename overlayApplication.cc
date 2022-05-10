@@ -267,8 +267,8 @@ namespace ns3
             if (tagPktRecv.GetDestID() == GetLocalID())
             {
                 std::cout << "Node ID: " << GetLocalID() << ": A packet received from " << (uint32_t)tagPktRecv.GetSourceID() << std::endl;
-                packet->RemoveAllPacketTags();
-                packet->RemoveAllByteTags();
+                // packet->RemoveAllPacketTags();
+                // packet->RemoveAllByteTags();
             }
             else
             {
@@ -343,8 +343,10 @@ namespace ns3
     void overlayApplication::StopApplication()
     {
         NS_LOG_FUNCTION(this);
+        //std::cout << "Node ID: " << m_local_ID << " stop Application" << std::endl;
         for (uint32_t i = 0; i < tab_socket.size(); i++)
         {
+            //std::cout << "iter Node ID: " << m_local_ID << " i" << i << std::endl;
             if (tab_socket[i] != 0)
             {
                 tab_socket[i]->Close();
@@ -353,8 +355,10 @@ namespace ns3
         }
         if (recv_socket != 0)
         {
+            //std::cout << "iter Node ID: " << m_local_ID << " recv_socket" << std::endl;
             recv_socket->Close();
             recv_socket->SetRecvCallback(MakeNullCallback<void, Ptr<Socket>>());
         }
+        //std::cout << "iter Node ID: " << m_local_ID << " complete" << std::endl;
     }
 }

@@ -4,6 +4,8 @@
 #include "ns3/internet-module.h"
 #include "ns3/applications-module.h"
 #include "ns3/point-to-point-module.h"
+// #include "ns3/flow-monitor.h"
+// #include "ns3/flow-monitor-helper.h"
 #include "overlayApplication.h"
 #include "ns3/application.h"
 #include "utils.h"
@@ -130,7 +132,14 @@ int main(int argc, char *argv[])
     // }
 
 
-    std::cout << "before socket" << std::endl;
+    /**
+     * Flow Monitor
+     **/
+    /* Ptr<FlowMonitor> flow_monitor;
+    FlowMonitorHelper flow_helper;
+    flow_monitor = flow_helper.InstallAll(); */
+    
+    
 
     // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/Rx", MakeCallback(&rxTraceIpv4) );
     // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/Tx", MakeCallback(&txTraceIpv4) );
@@ -148,6 +157,7 @@ int main(int argc, char *argv[])
     NS_LOG_INFO("Run Simulation.");
     // std::cout << "before run" << std::endl;
     Simulator::Run();
+    //flow_monitor->SerializeToXmlFile("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/flow_monitor_res.xml", true, true);
     Simulator::Destroy();
     NS_LOG_INFO("Done.");
 }
