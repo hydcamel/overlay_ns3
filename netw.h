@@ -4,6 +4,12 @@
 #include <vector>
 #include <map>
 
+#define AppPktSize 1024
+#define IPPktSize 1052
+#define MACPktSize 1054
+#define LISTENPORT 9
+#define MAXPKTNUM 1
+
 namespace ns3
 {
 
@@ -17,17 +23,20 @@ public:
     void read_underlay(std::string filename);
     void read_overlay();
     void read_demands(std::string filename);
+    void write_throughput(std::string filename);
 
     std::vector<int> w, bw, delay;
     //std::vector<int> src, dest;
     //std::map<std::pair<int, int>, int> edges;
     std::map<std::string, int> edges;
     std::vector<std::pair<int, int>> edges_vec;
+    std::vector<std::pair<int, int>> demands_vec;
     std::vector<std::vector<bool>> adj_mat;
     std::vector<bool> loc_overlay_nodes;
     uint32_t n_nodes,n_edges;
     std::map<std::string, std::vector<int>> routing_map;
     std::map<std::string, float> overlay_demands;
+    std::map<std::string, uint16_t> throughput;
 };
 
 //extern netw netw_meta;

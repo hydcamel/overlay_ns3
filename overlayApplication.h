@@ -11,12 +11,6 @@
 #include "utils.h"
 #include "netw.h"
 
-#define AppPktSize 1024
-#define IPPktSize 1052
-#define MACPktSize 1054
-#define LISTENPORT 9
-#define MAXPKTNUM 1
-
 namespace ns3
 {
     

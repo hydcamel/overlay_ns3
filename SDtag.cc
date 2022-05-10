@@ -38,19 +38,21 @@ TypeId SDtag::GetInstanceTypeId (void) const
 }
 uint32_t SDtag::GetSerializedSize (void) const
 {
-    return 3;
+    return 5;
 }
 void SDtag::Serialize (TagBuffer i) const
 {
     i.WriteU8 (SourceID);
     i.WriteU8 (DestID);
     i.WriteU8(currentHop);
+    i.WriteU16(StartTime);
 }
 void SDtag::Deserialize (TagBuffer i)
 {
     SourceID = i.ReadU8 ();
     DestID = i.ReadU8 ();
     currentHop = i.ReadU8();
+    StartTime = i.ReadU16();
 }
 void SDtag::Print (std::ostream &os) const
 {
@@ -84,7 +86,14 @@ uint8_t SDtag::GetCurrentHop (void) const
 {
     return currentHop;
 }
-
+uint16_t SDtag::GetStartTime (void) const
+{
+    return StartTime;
+}
+void SDtag::SetStartTime (uint16_t value)
+{
+    StartTime = value;
+}
 
 
 }

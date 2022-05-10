@@ -154,8 +154,24 @@ void netw::read_demands(std::string filename)
 		std::istringstream iss(line);
 		iss >> src >> dest >> demand_val;
 		overlay_demands.insert( std::pair<std::string, float>(std::to_string(src) + " " + std::to_string(dest), demand_val) );
+		throughput.insert( std::pair<std::string, float>(std::to_string(src) + " " + std::to_string(dest), 0) );
+		demands_vec.emplace_back( std::pair<int, int>(src, dest) );
 	}
 }
+
+void netw::write_throughput(std::string filename)
+{
+	std::ofstream wrfile(filename);
+	std::string key;
+	uint16_t n_bits = MACPktSize * MAXPKTNUM * 8;
+	for (uint16_t i = 0; i < demands_vec.size(); i++)
+	{
+		key = std::to_string(demands_vec[i].first) + ' ' + std::to_string(demands_vec[i].second);
+		wrfile << key << std::to_string( double(n_bits) / (double(throughput[key]) / 1000000000) ) << std::endl;
+	}
+	
+}
+
 
 }
 
