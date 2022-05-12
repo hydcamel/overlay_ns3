@@ -249,7 +249,7 @@ namespace ns3
         Ptr<Packet> packet;
         Address from;
         Address localAddress;
-        uint16_t time_trans = 0;
+        uint64_t time_trans = 0;
         while ((packet = socket->RecvFrom(from)))
         {
             socket->GetSockName(localAddress);
@@ -268,8 +268,9 @@ namespace ns3
             if (tagPktRecv.GetDestID() == GetLocalID())
             {
                 std::cout << "Node ID: " << GetLocalID() << ": A packet received from " << (uint32_t)tagPktRecv.GetSourceID() << std::endl;
-                time_trans = Simulator::Now().ToInteger(Time::NS) - tagPktRecv.GetStartTime();
-                meta->throughput[std::to_string(tagPktRecv.GetSourceID()) + ' ' + std::to_string(tagPktRecv.GetDestID())] += time_trans;
+                time_trans += Simulator::Now().ToInteger(Time::NS) - tagPktRecv.GetStartTime();
+                std::cout << tagPktRecv.GetSourceID() << " - " << tagPktRecv.GetDestID() << ": now " << Simulator::Now().ToInteger(Time::NS) << " start: " << tagPktRecv.GetStartTime() << " = " << time_trans << std::endl;
+                meta->average_delay[std::to_string(tagPktRecv.GetSourceID()) + ' ' + std::to_string(tagPktRecv.GetDestID())] += time_trans;
                 packet->RemoveAllPacketTags();
                 packet->RemoveAllByteTags();
             }
@@ -316,6 +317,7 @@ namespace ns3
         tagToSend.SetSourceID(m_local_ID);
         tagToSend.SetDestID(idx);
         tagToSend.SetCurrentHop(1);
+        std::cout << Simulator::Now().As(Time::NS) << std::endl;
         tagToSend.SetStartTime(Simulator::Now().ToInteger(Time::NS));
         
         // std::cout << "before add" << std::endl;
@@ -326,7 +328,7 @@ namespace ns3
         p->PeekPacketTag(tagCheck);
         tagCheck.Print(std::cout); */
 
-        std::cout << "Source ID: " << m_local_ID << ", target ID: " << idx << ", next hop" << routes[1] << "at time: " << tagToSend.GetStartTime() << std::endl;
+        std::cout << "Source ID: " << m_local_ID << ", target ID: " << idx << ", next hop" << routes[1] << "at time: " << tagToSend.GetStartTime() << " " << Simulator::Now().As(Time::NS) << std::endl;
 
         tab_socket[routes[1]]->Send(p);
         ++m_sent[idx];
@@ -350,7 +352,7 @@ namespace ns3
         NS_LOG_FUNCTION(this);
         if (m_local_ID == 0)
         {
-            meta->write_throughput("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/throughput.txt");
+            meta->write_average_delay("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/average_delay.txt");
         }
         
         //std::cout << "Node ID: " << m_local_ID << " stop Application" << std::endl;

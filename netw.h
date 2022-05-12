@@ -23,7 +23,7 @@ public:
     void read_underlay(std::string filename);
     void read_overlay();
     void read_demands(std::string filename);
-    void write_throughput(std::string filename);
+    void write_average_delay(std::string filename);
 
     std::vector<int> w, bw, delay;
     //std::vector<int> src, dest;
@@ -36,7 +36,7 @@ public:
     uint32_t n_nodes,n_edges;
     std::map<std::string, std::vector<int>> routing_map;
     std::map<std::string, float> overlay_demands;
-    std::map<std::string, uint16_t> throughput;
+    std::map<std::string, uint64_t> average_delay;
 };
 
 //extern netw netw_meta;

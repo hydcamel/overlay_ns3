@@ -26,13 +26,13 @@ public:
     void SetCurrentHop (uint8_t value);
     void AddCurrentHop (void);
     uint8_t GetCurrentHop (void) const;
-    uint16_t GetStartTime (void) const;
-    void SetStartTime (uint16_t value);
+    uint64_t GetStartTime (void) const;
+    void SetStartTime (uint64_t value);
 private:
     uint8_t SourceID;
     uint8_t DestID;
     uint8_t currentHop;
-    uint16_t StartTime;
+    uint64_t StartTime;
 };
 
 }
