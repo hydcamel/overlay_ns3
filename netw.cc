@@ -154,10 +154,11 @@ void netw::read_demands(std::string filename)
 		std::istringstream iss(line);
 		iss >> src >> dest >> demand_val;
 		overlay_demands.insert( std::pair<std::string, float>(std::to_string(src) + " " + std::to_string(dest), demand_val) );
-		average_delay.insert( std::pair<std::string, float>(std::to_string(src) + " " + std::to_string(dest), 0) );
-		time_span_flows.insert( std::pair<std::string, float>(std::to_string(src) + " " + std::to_string(dest), 0) );
+		average_delay.insert( std::pair<std::string, double>(std::to_string(src) + " " + std::to_string(dest), 0) );
+		time_span_flows.insert( std::pair<std::string, double>(std::to_string(src) + " " + std::to_string(dest), 0) );
 		demands_vec.emplace_back( std::pair<int, int>(src, dest) );
-		cnt_pkt.insert( std::pair<std::string, float>(std::to_string(src) + " " + std::to_string(dest), 0) );
+		cnt_pkt.insert( std::pair<std::string, uint32_t>(std::to_string(src) + " " + std::to_string(dest), 0) );
+		cnt_congestion.insert( std::pair<std::string, uint32_t>(std::to_string(src) + " " + std::to_string(dest), 0) );
 	}
 }
 

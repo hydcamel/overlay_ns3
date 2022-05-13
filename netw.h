@@ -9,7 +9,7 @@
 #define IPPktSize 1052
 #define MACPktSize 1054
 #define LISTENPORT 9
-#define MAXPKTNUM 1
+#define MAXPKTNUM 3
 #define NSTOMS 1000000
 
 namespace ns3
@@ -41,6 +41,7 @@ public:
     std::map<std::string, double> average_delay;
     std::unordered_map<std::string, double> time_span_flows;
     std::unordered_map<std::string, int32_t> cnt_pkt;
+    std::unordered_map<std::string, int32_t> cnt_congestion;
 };
 
 //extern netw netw_meta;

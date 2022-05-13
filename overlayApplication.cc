@@ -5,6 +5,7 @@
 #include "ns3/inet-socket-address.h"
 #include "ns3/socket.h"
 #include "ns3/simulator.h"
+#include "ns3/net-device.h"
 #include "ns3/socket-factory.h"
 #include "ns3/packet.h"
 #include "ns3/queue.h"
@@ -258,10 +259,10 @@ namespace ns3
             socket->GetSockName(localAddress);
             m_rxTrace(packet);
             m_rxTraceWithAddresses(packet, from, localAddress);
-            if (InetSocketAddress::IsMatchingType(from))
+            /* if (InetSocketAddress::IsMatchingType(from))
             {
                 NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " server received " << packet->GetSize() << " bytes from " << InetSocketAddress::ConvertFrom(from).GetIpv4() << " port " << InetSocketAddress::ConvertFrom(from).GetPort());
-            }
+            } */
             //std::cout << "Node ID: " << m_local_ID << "; pkt received" << std::endl;
             SDtag tagPktRecv;
             packet->PeekPacketTag(tagPktRecv);
@@ -271,9 +272,9 @@ namespace ns3
             // tagPktRecv.Print(std::cout);
             if (tagPktRecv.GetDestID() == GetLocalID())
             {
-                std::cout << "Node ID: " << GetLocalID() << ": A packet received from " << (uint32_t)tagPktRecv.GetSourceID() << std::endl;
+                //std::cout << "Node ID: " << GetLocalID() << ": A packet received from " << (uint32_t)tagPktRecv.GetSourceID() << std::endl;
                 time_trans += double(Simulator::Now().ToInteger(Time::NS) - tagPktRecv.GetStartTime()) / NSTOMS;
-                std::cout << tagPktRecv.GetSourceID() << " - " << tagPktRecv.GetDestID() << ": now " << Simulator::Now().ToInteger(Time::NS) << " start: " << tagPktRecv.GetStartTime() << " = " << time_trans << std::endl;
+                //std::cout << tagPktRecv.GetSourceID() << " - " << tagPktRecv.GetDestID() << ": now " << Simulator::Now().ToInteger(Time::NS) << " start: " << tagPktRecv.GetStartTime() << " = " << time_trans << std::endl;
                 meta->average_delay[keys] += time_trans;
                 meta->cnt_pkt[keys] ++;
                 if (meta->cnt_pkt[keys] == MAXPKTNUM)
@@ -338,7 +339,7 @@ namespace ns3
         p->PeekPacketTag(tagCheck);
         tagCheck.Print(std::cout); */
 
-        std::cout << "Source ID: " << m_local_ID << ", target ID: " << idx << ", next hop" << routes[1] << "at time: " << tagToSend.GetStartTime() << " " << Simulator::Now().As(Time::NS) << std::endl;
+        //std::cout << "Source ID: " << m_local_ID << ", target ID: " << idx << ", next hop" << routes[1] << "at time: " << tagToSend.GetStartTime() << " " << Simulator::Now().As(Time::NS) << std::endl;
 
         tab_socket[routes[1]]->Send(p);
         ++m_sent[idx];
@@ -383,15 +384,18 @@ namespace ns3
         }
         //std::cout << "iter Node ID: " << m_local_ID << " complete" << std::endl;
     }
-    void overlayApplication::CheckCongestion(uint32_t idx, Ptr<Socket> skt)
+    void overlayApplication::CheckCongestion(Ptr<Socket> skt, uint32_t src, uint32_t dest)
     {
         NS_LOG_FUNCTION(this);
-        Ptr<PointToPointNetDevice> net_device = DynamicCast<Ptr<PointToPointNetDevice>, Ptr<NetDevice>>(skt->GetBoundNetDevice());
-        Ptr<Queue<Packet>> net_queue = net_device->GetQueue();
+        //Ptr<NetDevice> net_raw = skt->GetBoundNetDevice();
+        //Ptr<PointToPointNetDevice> net_device = StaticCast<PointToPointNetDevice>(skt->GetBoundNetDevice());
+        Ptr<Queue<Packet>> net_queue = StaticCast<PointToPointNetDevice>(skt->GetBoundNetDevice())->GetQueue();
         if (net_queue->GetNPackets() > 0)
         {
-            /* code */
+            std::cout << "congestion at " << m_local_ID << "from " << src << " to " << dest << "with " << std::endl;
+            meta->cnt_congestion[std::to_string(src) + ' ' + std::to_string(dest)] ++;
         }
+
         
     }
 }
