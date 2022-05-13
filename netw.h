@@ -3,12 +3,14 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <unordered_map>
 
 #define AppPktSize 1024
 #define IPPktSize 1052
 #define MACPktSize 1054
 #define LISTENPORT 9
 #define MAXPKTNUM 1
+#define NSTOMS 1000000
 
 namespace ns3
 {
@@ -36,7 +38,9 @@ public:
     uint32_t n_nodes,n_edges;
     std::map<std::string, std::vector<int>> routing_map;
     std::map<std::string, float> overlay_demands;
-    std::map<std::string, uint64_t> average_delay;
+    std::map<std::string, double> average_delay;
+    std::unordered_map<std::string, double> time_span_flows;
+    std::unordered_map<std::string, int32_t> cnt_pkt;
 };
 
 //extern netw netw_meta;

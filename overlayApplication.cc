@@ -7,9 +7,11 @@
 #include "ns3/simulator.h"
 #include "ns3/socket-factory.h"
 #include "ns3/packet.h"
+#include "ns3/queue.h"
 #include "ns3/uinteger.h"
 #include "ns3/random-variable-stream.h"
 #include "ns3/trace-source-accessor.h"
+#include "ns3/point-to-point-module.h"
 #include "SDtag.h"
 #include <assert.h>
 #include "netw.h"
@@ -159,7 +161,7 @@ namespace ns3
         if (tab_socket[idx] == 0)
         {
             TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
-            std::cout << "Node ID:" << m_local_ID << "set skt for " << idx << ": " << ip << std::endl;
+            //std::cout << "Node ID:" << m_local_ID << "set skt for " << idx << ": " << ip << std::endl;
             tab_socket[idx] = Socket::CreateSocket(GetNode(), tid);
             if (Ipv4Address::IsMatchingType(ip) == true)
             {
@@ -222,6 +224,7 @@ namespace ns3
                     // tab_socket[routes[1]]->SetAllowBroadcast(false);
                     Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable>();
                     Time random_offset = MicroSeconds(rand->GetValue(50, 200));
+                    meta->time_span_flows[std::to_string(m_local_ID) + ' ' + std::to_string(i)] = random_offset.ToDouble(Time::MS);
                     ScheduleTransmit(random_offset, i);
                 }
             }
@@ -249,7 +252,7 @@ namespace ns3
         Ptr<Packet> packet;
         Address from;
         Address localAddress;
-        uint64_t time_trans = 0;
+        double time_trans = 0;
         while ((packet = socket->RecvFrom(from)))
         {
             socket->GetSockName(localAddress);
@@ -262,15 +265,22 @@ namespace ns3
             //std::cout << "Node ID: " << m_local_ID << "; pkt received" << std::endl;
             SDtag tagPktRecv;
             packet->PeekPacketTag(tagPktRecv);
-            std::vector<int> &routes = meta->routing_map[std::to_string(tagPktRecv.GetSourceID()) + ' ' + std::to_string(tagPktRecv.GetDestID())];
+            std::string keys{ std::to_string(tagPktRecv.GetSourceID()) + ' ' + std::to_string(tagPktRecv.GetDestID()) };
+            std::vector<int> &routes = meta->routing_map[keys];
             // packet->PrintPacketTags(std::cout);
             // tagPktRecv.Print(std::cout);
             if (tagPktRecv.GetDestID() == GetLocalID())
             {
                 std::cout << "Node ID: " << GetLocalID() << ": A packet received from " << (uint32_t)tagPktRecv.GetSourceID() << std::endl;
-                time_trans += Simulator::Now().ToInteger(Time::NS) - tagPktRecv.GetStartTime();
+                time_trans += double(Simulator::Now().ToInteger(Time::NS) - tagPktRecv.GetStartTime()) / NSTOMS;
                 std::cout << tagPktRecv.GetSourceID() << " - " << tagPktRecv.GetDestID() << ": now " << Simulator::Now().ToInteger(Time::NS) << " start: " << tagPktRecv.GetStartTime() << " = " << time_trans << std::endl;
-                meta->average_delay[std::to_string(tagPktRecv.GetSourceID()) + ' ' + std::to_string(tagPktRecv.GetDestID())] += time_trans;
+                meta->average_delay[keys] += time_trans;
+                meta->cnt_pkt[keys] ++;
+                if (meta->cnt_pkt[keys] == MAXPKTNUM)
+                {
+                    meta->time_span_flows[keys] = Simulator::Now().ToDouble(Time::MS) - meta->time_span_flows[keys];
+                }
+                
                 packet->RemoveAllPacketTags();
                 packet->RemoveAllByteTags();
             }
@@ -317,7 +327,7 @@ namespace ns3
         tagToSend.SetSourceID(m_local_ID);
         tagToSend.SetDestID(idx);
         tagToSend.SetCurrentHop(1);
-        std::cout << Simulator::Now().As(Time::NS) << std::endl;
+        //std::cout << Simulator::Now().As(Time::NS) << std::endl;
         tagToSend.SetStartTime(Simulator::Now().ToInteger(Time::NS));
         
         // std::cout << "before add" << std::endl;
@@ -372,5 +382,16 @@ namespace ns3
             recv_socket->SetRecvCallback(MakeNullCallback<void, Ptr<Socket>>());
         }
         //std::cout << "iter Node ID: " << m_local_ID << " complete" << std::endl;
+    }
+    void overlayApplication::CheckCongestion(uint32_t idx, Ptr<Socket> skt)
+    {
+        NS_LOG_FUNCTION(this);
+        Ptr<PointToPointNetDevice> net_device = DynamicCast<Ptr<PointToPointNetDevice>, Ptr<NetDevice>>(skt->GetBoundNetDevice());
+        Ptr<Queue<Packet>> net_queue = net_device->GetQueue();
+        if (net_queue->GetNPackets() > 0)
+        {
+            /* code */
+        }
+        
     }
 }

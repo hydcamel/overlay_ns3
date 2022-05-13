@@ -155,7 +155,9 @@ void netw::read_demands(std::string filename)
 		iss >> src >> dest >> demand_val;
 		overlay_demands.insert( std::pair<std::string, float>(std::to_string(src) + " " + std::to_string(dest), demand_val) );
 		average_delay.insert( std::pair<std::string, float>(std::to_string(src) + " " + std::to_string(dest), 0) );
+		time_span_flows.insert( std::pair<std::string, float>(std::to_string(src) + " " + std::to_string(dest), 0) );
 		demands_vec.emplace_back( std::pair<int, int>(src, dest) );
+		cnt_pkt.insert( std::pair<std::string, float>(std::to_string(src) + " " + std::to_string(dest), 0) );
 	}
 }
 
@@ -163,12 +165,13 @@ void netw::write_average_delay(std::string filename)
 {
 	std::ofstream wrfile(filename);
 	std::string key;
-	uint16_t n_bits = MACPktSize * MAXPKTNUM * 8;
+	//uint16_t n_bits = MACPktSize * MAXPKTNUM * 8;
 	for (uint16_t i = 0; i < demands_vec.size(); i++)
 	{
 		key = std::to_string(demands_vec[i].first) + ' ' + std::to_string(demands_vec[i].second);
 		//wrfile << key << " " << std::to_string( double(n_bits) / (double(average_delay[key]) / 1000000000) ) << std::endl;
-		wrfile << key << " " << std::to_string( (double(average_delay[key]) / 1000000000) / double(n_bits) ) << std::endl;
+		//wrfile << key << " " << std::to_string( (double(average_delay[key]) / 1000000000) / double(n_bits) ) << std::endl;
+		wrfile << key << " " << std::to_string( double(average_delay[key]) ) << std::endl;
 	}
 	
 }

@@ -94,9 +94,10 @@ int main(int argc, char *argv[])
             linkIpv4Addr[k] = linkIpv4[k]->GetAddress( n_devices_perNode[k]-1, 0 );
         }
         vec_app[netw_meta.edges_vec[i].first]->SetSocket( linkIpv4Addr[1].GetAddress(), netw_meta.edges_vec[i].second );
-        std::cout << netw_meta.edges_vec[i].first << ": " << linkIpv4Addr[1].GetAddress() << std::endl;
+        //std::cout << netw_meta.edges_vec[i].first << ": " << linkIpv4Addr[1].GetAddress() << std::endl;
         vec_app[netw_meta.edges_vec[i].second]->SetSocket( linkIpv4Addr[0].GetAddress(), netw_meta.edges_vec[i].first );
-        std::cout << netw_meta.edges_vec[i].second << ": " << linkIpv4Addr[0].GetAddress() << std::endl;
+        //std::cout << netw_meta.edges_vec[i].second << ": " << linkIpv4Addr[0].GetAddress() << std::endl;
+        
         /* for (int k = 0; k < 2; k++)
         {
             std::cout << "Node ID = " << NetDevices[i].Get(k)->GetNode()->GetId() << "; ";

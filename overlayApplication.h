@@ -41,6 +41,7 @@ namespace ns3
 
         void SetDataSize(uint32_t dataSize);
         void SetRecvSocket(void);
+        void CheckCongestion(uint32_t idx, Ptr<Socket> skt);
 
         uint32_t GetDataSize(void) const;
         uint16_t GetPort(void) const;
