@@ -156,7 +156,7 @@ namespace ns3
         NS_LOG_FUNCTION(this);
         return m_peerPort;
     }
-    void overlayApplication::SetSocket(Address ip, uint32_t idx)
+    void overlayApplication::SetSocket(Address ip, uint32_t idx, uint32_t deviceID)
     {
         NS_LOG_FUNCTION(this);
         if (tab_socket[idx] == 0)
@@ -185,6 +185,7 @@ namespace ns3
                 NS_ASSERT_MSG(false, "Incompatible address type: " << ip);
             }
             tab_socket[idx]->SetAllowBroadcast(false);
+            map_neighbor_device.insert( std::pair<uint32_t, uint32_t>(idx, deviceID) );
         }
         else
         {
@@ -291,6 +292,7 @@ namespace ns3
                 assert(routes[tagPktRecv.GetCurrentHop()] == m_local_ID);
                 tagPktRecv.AddCurrentHop();
                 packet->ReplacePacketTag(tagPktRecv);
+                CheckCongestion(map_neighbor_device[routes[tagPktRecv.GetCurrentHop()]], (uint32_t)tagPktRecv.GetSourceID(), (uint32_t)tagPktRecv.GetDestID());
                 tab_socket[routes[tagPktRecv.GetCurrentHop()]]->Send(packet);
             }
             // NS_LOG_LOGIC("Echoing packet");
@@ -330,6 +332,7 @@ namespace ns3
         tagToSend.SetCurrentHop(1);
         //std::cout << Simulator::Now().As(Time::NS) << std::endl;
         tagToSend.SetStartTime(Simulator::Now().ToInteger(Time::NS));
+
         
         // std::cout << "before add" << std::endl;
         // tagToSend.Print(std::cout);
@@ -341,6 +344,7 @@ namespace ns3
 
         //std::cout << "Source ID: " << m_local_ID << ", target ID: " << idx << ", next hop" << routes[1] << "at time: " << tagToSend.GetStartTime() << " " << Simulator::Now().As(Time::NS) << std::endl;
 
+        CheckCongestion(map_neighbor_device[routes[1]], m_local_ID, idx);
         tab_socket[routes[1]]->Send(p);
         ++m_sent[idx];
 
@@ -384,12 +388,30 @@ namespace ns3
         }
         //std::cout << "iter Node ID: " << m_local_ID << " complete" << std::endl;
     }
+
+    void overlayApplication::CheckCongestion(uint32_t deviceID, uint32_t src, uint32_t dest)
+    {
+        NS_LOG_FUNCTION(this);
+        //Ptr<PointToPointNetDevice> net_device = StaticCast<PointToPointNetDevice>(GetNode()->GetDevice(deviceID));
+        Ptr<NetDevice> net_raw = GetNode()->GetDevice(deviceID);
+        Ptr<PointToPointNetDevice> net_device = DynamicCast <PointToPointNetDevice, NetDevice>(GetNode()->GetDevice(deviceID));
+        Ptr<Queue<Packet>> net_queue = net_device->GetQueue();
+        std::cout << "src: " << src << " -dest: " << dest << " queue backlog: " << net_queue->GetNPackets() << std::endl;
+        if (net_queue->GetNPackets() > 0)
+        {
+            std::cout << "congestion at " << m_local_ID << "from " << src << " to " << dest << "with " << std::endl;
+            meta->cnt_congestion[std::to_string(src) + ' ' + std::to_string(dest)] ++;
+        }
+    }
+
     void overlayApplication::CheckCongestion(Ptr<Socket> skt, uint32_t src, uint32_t dest)
     {
         NS_LOG_FUNCTION(this);
-        //Ptr<NetDevice> net_raw = skt->GetBoundNetDevice();
-        //Ptr<PointToPointNetDevice> net_device = StaticCast<PointToPointNetDevice>(skt->GetBoundNetDevice());
-        Ptr<Queue<Packet>> net_queue = StaticCast<PointToPointNetDevice>(skt->GetBoundNetDevice())->GetQueue();
+        Ptr<NetDevice> net_raw = skt->GetBoundNetDevice();
+        Ptr<PointToPointNetDevice> net_device = StaticCast<PointToPointNetDevice>(net_raw);
+        Ptr<Queue<Packet>> net_queue = net_device->GetQueue();
+        //Ptr<Queue<Packet>> net_queue = StaticCast<PointToPointNetDevice>(skt->GetBoundNetDevice())->GetQueue();
+        std::cout << "src: " << src << " -dest: " << dest << " queue backlog: " << net_queue->GetNPackets() << std::endl;
         if (net_queue->GetNPackets() > 0)
         {
             std::cout << "congestion at " << m_local_ID << "from " << src << " to " << dest << "with " << std::endl;

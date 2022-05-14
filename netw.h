@@ -11,6 +11,7 @@
 #define LISTENPORT 9
 #define MAXPKTNUM 3
 #define NSTOMS 1000000
+#define MAXBACKLOG 1000
 
 namespace ns3
 {
