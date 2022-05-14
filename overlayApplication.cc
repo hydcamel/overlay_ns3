@@ -396,11 +396,15 @@ namespace ns3
         Ptr<NetDevice> net_raw = GetNode()->GetDevice(deviceID);
         Ptr<PointToPointNetDevice> net_device = DynamicCast <PointToPointNetDevice, NetDevice>(GetNode()->GetDevice(deviceID));
         Ptr<Queue<Packet>> net_queue = net_device->GetQueue();
-        std::cout << "src: " << src << " -dest: " << dest << " queue backlog: " << net_queue->GetNPackets() << std::endl;
+        //std::cout << "src: " << src << " -dest: " << dest << " queue backlog: " << net_queue->GetNPackets() << std::endl;
         if (net_queue->GetNPackets() > 0)
         {
-            std::cout << "congestion at " << m_local_ID << "from " << src << " to " << dest << "with " << std::endl;
+            std::cout << "congestion at " << m_local_ID << "from " << src << " to " << dest << "with " << net_queue->GetNPackets() << " " << net_queue->GetNBytes() << std::endl;
             meta->cnt_congestion[std::to_string(src) + ' ' + std::to_string(dest)] ++;
+        }
+        else
+        {
+            std::cout << "No congestion at " << m_local_ID << "from " << src << " to " << dest << "with " << net_queue->GetNPackets() << " " << net_queue->GetNBytes() << std::endl;
         }
     }
 
