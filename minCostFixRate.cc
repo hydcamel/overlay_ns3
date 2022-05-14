@@ -29,15 +29,21 @@ int main(int argc, char *argv[])
     LogComponentEnable("p2pTestV1", LOG_LEVEL_INFO);
     LogComponentEnable("overlayApplication", LOG_LEVEL_INFO);
 
-    std::string newt_filename{"/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/toy_one_junction.graph"};
-    std::string demands_file{"/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/tunnel_demands.txt"};
+    std::string name_shared_folder {"/vagrant/Documents/vagrant_shared_folder/"};
+    std::string name_pwd {"/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/"};
+    std::string name_underlay;
+
+    CommandLine cmd;
+    cmd.AddValue("name_underlay", "name of underlay in the form of .graph", name_underlay);
+    cmd.Parse (argc, argv);
+
+    //std::string newt_filename{"/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/toy_one_junction.graph"};
+    std::string newt_filename = name_shared_folder + name_underlay;
+    std::string demands_file = name_pwd + "tunnel_demands.txt";
 
     netw netw_meta(newt_filename, demands_file);
-    // netw_meta.read_underlay(newt_filename);
-    // netw_meta.read_overlay();
 
-    // CommandLine cmd;
-    // cmd.Parse (argc, argv);
+    
     InternetStackHelper internet;
     Ipv4AddressHelper address;
     address.SetBase("10.0.0.0", "255.255.255.0");
@@ -112,14 +118,14 @@ int main(int argc, char *argv[])
             }
         } */
     }
-    for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
+    /* for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
     {
         std::cout << "Node ID: " << i << "=" << underlayNodes.Get(i)->GetId() << "; n_devices = " << underlayNodes.Get(i)->GetNDevices() << std::endl;
         for (uint32_t l = 0; l < underlayNodes.Get(i)->GetNDevices(); l++)
         {
             std::cout << "device ID: " << l << " with address: " << underlayNodes.Get(i)->GetObject<Ipv4>()->GetAddress(l, 0).GetLocal() << std::endl;
         }
-    }
+    } */
 
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
     /* Ptr<OutputStreamWrapper> routingStream = Create<OutputStreamWrapper>(&std::cout);

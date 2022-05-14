@@ -368,6 +368,7 @@ namespace ns3
         if (m_local_ID == 0)
         {
             meta->write_average_delay("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/average_delay.txt");
+            meta->write_congestion_cnt("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/congestion_cnt.txt");
         }
         
         //std::cout << "Node ID: " << m_local_ID << " stop Application" << std::endl;
@@ -399,12 +400,12 @@ namespace ns3
         //std::cout << "src: " << src << " -dest: " << dest << " queue backlog: " << net_queue->GetNPackets() << std::endl;
         if (net_queue->GetNPackets() > 0)
         {
-            std::cout << "congestion at " << m_local_ID << "from " << src << " to " << dest << "with " << net_queue->GetNPackets() << " " << net_queue->GetNBytes() << std::endl;
+            //std::cout << "congestion at " << m_local_ID << "from " << src << " to " << dest << "with " << net_queue->GetNPackets() << " " << net_queue->GetNBytes() << std::endl;
             meta->cnt_congestion[std::to_string(src) + ' ' + std::to_string(dest)] ++;
         }
         else
         {
-            std::cout << "No congestion at " << m_local_ID << "from " << src << " to " << dest << "with " << net_queue->GetNPackets() << " " << net_queue->GetNBytes() << std::endl;
+            //std::cout << "No congestion at " << m_local_ID << "from " << src << " to " << dest << "with " << net_queue->GetNPackets() << " " << net_queue->GetNBytes() << std::endl;
         }
     }
 

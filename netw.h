@@ -9,7 +9,7 @@
 #define IPPktSize 1052
 #define MACPktSize 1054
 #define LISTENPORT 9
-#define MAXPKTNUM 3
+#define MAXPKTNUM 1
 #define NSTOMS 1000000
 #define MAXBACKLOG 1000
 
@@ -27,6 +27,7 @@ public:
     void read_overlay();
     void read_demands(std::string filename);
     void write_average_delay(std::string filename);
+    void write_congestion_cnt(std::string filename);
 
     std::vector<int> w, bw, delay;
     //std::vector<int> src, dest;

@@ -101,11 +101,11 @@ void netw::read_overlay()
 	{
 		std::cout << "overlay_file: " << file_overlay_nodes << std::endl;
 	}
-	
-	for (int idx = 0; idx < n_onodes; idx++)
+	uint32_t idx_node;
+	for (int i = 0; i < n_onodes; i++)
 	{
-		iss >> idx;
-		loc_overlay_nodes[idx] = true;
+		iss >> idx_node;
+		loc_overlay_nodes[idx_node] = true;
 	}
 }
 
@@ -173,6 +173,20 @@ void netw::write_average_delay(std::string filename)
 		//wrfile << key << " " << std::to_string( double(n_bits) / (double(average_delay[key]) / 1000000000) ) << std::endl;
 		//wrfile << key << " " << std::to_string( (double(average_delay[key]) / 1000000000) / double(n_bits) ) << std::endl;
 		wrfile << key << " " << std::to_string( double(average_delay[key]) ) << std::endl;
+	}
+	
+}
+
+void netw::write_congestion_cnt(std::string filename)
+{
+	std::ofstream wrfile(filename);
+	std::string key;
+	for (uint16_t i = 0; i < demands_vec.size(); i++)
+	{
+		key = std::to_string(demands_vec[i].first) + ' ' + std::to_string(demands_vec[i].second);
+		//wrfile << key << " " << std::to_string( double(n_bits) / (double(average_delay[key]) / 1000000000) ) << std::endl;
+		//wrfile << key << " " << std::to_string( (double(average_delay[key]) / 1000000000) / double(n_bits) ) << std::endl;
+		wrfile << key << " " << std::to_string( cnt_congestion[key] ) << std::endl;
 	}
 	
 }
