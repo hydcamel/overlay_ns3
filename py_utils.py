@@ -14,7 +14,7 @@ from gurobipy import GRB
 
 '''Create Functions'''
 def create_incidence_from_graph(file_name:str):
-    file_to_read = './Data/' + file_name
+    file_to_read = '/vagrant/Documents/vagrant_shared_folder/' + file_name
     graphFile = open(file_to_read, 'r')
     Lines = graphFile.readlines()
     # Read number of nodes and number of edges
