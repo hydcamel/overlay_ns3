@@ -9,6 +9,7 @@ import numpy as np
 import networkx as nx
 import py_utils
 import pickle
+import os
 
 
 '''Obtain topology file name'''
@@ -77,7 +78,7 @@ for idx_topo in idx_topology_list:
         tunnel_demands = py_utils.scale_tunnel_demands(init_demands=tunnel_demands, map_tunnel2edge=map_tunnel2edge, edge_capacity=edges_bw, tunnel_list=tunnel_list, nodes_overlay=idx_overlay_node, tunnel_delays=tunnel_delays, alpha=alpha)
 
         py_utils.convert_route_to_file(np.identity(len(tunnel_list)), tunnel_list, spr_table)
-        os.system("./waf --run MinCostFixRate")
+        os.system("../.././waf --run MinCostFixRate")
         delay_direct = py_utils.read_results(file_name="average_delay.txt", tunnel_list=tunnel_list)
         congestion_direct = py_utils.read_results(file_name="congestion_cnt.txt", tunnel_list=tunnel_list)
         print("congestion_direct: ", congestion_direct)
@@ -85,7 +86,7 @@ for idx_topo in idx_topology_list:
 
         res_x_aware = py_utils.aware_routing_MinCostFixedRate(routing_type='aware', tunnel_capacity=tunnel_capacity, tunnel_demands=tunnel_demands, category_dict=category_dict, nodes_overlay=idx_overlay_node, tunnel_list=tunnel_list, tunnel_delay=tunnel_delay, edge_capacity=edges_bw, is_creation_cost = is_creation_cost)
         py_utils.convert_route_to_file(res_x_aware, tunnel_list, spr_table)
-        os.system("./waf --run MinCostFixRate")
+        os.system("../.././waf --run MinCostFixRate")
         delay_aware = py_utils.read_results(file_name="average_delay.txt", tunnel_list=tunnel_list)
         congestion_aware = py_utils.read_results(file_name="congestion_cnt.txt", tunnel_list=tunnel_list)
         print("delay_aware: ", [delay_aware[k] / delay_direct[k] for k in range(len(tunnel_list))])
@@ -93,7 +94,7 @@ for idx_topo in idx_topology_list:
 
         res_x_agonostic = py_utils.aware_routing_MinCostFixedRate(routing_type='agnostic', tunnel_capacity=tunnel_capacity, tunnel_demands=tunnel_demands, category_dict=category_dict, nodes_overlay=idx_overlay_node, tunnel_list=tunnel_list, tunnel_delay=tunnel_delay, edge_capacity=edges_bw)
         py_utils.convert_route_to_file(res_x_agonostic, tunnel_list, spr_table)
-        os.system("./waf --run MinCostFixRate")
+        os.system("../.././waf --run MinCostFixRate")
         delay_agonostic = py_utils.read_results(file_name="average_delay.txt", tunnel_list=tunnel_list)
         congestion_agonostic = py_utils.read_results(file_name="congestion_cnt.txt", tunnel_list=tunnel_list)
         print("delay_agonostic: ", [delay_agonostic[k] / delay_direct[k] for k in range(len(tunnel_list))])
