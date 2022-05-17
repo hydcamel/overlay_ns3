@@ -23,6 +23,20 @@ using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE("p2pTestV1");
 
+void read_setup(std::string& name_underlay, std::string& name_routing)
+{
+    std::ifstream infile("setup.txt");
+    std::string line;
+
+    getline(infile, line);
+    std::istringstream iss(line);
+    iss >> name_underlay;
+
+    getline(infile, line);
+    std::istringstream iss(line);
+    iss >> name_routing;
+}
+
 int main(int argc, char *argv[])
 {
     // Log information
