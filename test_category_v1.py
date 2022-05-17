@@ -37,6 +37,7 @@ alpha = 2
 is_creation_cost = False
 n_iter_demands = 1
 idx_topology_list = [0, 1, 2, 18, 23, 39, 54, 127]
+idx_topology_list = [0]
 
 for idx_topo in idx_topology_list:
     D, edges_bw, edges_delay, edges_list, edges_dict = py_utils.create_incidence_from_graph( all_topology_filename[idx_topo] )
@@ -67,8 +68,8 @@ for idx_topo in idx_topology_list:
         tunnel_demands = py_utils.create_tunnel_demands(create_type='gravity', tunnel_capacity=tunnel_capacity, n_nodes=D.shape[0], idx_overlay_nodes=idx_overlay_node, tunnel_list=tunnel_list, demand_file=None)
         tunnel_demands = py_utils.scale_tunnel_demands(init_demands=tunnel_demands, map_tunnel2edge=map_tunnel2edge, edge_capacity=edges_bw, tunnel_list=tunnel_list, nodes_overlay=idx_overlay_node, tunnel_delays=tunnel_delays, alpha=alpha)
 
-        with open("debug_demands.pkl", "rb") as f:
-            tunnel_demands = pickle.load(f)
+        # with open("debug_demands.pkl", "rb") as f:
+        #     tunnel_demands = pickle.load(f)
         
         py_utils.convert_route_to_file(np.identity(len(tunnel_list)), tunnel_list, spr_table)
         

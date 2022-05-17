@@ -47,9 +47,9 @@ int main(int argc, char *argv[])
     std::string name_pwd {"/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/"};
     std::string name_underlay;
 
-    CommandLine cmd;
-    cmd.AddValue("name_underlay", "name of underlay in the form of .graph", name_underlay);
-    cmd.Parse (argc, argv);
+    // CommandLine cmd;
+    // cmd.AddValue("name_underlay", "name of underlay in the form of .graph", name_underlay);
+    // cmd.Parse (argc, argv);
 
     //std::string newt_filename{"/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/toy_one_junction.graph"};
     std::string newt_filename = name_shared_folder + name_underlay;
