@@ -14,7 +14,7 @@ import os
 
 '''Obtain topology file name'''
 is_load_topology_name = True
-f_topology_name = "./Data/topology_name.pkl"
+f_topology_name = "topology_name.pkl"
 if is_load_topology_name == False:
     import os
     base_folder = "./Data"
