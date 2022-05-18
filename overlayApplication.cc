@@ -416,7 +416,7 @@ namespace ns3
         if (net_queue->GetNPackets() > 0)
         {
             //std::cout << "congestion at " << m_local_ID << "from " << src << " to " << dest << "with " << net_queue->GetNPackets() << " " << net_queue->GetNBytes() << std::endl;
-            meta->cnt_congestion[std::to_string(src) + ' ' + std::to_string(dest)] ++;
+            meta->cnt_congestion[std::to_string(src) + ' ' + std::to_string(dest)] += net_queue->GetNPackets();
         }
         else
         {
