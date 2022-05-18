@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
         vec_app[i] = fact.Create<overlayApplication>();
         vec_app[i]->InitApp(&netw_meta, i, MAXPKTNUM);
         vec_app[i]->SetStartTime(Seconds(0));
-        vec_app[i]->SetStopTime(Seconds(5));
+        vec_app[i]->SetStopTime(Seconds(1500));
         underlayNodes.Get(i)->AddApplication(vec_app[i]);
         vec_app[i]->SetRecvSocket();
     }
@@ -178,6 +178,10 @@ int main(int argc, char *argv[])
     // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyRxEnd", MakeCallback(&trace_PhyRxEnd) );
 
     // Config::Connect( "/ChannelList/*/$ns3::PointToPointChannel/TxRxPointToPoint", MakeCallback(&trace_txrxPointToPoint) );
+    // Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTxDrop", MakeCallback(&trace_NetDeviceMacTxDrop));
+    // Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxDrop", MakeCallback(&trace_NetDevicePhyTxDrop));
+    // Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyRxDrop", MakeCallback(&trace_NetDevicePhyRxDrop));
+    // Config::Connect("/NodeList/*/$ns3::Ipv4L3Protocol/Drop", MakeCallback(&trace_Ipv4L3PDrop));
 
     NS_LOG_INFO("Run Simulation.");
     // std::cout << "before run" << std::endl;

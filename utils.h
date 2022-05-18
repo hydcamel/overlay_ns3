@@ -6,6 +6,7 @@
 #include "ns3/uinteger.h"
 #include "ns3/ipv4-global-routing-helper.h"
 #include "ns3/internet-module.h"
+#include "ns3/ipv4-l3-protocol.h"
 #include "ns3/log.h"
 
 namespace ns3
@@ -26,7 +27,11 @@ void trace_PhyRxBegin(std::string context, Ptr<const Packet> packet);
 void trace_PhyRxEnd(std::string context, Ptr<const Packet> packet);
 void trace_txrxPointToPoint(std::string context, Ptr<const Packet> packet, Ptr<NetDevice> src, Ptr<NetDevice> dest, Time trans, Time recv);
 
+void trace_NetDeviceMacTxDrop(std::string context, Ptr<const Packet> packet);
+void trace_NetDevicePhyTxDrop(std::string context, Ptr<const Packet> packet);
+void trace_NetDevicePhyRxDrop(std::string context, Ptr<const Packet> packet);
 
+void trace_Ipv4L3PDrop(std::string context, const Ipv4Header &header, Ptr< const Packet > packet, Ipv4L3Protocol::DropReason reason, Ptr< Ipv4 > ipv4, uint32_t interface);
 
 
 }

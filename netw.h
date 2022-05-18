@@ -9,7 +9,7 @@
 #define IPPktSize 1052
 #define MACPktSize 1054
 #define LISTENPORT 9
-#define MAXPKTNUM 10000
+#define MAXPKTNUM 500
 #define NSTOMS 1000000
 #define MAXBACKLOG 1000
 

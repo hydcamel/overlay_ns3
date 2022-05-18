@@ -268,20 +268,25 @@ namespace ns3
             SDtag tagPktRecv;
             packet->PeekPacketTag(tagPktRecv);
             std::string keys{ std::to_string(tagPktRecv.GetSourceID()) + ' ' + std::to_string(tagPktRecv.GetDestID()) };
-            if (meta->routing_map.count(keys) == 0)
+            /* if (meta->routing_map.count(keys) == 0)
             {
                 std::cout << "Wrong key: " << keys << " at " << m_local_ID << std::endl;
-            }
+            } */
+            /* if ((uint32_t)tagPktRecv.GetSourceID() == 4 && (uint32_t)tagPktRecv.GetDestID() == 19)
+            {
+                std::cout << keys << " at " << m_local_ID << std::endl;
+            } */
+            
             
             std::vector<int> &routes = meta->routing_map[keys];
             // packet->PrintPacketTags(std::cout);
             // tagPktRecv.Print(std::cout);
             if (tagPktRecv.GetDestID() == GetLocalID())
             {
-                if (meta->cnt_pkt.count(keys) == 0)
+                /* if (meta->cnt_pkt.count(keys) == 0)
                 {
                     std::cout << "Wrong key: " << keys << " at " << m_local_ID << std::endl;
-                }
+                } */
                 //std::cout << "Node ID: " << GetLocalID() << ": A packet received from " << (uint32_t)tagPktRecv.GetSourceID() << std::endl;
                 time_trans += double(Simulator::Now().ToInteger(Time::NS) - tagPktRecv.GetStartTime()) / NSTOMS;
                 //std::cout << tagPktRecv.GetSourceID() << " - " << tagPktRecv.GetDestID() << ": now " << Simulator::Now().ToInteger(Time::NS) << " start: " << tagPktRecv.GetStartTime() << " = " << time_trans << std::endl;
@@ -289,7 +294,7 @@ namespace ns3
                 meta->cnt_pkt[keys] ++;
                 if (meta->cnt_pkt[keys] == MAXPKTNUM)
                 {
-                    std::cout << keys << ": " << meta->cnt_pkt[keys] << "; MAXPKTNUM = " << MAXPKTNUM << std::endl;
+                    //std::cout << keys << ": " << meta->cnt_pkt[keys] << "; MAXPKTNUM = " << MAXPKTNUM << std::endl;
                     meta->time_span_flows[keys] = Simulator::Now().ToDouble(Time::MS) - meta->time_span_flows[keys];
                 }
                 

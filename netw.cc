@@ -167,11 +167,11 @@ void netw::write_average_delay(std::string filename)
 	std::ofstream wrfile(filename);
 	std::string key;
 	//uint16_t n_bits = MACPktSize * MAXPKTNUM * 8;
-	for (uint16_t i = 0; i < demands_vec.size(); i++)
+	/* for (uint16_t i = 0; i < demands_vec.size(); i++)
 	{
 		key = std::to_string(demands_vec[i].first) + ' ' + std::to_string(demands_vec[i].second);
 		std::cout << time_span_flows[key] << " ";
-	}
+	} */
 	std::cout << std::endl;
 	for (uint16_t i = 0; i < demands_vec.size(); i++)
 	{
