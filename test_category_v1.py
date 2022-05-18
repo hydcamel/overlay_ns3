@@ -93,13 +93,13 @@ for idx_topo in idx_topology_list:
         print("delay_aware: ", [delay_aware[k] / delay_direct[k] for k in range(len(tunnel_list))])
         print("congestion_aware: ", congestion_aware)
 
-        # res_x_agonostic = py_utils.aware_routing_MinCostFixedRate(routing_type='agnostic', tunnel_capacity=tunnel_capacity, tunnel_demands=tunnel_demands, category_dict=category_dict, nodes_overlay=idx_overlay_node, tunnel_list=tunnel_list, tunnel_delay=tunnel_delay, edge_capacity=edges_bw)
-        # py_utils.convert_route_to_file(res_x_agonostic, tunnel_list, spr_table)
-        # os.system("../.././waf --run MinCostFixRate")
-        # delay_agonostic = py_utils.read_results(file_name="average_delay.txt", tunnel_list=tunnel_list)
-        # congestion_agonostic = py_utils.read_results(file_name="congestion_cnt.txt", tunnel_list=tunnel_list)
-        # print("delay_agonostic: ", [delay_agonostic[k] / delay_direct[k] for k in range(len(tunnel_list))])
-        # print("congestion_agonostic: ", congestion_agonostic)
+        res_x_agonostic = py_utils.aware_routing_MinCostFixedRate(routing_type='agnostic', tunnel_capacity=tunnel_capacity, tunnel_demands=tunnel_demands, category_dict=category_dict, nodes_overlay=idx_overlay_node, tunnel_list=tunnel_list, tunnel_delay=tunnel_delay, edge_capacity=edges_bw)
+        py_utils.convert_route_to_file(res_x_agonostic, tunnel_list, spr_table)
+        os.system("../.././waf --run MinCostFixRate")
+        delay_agonostic = py_utils.read_results(file_name="average_delay.txt", tunnel_list=tunnel_list)
+        congestion_agonostic = py_utils.read_results(file_name="congestion_cnt.txt", tunnel_list=tunnel_list)
+        print("delay_agonostic: ", [delay_agonostic[k] / delay_direct[k] for k in range(len(tunnel_list))])
+        print("congestion_agonostic: ", congestion_agonostic)
 
         # delay_per_run = np.zeros((2,len(tunnel_list)))
         # congestion_per_run = np.zeros((2,len(tunnel_list)))
@@ -111,17 +111,19 @@ for idx_topo in idx_topology_list:
 
         # res_x = py_utils.MinCostFixedRate_v2(routing_type='aware', tunnel_capacity=tunnel_capacity, tunnel_demands=tunnel_demands, category_dict=category_dict, nodes_overlay=idx_overlay_node, tunnel_list=tunnel_list, tunnel_delay=tunnel_delay, edge_capacity=edges_bw)
 
-        # '''Compare theoretical delays'''
-        # log_delay_theory = np.zeros( (len(tunnel_list), 3) ) # aware; agnostic; direct tunnel
-        # log_delay_theory[:,2] = tunnel_delays
-        # for i in range(len(tunnel_list)):
-        #     log_delay_theory[i, 0] = np.sum(np.array( [res_x_aware[j,i] * tunnel_delays[j] for j in range(len(tunnel_list))] ))
-        #     log_delay_theory[i, 1] = np.sum(np.array( [res_x_agonostic[j,i] * tunnel_delays[j] for j in range(len(tunnel_list))] ))
-        # '''Compare theoretical congestion'''
-        # traffic_direct = py_utils.traffic_theoretical(tunnel_demands=tunnel_demands, map_tunnel2edge=map_tunnel2edge, res_x=np.identity(len(tunnel_list)))
-        # traffic_aware = py_utils.traffic_theoretical(tunnel_demands=tunnel_demands, map_tunnel2edge=map_tunnel2edge, res_x=res_x_aware)
-        # traffic_agnositc = py_utils.traffic_theoretical(tunnel_demands=tunnel_demands, map_tunnel2edge=map_tunnel2edge, res_x=res_x_agonostic)
-        # log_congestion_theory = np.zeros( (D.shape[1], 3) ) # aware; agnostic; direct tunnel
-        # log_congestion_theory[:, 0] = traffic_aware - edges_bw
-        # log_congestion_theory[:, 1] = traffic_agnositc - edges_bw
-        # log_congestion_theory[:, 2] = traffic_direct - edges_bw
+        '''Compare theoretical delays'''
+        log_delay_theory = np.zeros( (len(tunnel_list), 3) ) # aware; agnostic; direct tunnel
+        log_delay_theory[:,2] = tunnel_delays
+        for i in range(len(tunnel_list)):
+            log_delay_theory[i, 0] = np.sum(np.array( [res_x_aware[j,i] * tunnel_delays[j] for j in range(len(tunnel_list))] ))
+            log_delay_theory[i, 1] = np.sum(np.array( [res_x_agonostic[j,i] * tunnel_delays[j] for j in range(len(tunnel_list))] ))
+        print("log_delay_theory: ", log_delay_theory)
+        '''Compare theoretical congestion'''
+        traffic_direct = py_utils.traffic_theoretical(tunnel_demands=tunnel_demands, map_tunnel2edge=map_tunnel2edge, res_x=np.identity(len(tunnel_list)))
+        traffic_aware = py_utils.traffic_theoretical(tunnel_demands=tunnel_demands, map_tunnel2edge=map_tunnel2edge, res_x=res_x_aware)
+        traffic_agnositc = py_utils.traffic_theoretical(tunnel_demands=tunnel_demands, map_tunnel2edge=map_tunnel2edge, res_x=res_x_agonostic)
+        log_congestion_theory = np.zeros( (D.shape[1], 3) ) # aware; agnostic; direct tunnel
+        log_congestion_theory[:, 0] = traffic_aware - edges_bw
+        log_congestion_theory[:, 1] = traffic_agnositc - edges_bw
+        log_congestion_theory[:, 2] = traffic_direct - edges_bw
+        print("log_congestion_theory: ", log_congestion_theory)

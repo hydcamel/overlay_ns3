@@ -130,6 +130,7 @@ def create_tunnel_demands(create_type:str, tunnel_capacity:list, n_nodes, idx_ov
 '''Optimization: Routing'''
 def aware_routing_MinCostFixedRate(routing_type:str, tunnel_capacity:list, tunnel_demands:list, category_dict:dict, nodes_overlay:list, tunnel_list:list, tunnel_delay:list, edge_capacity:list, is_creation_cost = False):
     min_cost_model = gp.Model()
+    min_cost_model.setParam("OutputFlag", 0)
     n_tunnel = len(tunnel_capacity)
     xijh = min_cost_model.addVars(n_tunnel, n_tunnel, vtype = GRB.BINARY, name = 'x_bin') # tunnels * demands
     '''Capacity Constraint'''
