@@ -38,7 +38,7 @@ alpha = 2
 is_creation_cost = False
 n_iter_demands = 1
 idx_topology_list = [0, 1, 2, 18, 23, 39, 54, 127]
-idx_topology_list = [0]
+idx_topology_list = [2]
 
 for idx_topo in idx_topology_list:
     D, edges_bw, edges_delay, edges_list, edges_dict = py_utils.create_incidence_from_graph( all_topology_filename[idx_topo] )
@@ -51,12 +51,12 @@ for idx_topo in idx_topology_list:
     spr_table = py_utils.routing_underlay_spr_delay(edges_list=edges_list)
 
     # Create mapping from overlay to underlay
-    ratio_overlay_nodes = 0.3
+    ratio_overlay_nodes = 0.5
     n_overlay = int( ratio_overlay_nodes * D.shape[0] )
     # idx_overlay_node = np.random.permutation(D.shape[0])[0:n_overlay]
     # idx_overlay_node = [5,12,18]
     idx_overlay_node = py_utils.create_overlay_nodes(n_overlay_nodes=n_overlay, spr_table=spr_table, n_nodes=D.shape[0])
-    idx_overlay_node = [10, 5, 12, 1, 9]
+    #idx_overlay_node = [10, 5, 12, 1, 9]
 
     py_utils.wr_overlay_nodes(idx_overlay_node)
 
@@ -74,7 +74,7 @@ for idx_topo in idx_topology_list:
     delay_log = np.zeros((2,n_iter_demands))
     congestion_log = np.zeros((2,n_iter_demands))
     for it_demand in range(n_iter_demands):
-        tunnel_demands = py_utils.create_tunnel_demands(create_type='gravity', tunnel_capacity=tunnel_capacity, n_nodes=D.shape[0], idx_overlay_nodes=idx_overlay_node, tunnel_list=tunnel_list, demand_file=None)
+        tunnel_demands = py_utils.create_tunnel_demands(create_type='constant', tunnel_capacity=tunnel_capacity, n_nodes=D.shape[0], idx_overlay_nodes=idx_overlay_node, tunnel_list=tunnel_list, demand_file=None)
         tunnel_demands = py_utils.scale_tunnel_demands(init_demands=tunnel_demands, map_tunnel2edge=map_tunnel2edge, edge_capacity=edges_bw, tunnel_list=tunnel_list, nodes_overlay=idx_overlay_node, tunnel_delays=tunnel_delays, alpha=alpha)
         py_utils.write_tunnel_demands(tunnel_demands=tunnel_demands, tunnel_list=tunnel_list)
 

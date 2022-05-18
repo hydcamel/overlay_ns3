@@ -23,18 +23,16 @@ using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE("p2pTestV1");
 
-void read_setup(std::string& name_underlay, std::string& name_routing)
+void read_setup(std::string& name_underlay)
 {
-    std::ifstream infile("setup.txt");
+    std::ifstream infile("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/setup.txt");
     std::string line;
+    std::string temp;
 
     getline(infile, line);
     std::istringstream iss(line);
-    iss >> name_underlay;
-
-    getline(infile, line);
-    std::istringstream iss(line);
-    iss >> name_routing;
+    iss >> temp;
+    name_underlay = temp;
 }
 
 int main(int argc, char *argv[])
@@ -52,10 +50,11 @@ int main(int argc, char *argv[])
     // cmd.Parse (argc, argv);
 
     //std::string newt_filename{"/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/toy_one_junction.graph"};
-    std::string newt_filename = name_shared_folder + name_underlay;
+    read_setup(name_underlay);
+    std::string netw_filename = name_shared_folder + name_underlay;
     std::string demands_file = name_pwd + "tunnel_demands.txt";
 
-    netw netw_meta(newt_filename, demands_file);
+    netw netw_meta(netw_filename, demands_file);
 
     
     InternetStackHelper internet;

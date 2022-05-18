@@ -10,6 +10,7 @@ import random
 import networkx as nx
 import gurobipy as gp
 from gurobipy import GRB
+import numpy.matlib as npm
 
 
 '''Create Functions'''
@@ -118,7 +119,7 @@ def create_tunnel_demands(create_type:str, tunnel_capacity:list, n_nodes, idx_ov
         for i in range(n_tunnel):
             tunnel_demands[i] = round( np.random.uniform(lb*tunnel_capacity[i], ub*tunnel_capacity[i], 1)[0], 1 ) 
     elif create_type == 'constant':
-        tunnel_demands = ub*tunnel_capacity
+        tunnel_demands = np.array([ub*tunnel_capacity[k] for k in range(n_tunnel)])
     elif create_type == 'read':
         tunnel_demands = read_demands_file(demand_file)
     elif create_type == 'gravity':
@@ -239,7 +240,7 @@ def scale_tunnel_demands(init_demands:list, map_tunnel2edge, edge_capacity:list,
             rhs_list = [xijh[j,i] for j in tunnel_in]
             gp_model.addLConstr( gp.quicksum(lhs_list) == gp.quicksum(rhs_list) + 1*(src==node) - 1*(dest==node) )
         '''For each demand, we constrain the quality'''
-        gp_model.addLConstr( gp.quicksum([tunnel_delays[k] * xijh[k,i] for k in range(n_tunnel)]) <= alpha * tunnel_delays[i] )
+        # gp_model.addLConstr( gp.quicksum([tunnel_delays[k] * xijh[k,i] for k in range(n_tunnel)]) <= alpha * tunnel_delays[i] )
     gp_model.setObjective( omega[0], GRB.MINIMIZE )
     gp_model.optimize()
     return [iter_demand / omega[0].X for iter_demand in init_demands]
@@ -329,3 +330,9 @@ def decode_tunnel_str(tunnel_str):
     # for str_to_decode in tmp:
     #     tunnel_list = [tunnel_list, int(str_to_decode)]
     return tunnel_list
+
+def traffic_theoretical(tunnel_demands, map_tunnel2edge, res_x):
+    # res_x: tunnels * demands
+    tunnel_traffic = np.sum( res_x * npm.repmat( np.array(tunnel_demands), len(tunnel_demands), 1 ), axis=1 )
+    edge_traffic = np.sum( map_tunnel2edge * npm.repmat(tunnel_traffic, map_tunnel2edge.shape[0], 1), axis=1 )
+    return edge_traffic

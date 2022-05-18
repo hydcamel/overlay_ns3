@@ -170,9 +170,15 @@ void netw::write_average_delay(std::string filename)
 	for (uint16_t i = 0; i < demands_vec.size(); i++)
 	{
 		key = std::to_string(demands_vec[i].first) + ' ' + std::to_string(demands_vec[i].second);
+		std::cout << time_span_flows[key] << " ";
+	}
+	std::cout << std::endl;
+	for (uint16_t i = 0; i < demands_vec.size(); i++)
+	{
+		key = std::to_string(demands_vec[i].first) + ' ' + std::to_string(demands_vec[i].second);
 		//wrfile << key << " " << std::to_string( double(n_bits) / (double(average_delay[key]) / 1000000000) ) << std::endl;
 		//wrfile << key << " " << std::to_string( (double(average_delay[key]) / 1000000000) / double(n_bits) ) << std::endl;
-		wrfile << key << " " << std::to_string( double(average_delay[key]) ) << std::endl;
+		wrfile << key << " " << std::to_string( time_span_flows[key] ) << std::endl;
 	}
 	
 }

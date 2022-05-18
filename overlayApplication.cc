@@ -288,7 +288,7 @@ namespace ns3
             }
             else
             {
-                std::cout << "Source ID: " << (uint32_t)tagPktRecv.GetSourceID() << ", target ID: " << (uint32_t)tagPktRecv.GetDestID() << ", this hop" << m_local_ID << ", next hop" << routes[tagPktRecv.GetCurrentHop() + 1] << std::endl;
+                //std::cout << "Source ID: " << (uint32_t)tagPktRecv.GetSourceID() << ", target ID: " << (uint32_t)tagPktRecv.GetDestID() << ", this hop" << m_local_ID << ", next hop" << routes[tagPktRecv.GetCurrentHop() + 1] << std::endl;
                 assert(routes[tagPktRecv.GetCurrentHop()] == m_local_ID);
                 tagPktRecv.AddCurrentHop();
                 packet->ReplacePacketTag(tagPktRecv);
