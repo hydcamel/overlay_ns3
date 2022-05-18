@@ -117,5 +117,11 @@ for idx_topo in idx_topology_list:
         # for i in range(len(tunnel_list)):
         #     log_delay_theory[i, 0] = np.sum(np.array( [res_x_aware[j,i] * tunnel_delays[j] for j in range(len(tunnel_list))] ))
         #     log_delay_theory[i, 1] = np.sum(np.array( [res_x_agonostic[j,i] * tunnel_delays[j] for j in range(len(tunnel_list))] ))
-
-        # py_utils.convert_route_to_file(res_x_aware, tunnel_list, spr_table)
+        # '''Compare theoretical congestion'''
+        # traffic_direct = py_utils.traffic_theoretical(tunnel_demands=tunnel_demands, map_tunnel2edge=map_tunnel2edge, res_x=np.identity(len(tunnel_list)))
+        # traffic_aware = py_utils.traffic_theoretical(tunnel_demands=tunnel_demands, map_tunnel2edge=map_tunnel2edge, res_x=res_x_aware)
+        # traffic_agnositc = py_utils.traffic_theoretical(tunnel_demands=tunnel_demands, map_tunnel2edge=map_tunnel2edge, res_x=res_x_agonostic)
+        # log_congestion_theory = np.zeros( (D.shape[1], 3) ) # aware; agnostic; direct tunnel
+        # log_congestion_theory[:, 0] = traffic_aware - edges_bw
+        # log_congestion_theory[:, 1] = traffic_agnositc - edges_bw
+        # log_congestion_theory[:, 2] = traffic_direct - edges_bw
