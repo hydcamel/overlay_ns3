@@ -33,7 +33,7 @@ def create_incidence_from_graph(file_name:str):
         tmp = line.strip('\n').strip('edge_').split(' ')
         idx, src, dest, weight, bw, delay = int(tmp[0]), int(tmp[1]), int(tmp[2]), int(tmp[3]), int(tmp[4]), int(tmp[5])
         D[src][i], D[dest][i] = 1, -1
-        edges_bw[i], edges_delay[i] = bw, delay
+        edges_bw[i], edges_delay[i] = bw*1e3, float(delay) / 1e6 # dataset: bw in kbps, delay in microsec (us). transform to bps and sec
         #edges_list.append((src, dest, delay))
         edges_list.append((src, dest, 1))
         edges_dict[(src, dest)] = i
@@ -81,7 +81,7 @@ def create_overlay_node_tunnel(loc_nodes):
 
 def create_mapping(tunnel_list, spr_table, edges_dict, n_edges, edges_bw, edges_delay):
     map_mat = np.zeros((n_edges, len(tunnel_list))) # underlay * overlay
-    tunnel_capacity = [1e8] * len(tunnel_list) # overlay
+    tunnel_capacity = [1e20] * len(tunnel_list) # overlay
     tunnel_delay = [None] * len(tunnel_list) # overlay
     idx_tunnel = 0
     for (i,j) in tunnel_list:
@@ -130,7 +130,7 @@ def create_tunnel_demands(create_type:str, tunnel_capacity:list, n_nodes, idx_ov
 '''Optimization: Routing'''
 def aware_routing_MinCostFixedRate(routing_type:str, tunnel_capacity:list, tunnel_demands:list, category_dict:dict, nodes_overlay:list, tunnel_list:list, tunnel_delay:list, edge_capacity:list, is_creation_cost = False):
     min_cost_model = gp.Model()
-    min_cost_model.setParam("OutputFlag", 0)
+    # min_cost_model.setParam("OutputFlag", 0)
     n_tunnel = len(tunnel_capacity)
     xijh = min_cost_model.addVars(n_tunnel, n_tunnel, vtype = GRB.BINARY, name = 'x_bin') # tunnels * demands
     '''Capacity Constraint'''

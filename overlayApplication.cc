@@ -222,11 +222,11 @@ namespace ns3
                     if (it == meta->overlay_demands.end())
                         continue; // no such demands
                     // set interval
-                    SetInterval(i, float(MACPktSize * 8) / it->second); // flow rate for the target i
+                    SetInterval(i, float(MACPktSize * 8) / it->second); // flow rate for the target i: bps
                     // tab_socket[routes[1]]->SetAllowBroadcast(false);
                     Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable>();
                     Time random_offset = MicroSeconds(rand->GetValue(50, 200));
-                    meta->time_span_flows[std::to_string(m_local_ID) + ' ' + std::to_string(i)] = random_offset.ToDouble(Time::MS);
+                    meta->time_span_flows[std::to_string(m_local_ID) + ' ' + std::to_string(i)] = random_offset.ToDouble(Time::US);
                     ScheduleTransmit(random_offset, i);
                 }
             }
@@ -288,14 +288,14 @@ namespace ns3
                     std::cout << "Wrong key: " << keys << " at " << m_local_ID << std::endl;
                 } */
                 //std::cout << "Node ID: " << GetLocalID() << ": A packet received from " << (uint32_t)tagPktRecv.GetSourceID() << std::endl;
-                time_trans += double(Simulator::Now().ToInteger(Time::NS) - tagPktRecv.GetStartTime()) / NSTOMS;
+                time_trans += double(Simulator::Now().ToInteger(Time::NS) - tagPktRecv.GetStartTime()) / NSTOUS;
                 //std::cout << tagPktRecv.GetSourceID() << " - " << tagPktRecv.GetDestID() << ": now " << Simulator::Now().ToInteger(Time::NS) << " start: " << tagPktRecv.GetStartTime() << " = " << time_trans << std::endl;
                 meta->average_delay[keys] += time_trans;
                 meta->cnt_pkt[keys] ++;
                 if (meta->cnt_pkt[keys] == MAXPKTNUM)
                 {
                     //std::cout << keys << ": " << meta->cnt_pkt[keys] << "; MAXPKTNUM = " << MAXPKTNUM << std::endl;
-                    meta->time_span_flows[keys] = Simulator::Now().ToDouble(Time::MS) - meta->time_span_flows[keys];
+                    meta->time_span_flows[keys] = Simulator::Now().ToDouble(Time::US) - meta->time_span_flows[keys];
                 }
                 
                 packet->RemoveAllPacketTags();

@@ -98,8 +98,8 @@ int main(int argc, char *argv[])
 
     for (uint32_t i = 0; i < links.size(); i++)
     {
-        links[i].SetChannelAttribute("Delay", StringValue(std::to_string(netw_meta.delay[i]) + "ms"));
-        links[i].SetDeviceAttribute("DataRate", StringValue(std::to_string(netw_meta.bw[i]) + "bps"));
+        links[i].SetChannelAttribute("Delay", StringValue(std::to_string(netw_meta.delay[i]) + "us"));
+        links[i].SetDeviceAttribute("DataRate", StringValue(std::to_string(netw_meta.bw[i]) + "kbps"));
         links[i].SetQueue("ns3::DropTailQueue", "MaxSize", QueueSizeValue(QueueSize(QueueSizeUnit::PACKETS, MAXBACKLOG)));
         NetDevices[i] = links[i].Install(underlayNodes.Get(netw_meta.edges_vec[i].first), underlayNodes.Get(netw_meta.edges_vec[i].second));
         address.Assign(NetDevices[i]);
