@@ -14,7 +14,7 @@ n_iter_demands = 1
 n_iter_overlay = 1
 overlay_generation_method = "LowDegree"
 # overlay_generation_method = "stretch"
-root_name = "C:/Users/yxh5389/Documents/vagrant_shared_folder/"
+root_name = "/vagrant/Documents/vagrant_shared_folder/"
 create_type='constant'
 
 for idx_topo in idx_topology_list:
@@ -30,7 +30,12 @@ for idx_topo in idx_topology_list:
             # Direct Tunnel:
             route_direct_name = foldername+"route_table_" + overlay_generation_method+"_" + create_type+ "_" + "direct_"+ str(idx_overlay) + "_"+ str(idx_demand)+ ".txt"
             py_utils.write_setup("setup.txt", "graph_name " + graph_name, "name_overlay_nodes " + name_overlay_nodes, "name_demands " + name_demands, "route_name " + route_direct_name)
+            os.system("../.././waf --run MinCostFixRate")
+
             route_aware_name = foldername+"route_table_" + overlay_generation_method+"_" + create_type+ "_" + "aware_"+ str(idx_overlay) + "_"+ str(idx_demand)+ ".txt"
             py_utils.write_setup("setup.txt", "graph_name " + graph_name, "name_overlay_nodes " + name_overlay_nodes, "name_demands " + name_demands, "route_name " + route_aware_name)
+            os.system("../.././waf --run MinCostFixRate")
+            
             route_agnostic_name = foldername+"route_table_" + overlay_generation_method+"_" + create_type+ "_" + "agnostic_"+ str(idx_overlay) + "_"+ str(idx_demand)+ ".txt"
             py_utils.write_setup("setup.txt", "graph_name " + graph_name, "name_overlay_nodes " + name_overlay_nodes, "name_demands " + name_demands, "route_name " + route_agnostic_name)
+            os.system("../.././waf --run MinCostFixRate")

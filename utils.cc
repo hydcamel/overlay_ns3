@@ -19,15 +19,21 @@ void txTraceIpv4(std::string context, Ptr<const Packet> packet, Ptr<Ipv4> ptr_ip
 void p2pDevMacTx(std::string context, Ptr<const Packet> packet){
     SDtag tagPktRecv;
     packet->PeekPacketTag(tagPktRecv);
-    if (tagPktRecv.GetSourceID() == 17 && tagPktRecv.GetDestID() == 6)
+    if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
     {
-        std::cout << context << "\t" << Now() << ": packet sent from NetDev with size: " << packet->GetSize() << std::endl;
+        std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
     }
     
     // std::cout << context << "\t" << Now() << ": packet sent from NetDev with size: " << packet->GetSize() << std::endl;
 }
 void p2pDevMacRx(std::string context, Ptr<const Packet> packet){
-    std::cout << context << "\t" << Now() << ": packet received from NetDev with size:" << packet->GetSize() << std::endl;
+    SDtag tagPktRecv;
+    packet->PeekPacketTag(tagPktRecv);
+    if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
+    {
+        std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
+    }
+    // std::cout << context << "\t" << Now() << ": packet received from NetDev with size:" << packet->GetSize() << std::endl;
 }
 void LocalDeliver(std::string context, Ptr<const Packet> packet, Ipv4Header const &ip, uint32_t iif){
     std::cout << ": packet received for me" << std::endl;
@@ -36,10 +42,22 @@ void trace_udpClient(std::string context, Ptr<const Packet> packet){
     std::cout << context << "\t" << Now() << ": packet received with size: " << packet->GetSize() << std::endl;
 }
 void trace_PhyTxBegin(std::string context, Ptr<const Packet> packet){
-    std::cout << context << "\t" << Now() << ": PHY sent begin with size: " << packet->GetSize() << std::endl;
+    SDtag tagPktRecv;
+    packet->PeekPacketTag(tagPktRecv);
+    if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
+    {
+        std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID() << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
+    }
+    // std::cout << context << "\t" << Now() << ": PHY sent begin with size: " << packet->GetSize() << std::endl;
 }
 void trace_PhyTxEnd(std::string context, Ptr<const Packet> packet){
-    std::cout << context << "\t" << Now() << ": PHY sent end with size: " << packet->GetSize() << std::endl;
+    SDtag tagPktRecv;
+    packet->PeekPacketTag(tagPktRecv);
+    if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
+    {
+        std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
+    }
+    // std::cout << context << "\t" << Now() << ": PHY sent end with size: " << packet->GetSize() << std::endl;
 }
 void trace_PhyRxBegin(std::string context, Ptr<const Packet> packet){
     std::cout << context << "\t" << Now() << ": PHY received begin with size: " << packet->GetSize() << std::endl;
