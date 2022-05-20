@@ -17,7 +17,14 @@ void txTraceIpv4(std::string context, Ptr<const Packet> packet, Ptr<Ipv4> ptr_ip
     std::cout << context << "\t" << Now() << ": packet sent with size: " << packet->GetSize() << std::endl;
 }
 void p2pDevMacTx(std::string context, Ptr<const Packet> packet){
-    std::cout << context << "\t" << Now() << ": packet sent from NetDev with size: " << packet->GetSize() << std::endl;
+    SDtag tagPktRecv;
+    packet->PeekPacketTag(tagPktRecv);
+    if (tagPktRecv.GetSourceID() == 17 && tagPktRecv.GetDestID() == 6)
+    {
+        std::cout << context << "\t" << Now() << ": packet sent from NetDev with size: " << packet->GetSize() << std::endl;
+    }
+    
+    // std::cout << context << "\t" << Now() << ": packet sent from NetDev with size: " << packet->GetSize() << std::endl;
 }
 void p2pDevMacRx(std::string context, Ptr<const Packet> packet){
     std::cout << context << "\t" << Now() << ": packet received from NetDev with size:" << packet->GetSize() << std::endl;
