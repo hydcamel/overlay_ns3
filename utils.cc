@@ -93,5 +93,11 @@ void trace_Ipv4L3PDrop(std::string context, const Ipv4Header &header, Ptr< const
     packet->PeekPacketTag(tagPktRecv);
     std::cout << context << ": Ipv4L3PDrop from " << (uint32_t)tagPktRecv.GetSourceID() << " to " << (uint32_t)tagPktRecv.GetDestID() << " with " << reason << std::endl;
 }
+void trace_NetDeviceQueueDrop(std::string context, Ptr<const Packet> packet)
+{
+    SDtag tagPktRecv;
+    packet->PeekPacketTag(tagPktRecv);
+    std::cout << context << ": NetDeviceQueueDrop from " << (uint32_t)tagPktRecv.GetSourceID() << " to " << (uint32_t)tagPktRecv.GetDestID() << std::endl;
+}
 
 }

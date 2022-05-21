@@ -32,6 +32,8 @@ void trace_txrxPointToPoint(std::string context, Ptr<const Packet> packet, Ptr<N
 void trace_NetDeviceMacTxDrop(std::string context, Ptr<const Packet> packet);
 void trace_NetDevicePhyTxDrop(std::string context, Ptr<const Packet> packet);
 void trace_NetDevicePhyRxDrop(std::string context, Ptr<const Packet> packet);
+void trace_NetDeviceQueueDrop(std::string context, Ptr<const Packet> packet);
+
 
 void trace_Ipv4L3PDrop(std::string context, const Ipv4Header &header, Ptr< const Packet > packet, Ipv4L3Protocol::DropReason reason, Ptr< Ipv4 > ipv4, uint32_t interface);
 

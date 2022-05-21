@@ -12,7 +12,7 @@
 #define MAXPKTNUM 500
 #define NSTOMS 1000000
 #define NSTOUS 1000
-#define MAXBACKLOG 1000
+#define MAXBACKLOG 50
 
 namespace ns3
 {
