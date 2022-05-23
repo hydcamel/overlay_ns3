@@ -11,10 +11,22 @@ NS_LOG_COMPONENT_DEFINE("utils");
 
 
 void rxTraceIpv4(std::string context, Ptr<const Packet> packet, Ptr<Ipv4> ptr_ipv4, uint32_t dontknow){
-    std::cout << context << "\t" << Now() << ": packet received with size: " << packet->GetSize() << std::endl;
+    SDtag tagPktRecv;
+    packet->PeekPacketTag(tagPktRecv);
+    if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
+    {
+        std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
+    }
+    // std::cout << context << "\t" << Now() << ": packet received with size: " << packet->GetSize() << std::endl;
 }
 void txTraceIpv4(std::string context, Ptr<const Packet> packet, Ptr<Ipv4> ptr_ipv4, uint32_t dontknow){
-    std::cout << context << "\t" << Now() << ": packet sent with size: " << packet->GetSize() << std::endl;
+    SDtag tagPktRecv;
+    packet->PeekPacketTag(tagPktRecv);
+    if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
+    {
+        std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
+    }
+    // std::cout << context << "\t" << Now() << ": packet sent with size: " << packet->GetSize() << std::endl;
 }
 void p2pDevMacTx(std::string context, Ptr<const Packet> packet){
     SDtag tagPktRecv;
@@ -98,6 +110,18 @@ void trace_NetDeviceQueueDrop(std::string context, Ptr<const Packet> packet)
     SDtag tagPktRecv;
     packet->PeekPacketTag(tagPktRecv);
     std::cout << context << ": NetDeviceQueueDrop from " << (uint32_t)tagPktRecv.GetSourceID() << " to " << (uint32_t)tagPktRecv.GetDestID() << std::endl;
+}
+void trace_NetDeviceDropBeforeEnqueue(std::string context, Ptr<const Packet> packet)
+{
+    SDtag tagPktRecv;
+    packet->PeekPacketTag(tagPktRecv);
+    std::cout << context << ": NetDeviceQueueDrop from " << (uint32_t)tagPktRecv.GetSourceID() << " to " << (uint32_t)tagPktRecv.GetDestID() << std::endl;
+}
+void trace_NetDeviceQueueEnqueue(std::string context, Ptr<const Packet> packet)
+{
+    SDtag tagPktRecv;
+    packet->PeekPacketTag(tagPktRecv);
+    std::cout << context << ": trace_NetDeviceQueueEnqueue from " << (uint32_t)tagPktRecv.GetSourceID() << " to " << (uint32_t)tagPktRecv.GetDestID() << std::endl;
 }
 
 }

@@ -8,6 +8,7 @@
 // #include "ns3/flow-monitor-helper.h"
 #include "overlayApplication.h"
 #include "ns3/application.h"
+#include "ns3/traffic-control-helper.h"
 #include "utils.h"
 #include "netw.h"
 #include <vector>
@@ -101,6 +102,7 @@ int main(int argc, char *argv[])
         links[i].SetChannelAttribute("Delay", StringValue(std::to_string(netw_meta.delay[i]) + "us"));
         links[i].SetDeviceAttribute("DataRate", StringValue(std::to_string(netw_meta.bw[i]) + "kbps"));
         links[i].SetQueue("ns3::DropTailQueue", "MaxSize", QueueSizeValue(QueueSize(QueueSizeUnit::PACKETS, MAXBACKLOG)));
+        // links[i].;
         NetDevices[i] = links[i].Install(underlayNodes.Get(netw_meta.edges_vec[i].first), underlayNodes.Get(netw_meta.edges_vec[i].second));
         address.Assign(NetDevices[i]);
         address.NewNetwork();
@@ -139,8 +141,13 @@ int main(int argc, char *argv[])
             std::cout << "device ID: " << l << " with address: " << underlayNodes.Get(i)->GetObject<Ipv4>()->GetAddress(l, 0).GetLocal() << std::endl;
         }
     } */
-
+    
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
+    TrafficControlHelper TC_helper;
+    for (uint32_t i = 0; i < NetDevices.size(); i++)
+    {
+        TC_helper.Uninstall(NetDevices[i]);
+    }
     /* Ptr<OutputStreamWrapper> routingStream = Create<OutputStreamWrapper>(&std::cout);
     Ipv4RoutingHelper::PrintRoutingTableAllAt( Seconds(0), routingStream, Time::Unit::S); */
 
@@ -166,25 +173,27 @@ int main(int argc, char *argv[])
     FlowMonitorHelper flow_helper;
     flow_monitor = flow_helper.InstallAll(); */
 
-    // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/Rx", MakeCallback(&rxTraceIpv4) );
-    // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/Tx", MakeCallback(&txTraceIpv4) );
+    Config::Connect( "/NodeList/0/$ns3::Ipv4L3Protocol/Rx", MakeCallback(&rxTraceIpv4) );
+    Config::Connect( "/NodeList/0/$ns3::Ipv4L3Protocol/Tx", MakeCallback(&txTraceIpv4) );
     // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/LocalDeliver", MakeCallback(&LocalDeliver) );
 
-    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTx", MakeCallback(&p2pDevMacTx) );
-    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacRx", MakeCallback(&p2pDevMacRx) );
+    Config::Connect( "/NodeList/0/DeviceList/*/$ns3::PointToPointNetDevice/MacTx", MakeCallback(&p2pDevMacTx) );
+    Config::Connect( "/NodeList/0/DeviceList/*/$ns3::PointToPointNetDevice/MacRx", MakeCallback(&p2pDevMacRx) );
     // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTxDrop", MakeCallback(&p2pDevMacRx) );
 
-    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxBegin", MakeCallback(&trace_PhyTxBegin) );
-    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxEnd", MakeCallback(&trace_PhyTxEnd) );
+    Config::Connect( "/NodeList/0/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxBegin", MakeCallback(&trace_PhyTxBegin) );
+    Config::Connect( "/NodeList/0/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxEnd", MakeCallback(&trace_PhyTxEnd) );
     // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyRxEnd", MakeCallback(&trace_PhyRxEnd) );
 
     // Config::Connect( "/ChannelList/*/$ns3::PointToPointChannel/TxRxPointToPoint", MakeCallback(&trace_txrxPointToPoint) );
     Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTxDrop", MakeCallback(&trace_NetDeviceMacTxDrop));
     // Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxDrop", MakeCallback(&trace_NetDevicePhyTxDrop));
     // Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyRxDrop", MakeCallback(&trace_NetDevicePhyRxDrop));
-    // Config::Connect("/NodeList/*/$ns3::Ipv4L3Protocol/Drop", MakeCallback(&trace_Ipv4L3PDrop));
+    Config::Connect("/NodeList/*/$ns3::Ipv4L3Protocol/Drop", MakeCallback(&trace_Ipv4L3PDrop));
 
     Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/TxQueue/Drop", MakeCallback(&trace_NetDeviceQueueDrop));
+    Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/TxQueue/DropBeforeEnqueue", MakeCallback(&trace_NetDeviceDropBeforeEnqueue));
+    // Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/TxQueue/Enqueue", MakeCallback(&trace_NetDeviceQueueEnqueue));
 
     NS_LOG_INFO("Run Simulation.");
     // std::cout << "before run" << std::endl;

@@ -36,7 +36,7 @@ else:
 
 alpha = 2
 is_creation_cost = False
-overlay_generation_method = "LowDegree"
+overlay_generation_method = "stretch"
 n_iter_demands = 1
 idx_topology_list = [0, 1, 2, 18, 23, 39, 54, 127]
 idx_topology_list = [2]
@@ -56,7 +56,8 @@ for idx_topo in idx_topology_list:
     n_overlay = int( ratio_overlay_nodes * D.shape[0] )
     # idx_overlay_node = np.random.permutation(D.shape[0])[0:n_overlay]
     # idx_overlay_node = [5,12,18]
-    idx_overlay_node = py_utils.create_overlay_nodes(n_overlay_nodes=n_overlay, spr_table=spr_table, n_nodes=D.shape[0], generate_method=overlay_generation_method, DG_under = DG_under)
+    # idx_overlay_node = py_utils.create_overlay_nodes(n_overlay_nodes=n_overlay, spr_table=spr_table, n_nodes=D.shape[0], generate_method=overlay_generation_method, DG_under = DG_under)
+    idx_overlay_node = py_utils.create_overlay_nodes(n_overlay_nodes=n_overlay, spr_table=spr_table, n_nodes=D.shape[0], generate_method=overlay_generation_method)
     #idx_overlay_node = [10, 5, 12, 1, 9]
 
     py_utils.wr_overlay_nodes(idx_overlay_node)

@@ -298,7 +298,7 @@ namespace ns3
                 meta->cnt_pkt[keys]++;
                 if (meta->cnt_pkt[keys] == MAXPKTNUM)
                 {
-                    // std::cout << keys << ": " << meta->cnt_pkt[keys] << "; MAXPKTNUM = " << MAXPKTNUM << std::endl;
+                    std::cout << keys << ": " << meta->cnt_pkt[keys] << "; MAXPKTNUM = " << MAXPKTNUM << std::endl;
                     meta->time_span_flows[keys] = Simulator::Now().ToDouble(Time::US) - meta->time_span_flows[keys];
                 }
 
@@ -309,6 +309,10 @@ namespace ns3
             {
                 // std::cout << "Source ID: " << (uint32_t)tagPktRecv.GetSourceID() << ", target ID: " << (uint32_t)tagPktRecv.GetDestID() << ", this hop" << m_local_ID << ", next hop" << routes[tagPktRecv.GetCurrentHop() + 1] << std::endl;
                 assert(routes[tagPktRecv.GetCurrentHop()] == m_local_ID);
+                if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
+                {
+                    std::cout << "Node ID: " << m_local_ID << " forward at: " << Simulator::Now().ToDouble(Time::US) << std::endl;
+                }
                 tagPktRecv.AddCurrentHop();
                 packet->ReplacePacketTag(tagPktRecv);
                 CheckCongestion(map_neighbor_device[routes[tagPktRecv.GetCurrentHop()]], (uint32_t)tagPktRecv.GetSourceID(), (uint32_t)tagPktRecv.GetDestID(), (uint16_t)tagPktRecv.GetPktID());
@@ -421,9 +425,9 @@ namespace ns3
         Ptr<PointToPointNetDevice> net_device = DynamicCast<PointToPointNetDevice, NetDevice>(GetNode()->GetDevice(deviceID));
         Ptr<Queue<Packet>> net_queue = net_device->GetQueue();
         // std::cout << "src: " << src << " -dest: " << dest << " queue backlog: " << net_queue->GetNPackets() << std::endl;
-        if (src == SRC && dest == DEST)
+        if (src == SRC && dest == DEST && net_queue->GetNPackets() > 0)
         {
-            std::cout << "Node ID: " << m_local_ID << "PktID: " << PktID << "src: " << src << " -dest: " << dest << " queue backlog: " << net_queue->GetNPackets() << std::endl;
+            std::cout << "Node ID: " << m_local_ID << "PktID: " << PktID << "src: " << src << " -dest: " << dest << " queue backlog: " << net_queue->GetNPackets() << " limit = " << net_queue->GetMaxSize() << std::endl;
         }
 
         if (net_queue->GetNPackets() > 0)

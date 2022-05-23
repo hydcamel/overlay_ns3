@@ -7,13 +7,14 @@
 #include "ns3/ipv4-global-routing-helper.h"
 #include "ns3/internet-module.h"
 #include "ns3/ipv4-l3-protocol.h"
+#include "ns3/udp-socket.h"
 #include "ns3/log.h"
 
 namespace ns3
 {
 
-#define SRC 0
-#define DEST 17
+#define SRC 9
+#define DEST 14
 
 void receivePkt(Ptr<Socket> skt);
 void SendPacket (Ptr<Socket> socket, uint32_t pktSize,uint32_t pktCount, Time pktInterval, uint8_t SourceID, uint8_t DestID );
@@ -33,6 +34,9 @@ void trace_NetDeviceMacTxDrop(std::string context, Ptr<const Packet> packet);
 void trace_NetDevicePhyTxDrop(std::string context, Ptr<const Packet> packet);
 void trace_NetDevicePhyRxDrop(std::string context, Ptr<const Packet> packet);
 void trace_NetDeviceQueueDrop(std::string context, Ptr<const Packet> packet);
+void trace_NetDeviceDropBeforeEnqueue(std::string context, Ptr<const Packet> packet);
+void trace_NetDeviceQueueEnqueue(std::string context, Ptr<const Packet> packet);
+
 
 
 void trace_Ipv4L3PDrop(std::string context, const Ipv4Header &header, Ptr< const Packet > packet, Ipv4L3Protocol::DropReason reason, Ptr< Ipv4 > ipv4, uint32_t interface);
