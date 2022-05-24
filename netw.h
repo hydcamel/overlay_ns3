@@ -14,7 +14,7 @@
 #define MAXPKTNUM 500
 #define NSTOMS 1000000
 #define NSTOUS 1000
-#define MAXBACKLOG 20
+#define MAXBACKLOG 200
 
 namespace ns3
 {
@@ -24,10 +24,11 @@ class netw
 {
 public:
     netw(std::string filename, std::string demands_file);
+    netw(std::string filename, std::string demands_file, std::string file_overlay_nodes, std::string route_name);
     ~netw();
     void read_routing_map(std::string filename);
     void read_underlay(std::string filename);
-    void read_overlay();
+    void read_overlay(std::string file_overlay_nodes);
     void read_demands(std::string filename);
     void write_average_delay(std::string filename);
     void write_congestion_cnt(std::string filename);

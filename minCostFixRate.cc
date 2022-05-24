@@ -37,6 +37,35 @@ void read_setup(std::string& name_underlay)
     name_underlay = temp;
 }
 
+void read_setup(std::string& name_underlay, std::string& demands_file, std::string& file_overlay_nodes, std::string& route_name)
+{
+    std::ifstream infile("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/setup.txt");
+    std::string line;
+    std::string temp;
+
+    while (getline(infile, line))
+    {
+        std::istringstream iss(line);
+        iss >> temp ;
+        if (temp.compare("graph_name") == 0)
+        {
+            iss >> name_underlay;
+        }
+        else if (temp.compare("name_overlay_nodes") == 0)
+        {
+            iss >> file_overlay_nodes;
+        }
+        else if (temp.compare("name_demands") == 0)
+        {
+            iss >> demands_file;
+        }
+        else if (temp.compare("route_name") == 0)
+        {
+            iss >> route_name;
+        }
+    }
+}
+
 int main(int argc, char *argv[])
 {
     // Log information
@@ -53,10 +82,15 @@ int main(int argc, char *argv[])
 
     //std::string newt_filename{"/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/toy_one_junction.graph"};
     read_setup(name_underlay);
-    std::string netw_filename = name_shared_folder + name_underlay;
-    std::string demands_file = name_pwd + "tunnel_demands.txt";
+    // std::string netw_filename = name_shared_folder + name_underlay;
+    // std::string demands_file = name_pwd + "tunnel_demands.txt";
+    std::string netw_filename, demands_file, file_overlay_nodes, route_name;
+    // netw netw_meta(netw_filename, demands_file);
 
-    netw netw_meta(netw_filename, demands_file);
+    read_setup(netw_filename, demands_file, file_overlay_nodes, route_name);
+    netw netw_meta(netw_filename, demands_file, file_overlay_nodes, route_name);
+
+    
 
     
     InternetStackHelper internet;
@@ -86,7 +120,7 @@ int main(int argc, char *argv[])
         vec_app[i] = fact.Create<overlayApplication>();
         vec_app[i]->InitApp(&netw_meta, i, MAXPKTNUM);
         vec_app[i]->SetStartTime(Seconds(0));
-        vec_app[i]->SetStopTime(Seconds(1500));
+        vec_app[i]->SetStopTime(Seconds(150000));
         underlayNodes.Get(i)->AddApplication(vec_app[i]);
         vec_app[i]->SetRecvSocket();
     }
@@ -190,27 +224,27 @@ int main(int argc, char *argv[])
     // FlowMonitorHelper flow_helper;
     // flow_monitor = flow_helper.InstallAll();
 
-    Config::Connect( "/NodeList/0/$ns3::Ipv4L3Protocol/Rx", MakeCallback(&rxTraceIpv4) );
-    Config::Connect( "/NodeList/0/$ns3::Ipv4L3Protocol/Tx", MakeCallback(&txTraceIpv4) );
-    // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/LocalDeliver", MakeCallback(&LocalDeliver) );
+    // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/Rx", MakeCallback(&rxTraceIpv4) );
+    // Config::Connect( "/NodeList/0/$ns3::Ipv4L3Protocol/Tx", MakeCallback(&txTraceIpv4) );
+    // // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/LocalDeliver", MakeCallback(&LocalDeliver) );
 
-    Config::Connect( "/NodeList/0/DeviceList/*/$ns3::PointToPointNetDevice/MacTx", MakeCallback(&p2pDevMacTx) );
-    Config::Connect( "/NodeList/0/DeviceList/*/$ns3::PointToPointNetDevice/MacRx", MakeCallback(&p2pDevMacRx) );
-    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTxDrop", MakeCallback(&p2pDevMacRx) );
+    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTx", MakeCallback(&p2pDevMacTx) );
+    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacRx", MakeCallback(&p2pDevMacRx) );
+    // // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTxDrop", MakeCallback(&p2pDevMacRx) );
 
-    Config::Connect( "/NodeList/0/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxBegin", MakeCallback(&trace_PhyTxBegin) );
-    Config::Connect( "/NodeList/0/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxEnd", MakeCallback(&trace_PhyTxEnd) );
-    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyRxEnd", MakeCallback(&trace_PhyRxEnd) );
+    // Config::Connect( "/NodeList/0/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxBegin", MakeCallback(&trace_PhyTxBegin) );
+    // Config::Connect( "/NodeList/0/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxEnd", MakeCallback(&trace_PhyTxEnd) );
+    // // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyRxEnd", MakeCallback(&trace_PhyRxEnd) );
 
-    // Config::Connect( "/ChannelList/*/$ns3::PointToPointChannel/TxRxPointToPoint", MakeCallback(&trace_txrxPointToPoint) );
-    Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTxDrop", MakeCallback(&trace_NetDeviceMacTxDrop));
-    // Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxDrop", MakeCallback(&trace_NetDevicePhyTxDrop));
-    // Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyRxDrop", MakeCallback(&trace_NetDevicePhyRxDrop));
-    Config::Connect("/NodeList/*/$ns3::Ipv4L3Protocol/Drop", MakeCallback(&trace_Ipv4L3PDrop));
+    // // Config::Connect( "/ChannelList/*/$ns3::PointToPointChannel/TxRxPointToPoint", MakeCallback(&trace_txrxPointToPoint) );
+    // Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTxDrop", MakeCallback(&trace_NetDeviceMacTxDrop));
+    // // Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxDrop", MakeCallback(&trace_NetDevicePhyTxDrop));
+    // // Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyRxDrop", MakeCallback(&trace_NetDevicePhyRxDrop));
+    // Config::Connect("/NodeList/*/$ns3::Ipv4L3Protocol/Drop", MakeCallback(&trace_Ipv4L3PDrop));
 
-    Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/TxQueue/Drop", MakeCallback(&trace_NetDeviceQueueDrop));
-    Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/TxQueue/DropBeforeEnqueue", MakeCallback(&trace_NetDeviceDropBeforeEnqueue));
-    Config::Connect("/NodeList/0/DeviceList/*/$ns3::PointToPointNetDevice/TxQueue/Enqueue", MakeCallback(&trace_NetDeviceQueueEnqueue));
+    // Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/TxQueue/Drop", MakeCallback(&trace_NetDeviceQueueDrop));
+    // Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/TxQueue/DropBeforeEnqueue", MakeCallback(&trace_NetDeviceDropBeforeEnqueue));
+    // Config::Connect("/NodeList/0/DeviceList/*/$ns3::PointToPointNetDevice/TxQueue/Enqueue", MakeCallback(&trace_NetDeviceQueueEnqueue));
 
     NS_LOG_INFO("Run Simulation.");
     // std::cout << "before run" << std::endl;

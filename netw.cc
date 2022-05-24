@@ -14,8 +14,16 @@ namespace ns3
 netw::netw(std::string filename, std::string demands_file)
 {
 	read_underlay(filename);
-    read_overlay();
+    read_overlay("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/overlay.txt");
 	read_routing_map("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/route_table.txt");
+	read_demands(demands_file);
+}
+
+netw::netw(std::string filename, std::string demands_file, std::string file_overlay_nodes, std::string route_name)
+{
+	read_underlay(filename);
+    read_overlay(file_overlay_nodes);
+	read_routing_map(route_name);
 	read_demands(demands_file);
 }
 
@@ -85,13 +93,13 @@ void netw::read_underlay(std::string filename)
 	}
 }
 
-void netw::read_overlay()
+void netw::read_overlay(std::string file_overlay_nodes)
 {
 	/**
 	 * Prepare overlay information
 	 * */
 	loc_overlay_nodes.resize(n_nodes, false);
-	std::string file_overlay_nodes = "/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/overlay.txt";
+	// std::string file_overlay_nodes = "/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/overlay.txt";
 	std::ifstream infile_onodes(file_overlay_nodes);
 	std::string temp;
     std::string line;
