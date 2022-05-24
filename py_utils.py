@@ -339,6 +339,16 @@ def read_results(file_name, tunnel_list:list):
         res[idx] = val
     return res
 
+def read_overlay_nodes_from_file(file_name):
+    f = open(file_name, 'r')
+    Lines = f.readlines()
+    line = Lines[0].split(' ')
+    n_overlay_nodes = int(line[0].strip(':'))
+    idx_overlay_node = [None]*n_overlay_nodes
+    for i in range( n_overlay_nodes ):
+        idx_overlay_node[i] = int(line[i+1])
+    return idx_overlay_node
+
     
 
 '''Miscellaneous'''

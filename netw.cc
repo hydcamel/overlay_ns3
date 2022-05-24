@@ -158,6 +158,7 @@ void netw::read_demands(std::string filename)
     std::string line;
 	int src, dest;
 	float demand_val;
+	std::cout << "read_demands: " << filename << std::endl;
 
 	while (getline(infile, line))
 	{

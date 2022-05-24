@@ -18,18 +18,22 @@ overlay_generation_method = "LowDegree"
 root_name = "/vagrant/Documents/vagrant_shared_folder/"
 create_type='constant'
 
-#idx_topology_list = [2]
-delay_aware_log = np.array((3, len(idx_topology_list)))
-delay_agonostic_log = np.array((3, len(idx_topology_list)))
-congestion_log = np.array((2, len(idx_topology_list)))
+idx_topology_list = [53]
+delay_aware_log = np.zeros((3, len(idx_topology_list)))
+delay_agonostic_log = np.zeros((3, len(idx_topology_list)))
+# congestion_log = np.zeros((2, len(idx_topology_list)))
 
 idx_iter = 0
 for idx_topo in idx_topology_list:
+    if idx_topo in [16, 56, 251]:
+        continue
     graph_name = root_name+all_topology_filename[idx_topo]
     foldername = root_name+all_topology_filename[idx_topo].split('.')[0] + '/'
     print("idx_topo = ", idx_topo)
     for idx_overlay in range(n_iter_overlay):
         name_overlay_nodes = foldername+ "overlay_"+ overlay_generation_method+ "_"+ str(idx_overlay)+ ".txt"
+        idx_overlay_node = py_utils.read_overlay_nodes_from_file(name_overlay_nodes)
+        tunnel_list = py_utils.create_overlay_node_tunnel( idx_overlay_node )
         '''iter over demands'''
         for idx_demand in range(n_iter_demands):
             name_demands = foldername+"tunnel_demands_"+ overlay_generation_method+ "_" + create_type+  "_"+ str(idx_overlay) + "_"+ str(idx_demand)+ ".txt"
@@ -62,5 +66,5 @@ for idx_topo in idx_topology_list:
             delay_agonostic_log[2,idx_iter] = max(delay_tmp)
             delay_agonostic_log[1,idx_iter] = np.median(np.array(delay_tmp))
             idx_iter += 1
-print("delay_aware_log, ", delay_aware_log)
-print("delay_agonostic_log, ", delay_agonostic_log)
+            print("delay_aware_log, ", delay_aware_log)
+            print("delay_agonostic_log, ", delay_agonostic_log)

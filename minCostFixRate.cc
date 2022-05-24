@@ -72,21 +72,23 @@ int main(int argc, char *argv[])
     LogComponentEnable("p2pTestV1", LOG_LEVEL_INFO);
     LogComponentEnable("overlayApplication", LOG_LEVEL_INFO);
 
-    std::string name_shared_folder {"/vagrant/Documents/vagrant_shared_folder/"};
-    std::string name_pwd {"/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/"};
-    std::string name_underlay;
+    // std::string name_shared_folder {"/vagrant/Documents/vagrant_shared_folder/"};
+    // std::string name_pwd {"/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/"};
+    // std::string name_underlay {"Abvt.graph"};
 
     // CommandLine cmd;
     // cmd.AddValue("name_underlay", "name of underlay in the form of .graph", name_underlay);
     // cmd.Parse (argc, argv);
 
-    //std::string newt_filename{"/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/toy_one_junction.graph"};
-    read_setup(name_underlay);
+    // std::string newt_filename{"/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/toy_one_junction.graph"};
+    // read_setup(name_underlay);
+
     // std::string netw_filename = name_shared_folder + name_underlay;
     // std::string demands_file = name_pwd + "tunnel_demands.txt";
-    std::string netw_filename, demands_file, file_overlay_nodes, route_name;
+    
     // netw netw_meta(netw_filename, demands_file);
 
+    std::string netw_filename, demands_file, file_overlay_nodes, route_name;
     read_setup(netw_filename, demands_file, file_overlay_nodes, route_name);
     netw netw_meta(netw_filename, demands_file, file_overlay_nodes, route_name);
 
@@ -120,7 +122,7 @@ int main(int argc, char *argv[])
         vec_app[i] = fact.Create<overlayApplication>();
         vec_app[i]->InitApp(&netw_meta, i, MAXPKTNUM);
         vec_app[i]->SetStartTime(Seconds(0));
-        vec_app[i]->SetStopTime(Seconds(150000));
+        vec_app[i]->SetStopTime(Minutes(1000));
         underlayNodes.Get(i)->AddApplication(vec_app[i]);
         vec_app[i]->SetRecvSocket();
     }
