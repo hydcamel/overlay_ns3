@@ -197,6 +197,15 @@ void netw::write_congestion_cnt(std::string filename)
 	
 }
 
+void netw::register_vecApp(std::vector<Ptr<overlayApplication>>* input)
+{
+	vec_app = input;
+}
+
+void netw::notify_pktLoss(uint32_t src, uint32_t dest, uint32_t valPktID)
+{
+	(*vec_app)[src]->SetMSent(dest, valPktID);
+}
 
 }
 

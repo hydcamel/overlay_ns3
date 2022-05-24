@@ -1,9 +1,9 @@
 Waf: Entering directory `/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/build'
-[966/968] Compiling minCostFixRate.cc
+[964/968] Compiling overlayApplication.cc
 [968/968] Linking ../../build/scratch/MinCostFixRate/MinCostFixRate
 Waf: Leaving directory `/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/build'
 Build commands will be stored in build/compile_commands.json
-'build' finished successfully (4.013s)
+'build' finished successfully (4.134s)
 underlay_file: /vagrant/Documents/vagrant_shared_folder/Abvt.graph
 overlay_file: /home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/overlay.txt
 route_table: /home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/route_table.txt
@@ -107,6 +107,7 @@ Node ID: 0 forward at: 11085
 Node ID: 0PktID: 0src: 9 -dest: 14 queue backlog: 1 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.1085e+07ns, PktID= 0: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.1085e+07ns, PktID= 0: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+1.10986e+07ns, PktID= 0: src:9 dest:14
 Node ID: 6 forward at: 11101.2
 Node ID: 7 forward at: 11102.6
@@ -119,6 +120,7 @@ Node ID: 0 forward at: 11211
 Node ID: 0PktID: 1src: 9 -dest: 14 queue backlog: 3 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.1211e+07ns, PktID= 1: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.1211e+07ns, PktID= 1: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 11227.2
 Node ID: 7 forward at: 11228.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+1.12419e+07ns, PktID= 1: src:9 dest:14
@@ -131,6 +133,7 @@ Node ID: 0 forward at: 11337
 Node ID: 0PktID: 2src: 9 -dest: 14 queue backlog: 5 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.1337e+07ns, PktID= 2: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.1337e+07ns, PktID= 2: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 11353.2
 Node ID: 7 forward at: 11354.6
 Node ID: 1 forward at: 11376.7
@@ -143,6 +146,7 @@ Node ID: 0 forward at: 11463
 Node ID: 0PktID: 3src: 9 -dest: 14 queue backlog: 7 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.1463e+07ns, PktID= 3: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.1463e+07ns, PktID= 3: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 11479.2
 Node ID: 7 forward at: 11480.6
 Node ID: 1 forward at: 11502.7
@@ -155,6 +159,7 @@ Node ID: 0 forward at: 11589
 Node ID: 0PktID: 4src: 9 -dest: 14 queue backlog: 9 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.1589e+07ns, PktID= 4: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.1589e+07ns, PktID= 4: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 11605.2
 Node ID: 7 forward at: 11606.6
 Node ID: 1 forward at: 11628.7
@@ -167,6 +172,7 @@ Node ID: 0 forward at: 11715
 Node ID: 0PktID: 5src: 9 -dest: 14 queue backlog: 11 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.1715e+07ns, PktID= 5: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.1715e+07ns, PktID= 5: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 11731.2
 Node ID: 7 forward at: 11732.6
 Node ID: 1 forward at: 11754.7
@@ -179,6 +185,7 @@ Node ID: 0 forward at: 11841
 Node ID: 0PktID: 6src: 9 -dest: 14 queue backlog: 13 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.1841e+07ns, PktID= 6: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.1841e+07ns, PktID= 6: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 11857.2
 Node ID: 7 forward at: 11858.6
 Node ID: 1 forward at: 11880.7
@@ -190,6 +197,7 @@ Node ID: 0 forward at: 11967
 Node ID: 0PktID: 7src: 9 -dest: 14 queue backlog: 16 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.1967e+07ns, PktID= 7: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.1967e+07ns, PktID= 7: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+1.19671e+07ns, PktID= 6: src:9 dest:14
 Node ID: 6 forward at: 11983.2
 Node ID: 7 forward at: 11984.6
@@ -201,6 +209,7 @@ Node ID: 0 forward at: 12093
 Node ID: 0PktID: 8src: 9 -dest: 14 queue backlog: 18 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.2093e+07ns, PktID= 8: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.2093e+07ns, PktID= 8: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+1.2102e+07ns, PktID= 7: src:9 dest:14
 Node ID: 6 forward at: 12109.2
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+1.21104e+07ns, PktID= 7: src:9 dest:14
@@ -282,6 +291,7 @@ Node ID: 0 forward at: 13101
 Node ID: 0PktID: 16src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.3101e+07ns, PktID= 16: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.3101e+07ns, PktID= 16: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 13117.2
 Node ID: 7 forward at: 13118.6
 Node ID: 2 forward at: 13137.4
@@ -293,6 +303,7 @@ Node ID: 0 forward at: 13227
 Node ID: 0PktID: 17src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.3227e+07ns, PktID= 17: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.3227e+07ns, PktID= 17: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 13243.2
 Node ID: 7 forward at: 13244.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+1.32656e+07ns, PktID= 16: src:9 dest:14
@@ -306,6 +317,7 @@ Node ID: 0 forward at: 13353
 Node ID: 0PktID: 18src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.3353e+07ns, PktID= 18: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.3353e+07ns, PktID= 18: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 13369.2
 Node ID: 7 forward at: 13370.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+1.33921e+07ns, PktID= 17: src:9 dest:14
@@ -319,6 +331,7 @@ Node ID: 0 forward at: 13479
 Node ID: 0PktID: 19src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.3479e+07ns, PktID= 19: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.3479e+07ns, PktID= 19: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 13495.2
 Node ID: 7 forward at: 13496.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+1.35186e+07ns, PktID= 18: src:9 dest:14
@@ -332,6 +345,7 @@ Node ID: 0 forward at: 13605
 Node ID: 0PktID: 20src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.3605e+07ns, PktID= 20: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.3605e+07ns, PktID= 20: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 13621.2
 Node ID: 7 forward at: 13622.6
 Node ID: 1 forward at: 13644.7
@@ -345,6 +359,7 @@ Node ID: 0 forward at: 13731
 Node ID: 0PktID: 21src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.3731e+07ns, PktID= 21: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.3731e+07ns, PktID= 21: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 13747.2
 Node ID: 7 forward at: 13748.6
 Node ID: 1 forward at: 13770.7
@@ -357,6 +372,7 @@ Node ID: 0 forward at: 13857
 Node ID: 0PktID: 22src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.3857e+07ns, PktID= 22: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.3857e+07ns, PktID= 22: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 13873.2
 Node ID: 7 forward at: 13874.6
 Node ID: 1 forward at: 13896.7
@@ -369,6 +385,7 @@ Node ID: 0 forward at: 13983
 Node ID: 0PktID: 23src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.3983e+07ns, PktID= 23: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.3983e+07ns, PktID= 23: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 13999.2
 Node ID: 7 forward at: 14000.6
 Node ID: 1 forward at: 14022.7
@@ -381,6 +398,7 @@ Node ID: 0 forward at: 14109
 Node ID: 0PktID: 24src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.4109e+07ns, PktID= 24: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.4109e+07ns, PktID= 24: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 14125.2
 Node ID: 7 forward at: 14126.6
 Node ID: 1 forward at: 14148.7
@@ -490,6 +508,7 @@ Node ID: 0 forward at: 15369
 Node ID: 0PktID: 34src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.5369e+07ns, PktID= 34: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.5369e+07ns, PktID= 34: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 15385.2
 Node ID: 7 forward at: 15386.6
 Node ID: 1 forward at: 15408.7
@@ -502,6 +521,7 @@ Node ID: 0 forward at: 15495
 Node ID: 0PktID: 35src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.5495e+07ns, PktID= 35: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.5495e+07ns, PktID= 35: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 15511.2
 Node ID: 7 forward at: 15512.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+1.55338e+07ns, PktID= 34: src:9 dest:14
@@ -516,6 +536,7 @@ Node ID: 0 forward at: 15621
 Node ID: 0PktID: 36src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.5621e+07ns, PktID= 36: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.5621e+07ns, PktID= 36: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 15637.2
 Node ID: 7 forward at: 15638.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+1.56603e+07ns, PktID= 35: src:9 dest:14
@@ -529,6 +550,7 @@ Node ID: 0 forward at: 15747
 Node ID: 0PktID: 37src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.5747e+07ns, PktID= 37: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.5747e+07ns, PktID= 37: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 15763.2
 Node ID: 7 forward at: 15764.6
 Node ID: 1 forward at: 15786.7
@@ -541,6 +563,7 @@ Node ID: 0 forward at: 15873
 Node ID: 0PktID: 38src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.5873e+07ns, PktID= 38: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.5873e+07ns, PktID= 38: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 15889.2
 Node ID: 7 forward at: 15890.6
 Node ID: 1 forward at: 15912.7
@@ -553,6 +576,7 @@ Node ID: 0 forward at: 15999
 Node ID: 0PktID: 39src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.5999e+07ns, PktID= 39: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.5999e+07ns, PktID= 39: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 16015.2
 Node ID: 7 forward at: 16016.6
 Node ID: 1 forward at: 16038.7
@@ -565,6 +589,7 @@ Node ID: 0 forward at: 16125
 Node ID: 0PktID: 40src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.6125e+07ns, PktID= 40: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.6125e+07ns, PktID= 40: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 16141.2
 Node ID: 7 forward at: 16142.6
 Node ID: 1 forward at: 16164.7
@@ -577,6 +602,7 @@ Node ID: 0 forward at: 16251
 Node ID: 0PktID: 41src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.6251e+07ns, PktID= 41: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.6251e+07ns, PktID= 41: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 16267.2
 Node ID: 7 forward at: 16268.6
 Node ID: 1 forward at: 16290.7
@@ -685,6 +711,7 @@ Node ID: 0 forward at: 17511
 Node ID: 0PktID: 51src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.7511e+07ns, PktID= 51: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.7511e+07ns, PktID= 51: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 17527.2
 Node ID: 7 forward at: 17528.6
 Node ID: 1 forward at: 17550.7
@@ -697,6 +724,7 @@ Node ID: 0 forward at: 17637
 Node ID: 0PktID: 52src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.7637e+07ns, PktID= 52: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.7637e+07ns, PktID= 52: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 17653.2
 Node ID: 7 forward at: 17654.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+1.76756e+07ns, PktID= 51: src:9 dest:14
@@ -710,6 +738,7 @@ Node ID: 0 forward at: 17763
 Node ID: 0PktID: 53src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.7763e+07ns, PktID= 53: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.7763e+07ns, PktID= 53: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 17779.2
 Node ID: 7 forward at: 17780.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+1.7802e+07ns, PktID= 52: src:9 dest:14
@@ -723,6 +752,7 @@ Node ID: 0 forward at: 17889
 Node ID: 0PktID: 54src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.7889e+07ns, PktID= 54: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.7889e+07ns, PktID= 54: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 17905.2
 Node ID: 7 forward at: 17906.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+1.79285e+07ns, PktID= 53: src:9 dest:14
@@ -735,6 +765,7 @@ Node ID: 0 forward at: 18015
 Node ID: 0PktID: 55src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.8015e+07ns, PktID= 55: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.8015e+07ns, PktID= 55: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 18031.2
 Node ID: 7 forward at: 18032.6
 Node ID: 1 forward at: 18054.7
@@ -747,6 +778,7 @@ Node ID: 0 forward at: 18141
 Node ID: 0PktID: 56src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.8141e+07ns, PktID= 56: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.8141e+07ns, PktID= 56: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 18157.2
 Node ID: 7 forward at: 18158.6
 Node ID: 1 forward at: 18180.7
@@ -759,6 +791,7 @@ Node ID: 0 forward at: 18267
 Node ID: 0PktID: 57src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.8267e+07ns, PktID= 57: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.8267e+07ns, PktID= 57: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 18283.2
 Node ID: 7 forward at: 18284.6
 Node ID: 1 forward at: 18306.7
@@ -771,6 +804,7 @@ Node ID: 0 forward at: 18393
 Node ID: 0PktID: 58src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.8393e+07ns, PktID= 58: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.8393e+07ns, PktID= 58: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 18409.2
 Node ID: 7 forward at: 18410.6
 Node ID: 1 forward at: 18432.7
@@ -783,6 +817,7 @@ Node ID: 0 forward at: 18519
 Node ID: 0PktID: 59src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.8519e+07ns, PktID= 59: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.8519e+07ns, PktID= 59: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 18535.2
 Node ID: 7 forward at: 18536.6
 Node ID: 1 forward at: 18558.7
@@ -892,6 +927,7 @@ Node ID: 0 forward at: 19779
 Node ID: 0PktID: 69src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.9779e+07ns, PktID= 69: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.9779e+07ns, PktID= 69: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 19795.2
 Node ID: 7 forward at: 19796.6
 Node ID: 1 forward at: 19818.7
@@ -903,6 +939,7 @@ Node ID: 0 forward at: 19905
 Node ID: 0PktID: 70src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+1.9905e+07ns, PktID= 70: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+1.9905e+07ns, PktID= 70: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 19921.2
 Node ID: 7 forward at: 19922.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+1.99438e+07ns, PktID= 69: src:9 dest:14
@@ -916,6 +953,7 @@ Node ID: 0 forward at: 20031
 Node ID: 0PktID: 71src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.0031e+07ns, PktID= 71: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.0031e+07ns, PktID= 71: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 20047.2
 Node ID: 7 forward at: 20048.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+2.00702e+07ns, PktID= 70: src:9 dest:14
@@ -929,6 +967,7 @@ Node ID: 0 forward at: 20157
 Node ID: 0PktID: 72src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.0157e+07ns, PktID= 72: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.0157e+07ns, PktID= 72: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 20173.2
 Node ID: 7 forward at: 20174.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+2.01967e+07ns, PktID= 71: src:9 dest:14
@@ -941,6 +980,7 @@ Node ID: 0 forward at: 20283
 Node ID: 0PktID: 73src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.0283e+07ns, PktID= 73: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.0283e+07ns, PktID= 73: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 20299.2
 Node ID: 7 forward at: 20300.6
 Node ID: 1 forward at: 20322.7
@@ -953,6 +993,7 @@ Node ID: 0 forward at: 20409
 Node ID: 0PktID: 74src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.0409e+07ns, PktID= 74: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.0409e+07ns, PktID= 74: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 20425.2
 Node ID: 7 forward at: 20426.6
 Node ID: 1 forward at: 20448.7
@@ -965,6 +1006,7 @@ Node ID: 0 forward at: 20535
 Node ID: 0PktID: 75src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.0535e+07ns, PktID= 75: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.0535e+07ns, PktID= 75: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 20551.2
 Node ID: 7 forward at: 20552.6
 Node ID: 1 forward at: 20574.7
@@ -977,6 +1019,7 @@ Node ID: 0 forward at: 20661
 Node ID: 0PktID: 76src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.0661e+07ns, PktID= 76: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.0661e+07ns, PktID= 76: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 20677.2
 Node ID: 7 forward at: 20678.6
 Node ID: 1 forward at: 20700.7
@@ -989,6 +1032,7 @@ Node ID: 0 forward at: 20787
 Node ID: 0PktID: 77src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.0787e+07ns, PktID= 77: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.0787e+07ns, PktID= 77: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 20803.2
 Node ID: 7 forward at: 20804.6
 Node ID: 1 forward at: 20826.7
@@ -1088,6 +1132,7 @@ Node ID: 0 forward at: 21921
 Node ID: 0PktID: 86src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.1921e+07ns, PktID= 86: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.1921e+07ns, PktID= 86: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 21937.2
 Node ID: 7 forward at: 21938.6
 Node ID: 1 forward at: 21960.7
@@ -1100,6 +1145,7 @@ Node ID: 0 forward at: 22047
 Node ID: 0PktID: 87src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.2047e+07ns, PktID= 87: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.2047e+07ns, PktID= 87: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 22063.2
 Node ID: 7 forward at: 22064.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+2.20855e+07ns, PktID= 86: src:9 dest:14
@@ -1113,6 +1159,7 @@ Node ID: 0 forward at: 22173
 Node ID: 0PktID: 88src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.2173e+07ns, PktID= 88: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.2173e+07ns, PktID= 88: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 22189.2
 Node ID: 7 forward at: 22190.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+2.2212e+07ns, PktID= 87: src:9 dest:14
@@ -1126,6 +1173,7 @@ Node ID: 0 forward at: 22299
 Node ID: 0PktID: 89src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.2299e+07ns, PktID= 89: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.2299e+07ns, PktID= 89: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 22315.2
 Node ID: 7 forward at: 22316.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+2.23384e+07ns, PktID= 88: src:9 dest:14
@@ -1139,6 +1187,7 @@ Node ID: 0 forward at: 22425
 Node ID: 0PktID: 90src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.2425e+07ns, PktID= 90: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.2425e+07ns, PktID= 90: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 22441.2
 Node ID: 7 forward at: 22442.6
 Node ID: 1 forward at: 22464.7
@@ -1151,6 +1200,7 @@ Node ID: 0 forward at: 22551
 Node ID: 0PktID: 91src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.2551e+07ns, PktID= 91: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.2551e+07ns, PktID= 91: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 22567.2
 Node ID: 7 forward at: 22568.6
 Node ID: 1 forward at: 22590.7
@@ -1163,6 +1213,7 @@ Node ID: 0 forward at: 22677
 Node ID: 0PktID: 92src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.2677e+07ns, PktID= 92: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.2677e+07ns, PktID= 92: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 22693.2
 Node ID: 7 forward at: 22694.6
 Node ID: 1 forward at: 22716.7
@@ -1175,6 +1226,7 @@ Node ID: 0 forward at: 22803
 Node ID: 0PktID: 93src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.2803e+07ns, PktID= 93: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.2803e+07ns, PktID= 93: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 22819.2
 Node ID: 7 forward at: 22820.6
 Node ID: 1 forward at: 22842.7
@@ -1187,6 +1239,7 @@ Node ID: 0 forward at: 22929
 Node ID: 0PktID: 94src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.2929e+07ns, PktID= 94: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.2929e+07ns, PktID= 94: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 22945.2
 Node ID: 7 forward at: 22946.6
 Node ID: 1 forward at: 22968.7
@@ -1296,6 +1349,7 @@ Node ID: 0 forward at: 24189
 Node ID: 0PktID: 104src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.4189e+07ns, PktID= 104: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.4189e+07ns, PktID= 104: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 24205.2
 Node ID: 7 forward at: 24206.6
 Node ID: 1 forward at: 24228.7
@@ -1308,6 +1362,7 @@ Node ID: 0 forward at: 24315
 Node ID: 0PktID: 105src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.4315e+07ns, PktID= 105: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.4315e+07ns, PktID= 105: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 24331.2
 Node ID: 7 forward at: 24332.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+2.43537e+07ns, PktID= 104: src:9 dest:14
@@ -1321,6 +1376,7 @@ Node ID: 0 forward at: 24441
 Node ID: 0PktID: 106src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.4441e+07ns, PktID= 106: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.4441e+07ns, PktID= 106: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 24457.2
 Node ID: 7 forward at: 24458.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+2.44802e+07ns, PktID= 105: src:9 dest:14
@@ -1334,6 +1390,7 @@ Node ID: 0 forward at: 24567
 Node ID: 0PktID: 107src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.4567e+07ns, PktID= 107: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.4567e+07ns, PktID= 107: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 24583.2
 Node ID: 7 forward at: 24584.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+2.46067e+07ns, PktID= 106: src:9 dest:14
@@ -1346,6 +1403,7 @@ Node ID: 0 forward at: 24693
 Node ID: 0PktID: 108src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.4693e+07ns, PktID= 108: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.4693e+07ns, PktID= 108: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 24709.2
 Node ID: 7 forward at: 24710.6
 Node ID: 1 forward at: 24732.7
@@ -1358,6 +1416,7 @@ Node ID: 0 forward at: 24819
 Node ID: 0PktID: 109src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.4819e+07ns, PktID= 109: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.4819e+07ns, PktID= 109: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 24835.2
 Node ID: 7 forward at: 24836.6
 Node ID: 1 forward at: 24858.7
@@ -1370,6 +1429,7 @@ Node ID: 0 forward at: 24945
 Node ID: 0PktID: 110src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.4945e+07ns, PktID= 110: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.4945e+07ns, PktID= 110: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 24961.2
 Node ID: 7 forward at: 24962.6
 Node ID: 1 forward at: 24984.7
@@ -1382,6 +1442,7 @@ Node ID: 0 forward at: 25071
 Node ID: 0PktID: 111src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.5071e+07ns, PktID= 111: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.5071e+07ns, PktID= 111: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 25087.2
 Node ID: 7 forward at: 25088.6
 Node ID: 1 forward at: 25110.7
@@ -1394,6 +1455,7 @@ Node ID: 0 forward at: 25197
 Node ID: 0PktID: 112src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.5197e+07ns, PktID= 112: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.5197e+07ns, PktID= 112: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 25213.2
 Node ID: 7 forward at: 25214.6
 Node ID: 1 forward at: 25236.7
@@ -1493,6 +1555,7 @@ Node ID: 0 forward at: 26331
 Node ID: 0PktID: 121src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.6331e+07ns, PktID= 121: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.6331e+07ns, PktID= 121: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 26347.2
 Node ID: 7 forward at: 26348.6
 Node ID: 1 forward at: 26370.7
@@ -1505,6 +1568,7 @@ Node ID: 0 forward at: 26457
 Node ID: 0PktID: 122src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.6457e+07ns, PktID= 122: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.6457e+07ns, PktID= 122: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 26473.2
 Node ID: 7 forward at: 26474.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+2.64954e+07ns, PktID= 121: src:9 dest:14
@@ -1518,6 +1582,7 @@ Node ID: 0 forward at: 26583
 Node ID: 0PktID: 123src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.6583e+07ns, PktID= 123: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.6583e+07ns, PktID= 123: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 26599.2
 Node ID: 7 forward at: 26600.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+2.66219e+07ns, PktID= 122: src:9 dest:14
@@ -1531,6 +1596,7 @@ Node ID: 0 forward at: 26709
 Node ID: 0PktID: 124src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.6709e+07ns, PktID= 124: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.6709e+07ns, PktID= 124: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 26725.2
 Node ID: 7 forward at: 26726.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+2.67484e+07ns, PktID= 123: src:9 dest:14
@@ -1544,6 +1610,7 @@ Node ID: 0 forward at: 26835
 Node ID: 0PktID: 125src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.6835e+07ns, PktID= 125: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.6835e+07ns, PktID= 125: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 26851.2
 Node ID: 7 forward at: 26852.6
 Node ID: 1 forward at: 26874.7
@@ -1556,6 +1623,7 @@ Node ID: 0 forward at: 26961
 Node ID: 0PktID: 126src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.6961e+07ns, PktID= 126: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.6961e+07ns, PktID= 126: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 26977.2
 Node ID: 7 forward at: 26978.6
 Node ID: 1 forward at: 27000.7
@@ -1568,6 +1636,7 @@ Node ID: 0 forward at: 27087
 Node ID: 0PktID: 127src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.7087e+07ns, PktID= 127: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.7087e+07ns, PktID= 127: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 27103.2
 Node ID: 7 forward at: 27104.6
 Node ID: 1 forward at: 27126.7
@@ -1580,6 +1649,7 @@ Node ID: 0 forward at: 27213
 Node ID: 0PktID: 128src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.7213e+07ns, PktID= 128: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.7213e+07ns, PktID= 128: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 27229.2
 Node ID: 7 forward at: 27230.6
 Node ID: 1 forward at: 27252.7
@@ -1592,6 +1662,7 @@ Node ID: 0 forward at: 27339
 Node ID: 0PktID: 129src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.7339e+07ns, PktID= 129: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.7339e+07ns, PktID= 129: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 27355.2
 Node ID: 7 forward at: 27356.6
 Node ID: 1 forward at: 27378.7
@@ -1701,6 +1772,7 @@ Node ID: 0 forward at: 28599
 Node ID: 0PktID: 139src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.8599e+07ns, PktID= 139: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.8599e+07ns, PktID= 139: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 28615.2
 Node ID: 7 forward at: 28616.6
 Node ID: 1 forward at: 28638.7
@@ -1713,6 +1785,7 @@ Node ID: 0 forward at: 28725
 Node ID: 0PktID: 140src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.8725e+07ns, PktID= 140: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.8725e+07ns, PktID= 140: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 28741.2
 Node ID: 7 forward at: 28742.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+2.87636e+07ns, PktID= 139: src:9 dest:14
@@ -1726,6 +1799,7 @@ Node ID: 0 forward at: 28851
 Node ID: 0PktID: 141src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.8851e+07ns, PktID= 141: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.8851e+07ns, PktID= 141: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 28867.2
 Node ID: 7 forward at: 28868.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+2.88901e+07ns, PktID= 140: src:9 dest:14
@@ -1739,6 +1813,7 @@ Node ID: 0 forward at: 28977
 Node ID: 0PktID: 142src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.8977e+07ns, PktID= 142: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.8977e+07ns, PktID= 142: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 28993.2
 Node ID: 7 forward at: 28994.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+2.90166e+07ns, PktID= 141: src:9 dest:14
@@ -1751,6 +1826,7 @@ Node ID: 0 forward at: 29103
 Node ID: 0PktID: 143src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.9103e+07ns, PktID= 143: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.9103e+07ns, PktID= 143: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 29119.2
 Node ID: 7 forward at: 29120.6
 Node ID: 1 forward at: 29142.7
@@ -1763,6 +1839,7 @@ Node ID: 0 forward at: 29229
 Node ID: 0PktID: 144src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.9229e+07ns, PktID= 144: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.9229e+07ns, PktID= 144: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 29245.2
 Node ID: 7 forward at: 29246.6
 Node ID: 1 forward at: 29268.7
@@ -1775,6 +1852,7 @@ Node ID: 0 forward at: 29355
 Node ID: 0PktID: 145src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.9355e+07ns, PktID= 145: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.9355e+07ns, PktID= 145: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 29371.2
 Node ID: 7 forward at: 29372.6
 Node ID: 1 forward at: 29394.7
@@ -1787,6 +1865,7 @@ Node ID: 0 forward at: 29481
 Node ID: 0PktID: 146src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.9481e+07ns, PktID= 146: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.9481e+07ns, PktID= 146: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 29497.2
 Node ID: 7 forward at: 29498.6
 Node ID: 1 forward at: 29520.7
@@ -1799,6 +1878,7 @@ Node ID: 0 forward at: 29607
 Node ID: 0PktID: 147src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+2.9607e+07ns, PktID= 147: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+2.9607e+07ns, PktID= 147: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 29623.2
 Node ID: 7 forward at: 29624.6
 Node ID: 1 forward at: 29646.7
@@ -1909,6 +1989,7 @@ Node ID: 0 forward at: 30867
 Node ID: 0PktID: 157src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.0867e+07ns, PktID= 157: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.0867e+07ns, PktID= 157: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 30883.2
 Node ID: 7 forward at: 30884.6
 Node ID: 1 forward at: 30906.7
@@ -1920,6 +2001,7 @@ Node ID: 0 forward at: 30993
 Node ID: 0PktID: 158src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.0993e+07ns, PktID= 158: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.0993e+07ns, PktID= 158: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 31009.2
 Node ID: 7 forward at: 31010.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+3.10318e+07ns, PktID= 157: src:9 dest:14
@@ -1933,6 +2015,7 @@ Node ID: 0 forward at: 31119
 Node ID: 0PktID: 159src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.1119e+07ns, PktID= 159: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.1119e+07ns, PktID= 159: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 31135.2
 Node ID: 7 forward at: 31136.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+3.11583e+07ns, PktID= 158: src:9 dest:14
@@ -1946,6 +2029,7 @@ Node ID: 0 forward at: 31245
 Node ID: 0PktID: 160src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.1245e+07ns, PktID= 160: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.1245e+07ns, PktID= 160: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 31261.2
 Node ID: 7 forward at: 31262.6
 Node ID: 1 forward at: 31284.7
@@ -1958,6 +2042,7 @@ Node ID: 0 forward at: 31371
 Node ID: 0PktID: 161src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.1371e+07ns, PktID= 161: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.1371e+07ns, PktID= 161: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 31387.2
 Node ID: 7 forward at: 31388.6
 Node ID: 1 forward at: 31410.7
@@ -1970,6 +2055,7 @@ Node ID: 0 forward at: 31497
 Node ID: 0PktID: 162src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.1497e+07ns, PktID= 162: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.1497e+07ns, PktID= 162: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 31513.2
 Node ID: 7 forward at: 31514.6
 Node ID: 1 forward at: 31536.7
@@ -1982,6 +2068,7 @@ Node ID: 0 forward at: 31623
 Node ID: 0PktID: 163src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.1623e+07ns, PktID= 163: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.1623e+07ns, PktID= 163: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 31639.2
 Node ID: 7 forward at: 31640.6
 Node ID: 1 forward at: 31662.7
@@ -1994,6 +2081,7 @@ Node ID: 0 forward at: 31749
 Node ID: 0PktID: 164src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.1749e+07ns, PktID= 164: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.1749e+07ns, PktID= 164: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 31765.2
 Node ID: 7 forward at: 31766.6
 Node ID: 1 forward at: 31788.7
@@ -2102,6 +2190,7 @@ Node ID: 0 forward at: 33009
 Node ID: 0PktID: 174src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.3009e+07ns, PktID= 174: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.3009e+07ns, PktID= 174: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 33025.2
 Node ID: 7 forward at: 33026.6
 Node ID: 1 forward at: 33048.7
@@ -2114,6 +2203,7 @@ Node ID: 0 forward at: 33135
 Node ID: 0PktID: 175src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.3135e+07ns, PktID= 175: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.3135e+07ns, PktID= 175: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 33151.2
 Node ID: 7 forward at: 33152.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+3.31736e+07ns, PktID= 174: src:9 dest:14
@@ -2127,6 +2217,7 @@ Node ID: 0 forward at: 33261
 Node ID: 0PktID: 176src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.3261e+07ns, PktID= 176: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.3261e+07ns, PktID= 176: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 33277.2
 Node ID: 7 forward at: 33278.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+3.33e+07ns, PktID= 175: src:9 dest:14
@@ -2140,6 +2231,7 @@ Node ID: 0 forward at: 33387
 Node ID: 0PktID: 177src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.3387e+07ns, PktID= 177: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.3387e+07ns, PktID= 177: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 33403.2
 Node ID: 7 forward at: 33404.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+3.34265e+07ns, PktID= 176: src:9 dest:14
@@ -2152,6 +2244,7 @@ Node ID: 0 forward at: 33513
 Node ID: 0PktID: 178src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.3513e+07ns, PktID= 178: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.3513e+07ns, PktID= 178: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 33529.2
 Node ID: 7 forward at: 33530.6
 Node ID: 1 forward at: 33552.7
@@ -2164,6 +2257,7 @@ Node ID: 0 forward at: 33639
 Node ID: 0PktID: 179src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.3639e+07ns, PktID= 179: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.3639e+07ns, PktID= 179: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 33655.2
 Node ID: 7 forward at: 33656.6
 Node ID: 1 forward at: 33678.7
@@ -2176,6 +2270,7 @@ Node ID: 0 forward at: 33765
 Node ID: 0PktID: 180src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.3765e+07ns, PktID= 180: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.3765e+07ns, PktID= 180: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 33781.2
 Node ID: 7 forward at: 33782.6
 Node ID: 1 forward at: 33804.7
@@ -2188,6 +2283,7 @@ Node ID: 0 forward at: 33891
 Node ID: 0PktID: 181src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.3891e+07ns, PktID= 181: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.3891e+07ns, PktID= 181: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 33907.2
 Node ID: 7 forward at: 33908.6
 Node ID: 1 forward at: 33930.7
@@ -2200,6 +2296,7 @@ Node ID: 0 forward at: 34017
 Node ID: 0PktID: 182src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.4017e+07ns, PktID= 182: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.4017e+07ns, PktID= 182: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 34033.2
 Node ID: 7 forward at: 34034.6
 Node ID: 1 forward at: 34056.7
@@ -2309,6 +2406,7 @@ Node ID: 0 forward at: 35277
 Node ID: 0PktID: 192src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.5277e+07ns, PktID= 192: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.5277e+07ns, PktID= 192: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 35293.2
 Node ID: 7 forward at: 35294.6
 Node ID: 1 forward at: 35316.7
@@ -2320,6 +2418,7 @@ Node ID: 0 forward at: 35403
 Node ID: 0PktID: 193src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.5403e+07ns, PktID= 193: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.5403e+07ns, PktID= 193: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 35419.2
 Node ID: 7 forward at: 35420.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+3.54418e+07ns, PktID= 192: src:9 dest:14
@@ -2333,6 +2432,7 @@ Node ID: 0 forward at: 35529
 Node ID: 0PktID: 194src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.5529e+07ns, PktID= 194: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.5529e+07ns, PktID= 194: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 35545.2
 Node ID: 7 forward at: 35546.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+3.55683e+07ns, PktID= 193: src:9 dest:14
@@ -2346,6 +2446,7 @@ Node ID: 0 forward at: 35655
 Node ID: 0PktID: 195src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.5655e+07ns, PktID= 195: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.5655e+07ns, PktID= 195: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 35671.2
 Node ID: 7 forward at: 35672.6
 Node ID: 1 forward at: 35694.7
@@ -2358,6 +2459,7 @@ Node ID: 0 forward at: 35781
 Node ID: 0PktID: 196src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.5781e+07ns, PktID= 196: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.5781e+07ns, PktID= 196: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 35797.2
 Node ID: 7 forward at: 35798.6
 Node ID: 1 forward at: 35820.7
@@ -2370,6 +2472,7 @@ Node ID: 0 forward at: 35907
 Node ID: 0PktID: 197src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.5907e+07ns, PktID= 197: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.5907e+07ns, PktID= 197: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 35923.2
 Node ID: 7 forward at: 35924.6
 Node ID: 1 forward at: 35946.7
@@ -2382,6 +2485,7 @@ Node ID: 0 forward at: 36033
 Node ID: 0PktID: 198src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.6033e+07ns, PktID= 198: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.6033e+07ns, PktID= 198: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 36049.2
 Node ID: 7 forward at: 36050.6
 Node ID: 1 forward at: 36072.7
@@ -2394,6 +2498,7 @@ Node ID: 0 forward at: 36159
 Node ID: 0PktID: 199src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.6159e+07ns, PktID= 199: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.6159e+07ns, PktID= 199: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 36175.2
 Node ID: 7 forward at: 36176.6
 Node ID: 1 forward at: 36198.7
@@ -2406,6 +2511,7 @@ Node ID: 0 forward at: 36285
 Node ID: 0PktID: 200src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.6285e+07ns, PktID= 200: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.6285e+07ns, PktID= 200: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 36301.2
 Node ID: 7 forward at: 36302.6
 Node ID: 1 forward at: 36324.7
@@ -2505,6 +2611,7 @@ Node ID: 0 forward at: 37419
 Node ID: 0PktID: 209src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.7419e+07ns, PktID= 209: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.7419e+07ns, PktID= 209: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 37435.2
 Node ID: 7 forward at: 37436.6
 Node ID: 1 forward at: 37458.7
@@ -2517,6 +2624,7 @@ Node ID: 0 forward at: 37545
 Node ID: 0PktID: 210src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.7545e+07ns, PktID= 210: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.7545e+07ns, PktID= 210: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 37561.2
 Node ID: 7 forward at: 37562.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+3.75835e+07ns, PktID= 209: src:9 dest:14
@@ -2530,6 +2638,7 @@ Node ID: 0 forward at: 37671
 Node ID: 0PktID: 211src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.7671e+07ns, PktID= 211: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.7671e+07ns, PktID= 211: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 37687.2
 Node ID: 7 forward at: 37688.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+3.771e+07ns, PktID= 210: src:9 dest:14
@@ -2543,6 +2652,7 @@ Node ID: 0 forward at: 37797
 Node ID: 0PktID: 212src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.7797e+07ns, PktID= 212: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.7797e+07ns, PktID= 212: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 37813.2
 Node ID: 7 forward at: 37814.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+3.78365e+07ns, PktID= 211: src:9 dest:14
@@ -2556,6 +2666,7 @@ Node ID: 0 forward at: 37923
 Node ID: 0PktID: 213src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.7923e+07ns, PktID= 213: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.7923e+07ns, PktID= 213: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 37939.2
 Node ID: 7 forward at: 37940.6
 Node ID: 1 forward at: 37962.7
@@ -2568,6 +2679,7 @@ Node ID: 0 forward at: 38049
 Node ID: 0PktID: 214src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.8049e+07ns, PktID= 214: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.8049e+07ns, PktID= 214: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 38065.2
 Node ID: 7 forward at: 38066.6
 Node ID: 1 forward at: 38088.7
@@ -2580,6 +2692,7 @@ Node ID: 0 forward at: 38175
 Node ID: 0PktID: 215src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.8175e+07ns, PktID= 215: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.8175e+07ns, PktID= 215: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 38191.2
 Node ID: 7 forward at: 38192.6
 Node ID: 1 forward at: 38214.7
@@ -2592,6 +2705,7 @@ Node ID: 0 forward at: 38301
 Node ID: 0PktID: 216src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.8301e+07ns, PktID= 216: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.8301e+07ns, PktID= 216: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 38317.2
 Node ID: 7 forward at: 38318.6
 Node ID: 1 forward at: 38340.7
@@ -2604,6 +2718,7 @@ Node ID: 0 forward at: 38427
 Node ID: 0PktID: 217src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.8427e+07ns, PktID= 217: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.8427e+07ns, PktID= 217: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 38443.2
 Node ID: 7 forward at: 38444.6
 Node ID: 1 forward at: 38466.7
@@ -2713,6 +2828,7 @@ Node ID: 0 forward at: 39687
 Node ID: 0PktID: 227src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.9687e+07ns, PktID= 227: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.9687e+07ns, PktID= 227: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 39703.2
 Node ID: 7 forward at: 39704.6
 Node ID: 1 forward at: 39726.7
@@ -2725,6 +2841,7 @@ Node ID: 0 forward at: 39813
 Node ID: 0PktID: 228src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.9813e+07ns, PktID= 228: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.9813e+07ns, PktID= 228: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 39829.2
 Node ID: 7 forward at: 39830.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+3.98517e+07ns, PktID= 227: src:9 dest:14
@@ -2738,6 +2855,7 @@ Node ID: 0 forward at: 39939
 Node ID: 0PktID: 229src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+3.9939e+07ns, PktID= 229: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+3.9939e+07ns, PktID= 229: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 39955.2
 Node ID: 7 forward at: 39956.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+3.99782e+07ns, PktID= 228: src:9 dest:14
@@ -2751,6 +2869,7 @@ Node ID: 0 forward at: 40065
 Node ID: 0PktID: 230src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.0065e+07ns, PktID= 230: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.0065e+07ns, PktID= 230: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 40081.2
 Node ID: 7 forward at: 40082.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+4.01047e+07ns, PktID= 229: src:9 dest:14
@@ -2763,6 +2882,7 @@ Node ID: 0 forward at: 40191
 Node ID: 0PktID: 231src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.0191e+07ns, PktID= 231: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.0191e+07ns, PktID= 231: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 40207.2
 Node ID: 7 forward at: 40208.6
 Node ID: 1 forward at: 40230.7
@@ -2775,6 +2895,7 @@ Node ID: 0 forward at: 40317
 Node ID: 0PktID: 232src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.0317e+07ns, PktID= 232: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.0317e+07ns, PktID= 232: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 40333.2
 Node ID: 7 forward at: 40334.6
 Node ID: 1 forward at: 40356.7
@@ -2787,6 +2908,7 @@ Node ID: 0 forward at: 40443
 Node ID: 0PktID: 233src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.0443e+07ns, PktID= 233: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.0443e+07ns, PktID= 233: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 40459.2
 Node ID: 7 forward at: 40460.6
 Node ID: 1 forward at: 40482.7
@@ -2799,6 +2921,7 @@ Node ID: 0 forward at: 40569
 Node ID: 0PktID: 234src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.0569e+07ns, PktID= 234: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.0569e+07ns, PktID= 234: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 40585.2
 Node ID: 7 forward at: 40586.6
 Node ID: 1 forward at: 40608.7
@@ -2811,6 +2934,7 @@ Node ID: 0 forward at: 40695
 Node ID: 0PktID: 235src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.0695e+07ns, PktID= 235: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.0695e+07ns, PktID= 235: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 40711.2
 Node ID: 7 forward at: 40712.6
 Node ID: 1 forward at: 40734.7
@@ -2910,6 +3034,7 @@ Node ID: 0 forward at: 41829
 Node ID: 0PktID: 244src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.1829e+07ns, PktID= 244: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.1829e+07ns, PktID= 244: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 41845.2
 Node ID: 7 forward at: 41846.6
 Node ID: 1 forward at: 41868.7
@@ -2922,6 +3047,7 @@ Node ID: 0 forward at: 41955
 Node ID: 0PktID: 245src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.1955e+07ns, PktID= 245: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.1955e+07ns, PktID= 245: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 41971.2
 Node ID: 7 forward at: 41972.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+4.19934e+07ns, PktID= 244: src:9 dest:14
@@ -2935,6 +3061,7 @@ Node ID: 0 forward at: 42081
 Node ID: 0PktID: 246src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.2081e+07ns, PktID= 246: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.2081e+07ns, PktID= 246: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 42097.2
 Node ID: 7 forward at: 42098.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+4.21199e+07ns, PktID= 245: src:9 dest:14
@@ -2948,6 +3075,7 @@ Node ID: 0 forward at: 42207
 Node ID: 0PktID: 247src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.2207e+07ns, PktID= 247: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.2207e+07ns, PktID= 247: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 42223.2
 Node ID: 7 forward at: 42224.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+4.22464e+07ns, PktID= 246: src:9 dest:14
@@ -2961,6 +3089,7 @@ Node ID: 0 forward at: 42333
 Node ID: 0PktID: 248src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.2333e+07ns, PktID= 248: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.2333e+07ns, PktID= 248: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 42349.2
 Node ID: 7 forward at: 42350.6
 Node ID: 1 forward at: 42372.7
@@ -2973,6 +3102,7 @@ Node ID: 0 forward at: 42459
 Node ID: 0PktID: 249src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.2459e+07ns, PktID= 249: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.2459e+07ns, PktID= 249: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 42475.2
 Node ID: 7 forward at: 42476.6
 Node ID: 1 forward at: 42498.7
@@ -2985,6 +3115,7 @@ Node ID: 0 forward at: 42585
 Node ID: 0PktID: 250src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.2585e+07ns, PktID= 250: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.2585e+07ns, PktID= 250: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 42601.2
 Node ID: 7 forward at: 42602.6
 Node ID: 1 forward at: 42624.7
@@ -2997,6 +3128,7 @@ Node ID: 0 forward at: 42711
 Node ID: 0PktID: 251src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.2711e+07ns, PktID= 251: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.2711e+07ns, PktID= 251: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 42727.2
 Node ID: 7 forward at: 42728.6
 Node ID: 1 forward at: 42750.7
@@ -3009,6 +3141,7 @@ Node ID: 0 forward at: 42837
 Node ID: 0PktID: 252src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.2837e+07ns, PktID= 252: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.2837e+07ns, PktID= 252: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 42853.2
 Node ID: 7 forward at: 42854.6
 Node ID: 1 forward at: 42876.7
@@ -3118,6 +3251,7 @@ Node ID: 0 forward at: 44097
 Node ID: 0PktID: 6src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.4097e+07ns, PktID= 6: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.4097e+07ns, PktID= 6: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 44113.2
 Node ID: 7 forward at: 44114.6
 Node ID: 1 forward at: 44136.7
@@ -3130,6 +3264,7 @@ Node ID: 0 forward at: 44223
 Node ID: 0PktID: 7src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.4223e+07ns, PktID= 7: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.4223e+07ns, PktID= 7: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 44239.2
 Node ID: 7 forward at: 44240.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+4.42616e+07ns, PktID= 6: src:9 dest:14
@@ -3143,6 +3278,7 @@ Node ID: 0 forward at: 44349
 Node ID: 0PktID: 8src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.4349e+07ns, PktID= 8: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.4349e+07ns, PktID= 8: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 44365.2
 Node ID: 7 forward at: 44366.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+4.43881e+07ns, PktID= 7: src:9 dest:14
@@ -3156,6 +3292,7 @@ Node ID: 0 forward at: 44475
 Node ID: 0PktID: 9src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.4475e+07ns, PktID= 9: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.4475e+07ns, PktID= 9: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 44491.2
 Node ID: 7 forward at: 44492.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+4.45146e+07ns, PktID= 8: src:9 dest:14
@@ -3168,6 +3305,7 @@ Node ID: 0 forward at: 44601
 Node ID: 0PktID: 10src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.4601e+07ns, PktID= 10: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.4601e+07ns, PktID= 10: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 44617.2
 Node ID: 7 forward at: 44618.6
 Node ID: 1 forward at: 44640.7
@@ -3180,6 +3318,7 @@ Node ID: 0 forward at: 44727
 Node ID: 0PktID: 11src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.4727e+07ns, PktID= 11: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.4727e+07ns, PktID= 11: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 44743.2
 Node ID: 7 forward at: 44744.6
 Node ID: 1 forward at: 44766.7
@@ -3192,6 +3331,7 @@ Node ID: 0 forward at: 44853
 Node ID: 0PktID: 12src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.4853e+07ns, PktID= 12: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.4853e+07ns, PktID= 12: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 44869.2
 Node ID: 7 forward at: 44870.6
 Node ID: 1 forward at: 44892.7
@@ -3204,6 +3344,7 @@ Node ID: 0 forward at: 44979
 Node ID: 0PktID: 13src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.4979e+07ns, PktID= 13: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.4979e+07ns, PktID= 13: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 44995.2
 Node ID: 7 forward at: 44996.6
 Node ID: 1 forward at: 45018.7
@@ -3216,6 +3357,7 @@ Node ID: 0 forward at: 45105
 Node ID: 0PktID: 14src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.5105e+07ns, PktID= 14: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.5105e+07ns, PktID= 14: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 45121.2
 Node ID: 7 forward at: 45122.6
 Node ID: 1 forward at: 45144.7
@@ -3326,6 +3468,7 @@ Node ID: 0 forward at: 46365
 Node ID: 0PktID: 24src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.6365e+07ns, PktID= 24: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.6365e+07ns, PktID= 24: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 46381.2
 Node ID: 7 forward at: 46382.6
 Node ID: 1 forward at: 46404.7
@@ -3337,6 +3480,7 @@ Node ID: 0 forward at: 46491
 Node ID: 0PktID: 25src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.6491e+07ns, PktID= 25: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.6491e+07ns, PktID= 25: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 46507.2
 Node ID: 7 forward at: 46508.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+4.65299e+07ns, PktID= 24: src:9 dest:14
@@ -3350,6 +3494,7 @@ Node ID: 0 forward at: 46617
 Node ID: 0PktID: 26src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.6617e+07ns, PktID= 26: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.6617e+07ns, PktID= 26: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 46633.2
 Node ID: 7 forward at: 46634.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+4.66563e+07ns, PktID= 25: src:9 dest:14
@@ -3363,6 +3508,7 @@ Node ID: 0 forward at: 46743
 Node ID: 0PktID: 27src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.6743e+07ns, PktID= 27: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.6743e+07ns, PktID= 27: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 46759.2
 Node ID: 7 forward at: 46760.6
 Node ID: 1 forward at: 46782.7
@@ -3375,6 +3521,7 @@ Node ID: 0 forward at: 46869
 Node ID: 0PktID: 28src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.6869e+07ns, PktID= 28: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.6869e+07ns, PktID= 28: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 46885.2
 Node ID: 7 forward at: 46886.6
 Node ID: 1 forward at: 46908.7
@@ -3387,6 +3534,7 @@ Node ID: 0 forward at: 46995
 Node ID: 0PktID: 29src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.6995e+07ns, PktID= 29: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.6995e+07ns, PktID= 29: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 47011.2
 Node ID: 7 forward at: 47012.6
 Node ID: 1 forward at: 47034.7
@@ -3399,6 +3547,7 @@ Node ID: 0 forward at: 47121
 Node ID: 0PktID: 30src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.7121e+07ns, PktID= 30: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.7121e+07ns, PktID= 30: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 47137.2
 Node ID: 7 forward at: 47138.6
 Node ID: 1 forward at: 47160.7
@@ -3411,6 +3560,7 @@ Node ID: 0 forward at: 47247
 Node ID: 0PktID: 31src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.7247e+07ns, PktID= 31: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.7247e+07ns, PktID= 31: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 47263.2
 Node ID: 7 forward at: 47264.6
 Node ID: 1 forward at: 47286.7
@@ -3519,6 +3669,7 @@ Node ID: 0 forward at: 48507
 Node ID: 0PktID: 41src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.8507e+07ns, PktID= 41: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.8507e+07ns, PktID= 41: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 48523.2
 Node ID: 7 forward at: 48524.6
 Node ID: 1 forward at: 48546.7
@@ -3531,6 +3682,7 @@ Node ID: 0 forward at: 48633
 Node ID: 0PktID: 42src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.8633e+07ns, PktID= 42: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.8633e+07ns, PktID= 42: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 48649.2
 Node ID: 7 forward at: 48650.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+4.86716e+07ns, PktID= 41: src:9 dest:14
@@ -3544,6 +3696,7 @@ Node ID: 0 forward at: 48759
 Node ID: 0PktID: 43src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.8759e+07ns, PktID= 43: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.8759e+07ns, PktID= 43: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 48775.2
 Node ID: 7 forward at: 48776.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+4.87981e+07ns, PktID= 42: src:9 dest:14
@@ -3557,6 +3710,7 @@ Node ID: 0 forward at: 48885
 Node ID: 0PktID: 44src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.8885e+07ns, PktID= 44: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.8885e+07ns, PktID= 44: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 48901.2
 Node ID: 7 forward at: 48902.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+4.89245e+07ns, PktID= 43: src:9 dest:14
@@ -3569,6 +3723,7 @@ Node ID: 0 forward at: 49011
 Node ID: 0PktID: 45src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.9011e+07ns, PktID= 45: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.9011e+07ns, PktID= 45: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 49027.2
 Node ID: 7 forward at: 49028.6
 Node ID: 1 forward at: 49050.7
@@ -3581,6 +3736,7 @@ Node ID: 0 forward at: 49137
 Node ID: 0PktID: 46src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.9137e+07ns, PktID= 46: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.9137e+07ns, PktID= 46: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 49153.2
 Node ID: 7 forward at: 49154.6
 Node ID: 1 forward at: 49176.7
@@ -3593,6 +3749,7 @@ Node ID: 0 forward at: 49263
 Node ID: 0PktID: 47src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.9263e+07ns, PktID= 47: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.9263e+07ns, PktID= 47: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 49279.2
 Node ID: 7 forward at: 49280.6
 Node ID: 1 forward at: 49302.7
@@ -3605,6 +3762,7 @@ Node ID: 0 forward at: 49389
 Node ID: 0PktID: 48src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.9389e+07ns, PktID= 48: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.9389e+07ns, PktID= 48: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 49405.2
 Node ID: 7 forward at: 49406.6
 Node ID: 1 forward at: 49428.7
@@ -3617,6 +3775,7 @@ Node ID: 0 forward at: 49515
 Node ID: 0PktID: 49src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+4.9515e+07ns, PktID= 49: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+4.9515e+07ns, PktID= 49: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 49531.2
 Node ID: 7 forward at: 49532.6
 Node ID: 1 forward at: 49554.7
@@ -3726,6 +3885,7 @@ Node ID: 0 forward at: 50775
 Node ID: 0PktID: 59src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.0775e+07ns, PktID= 59: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.0775e+07ns, PktID= 59: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 50791.2
 Node ID: 7 forward at: 50792.6
 Node ID: 1 forward at: 50814.7
@@ -3737,6 +3897,7 @@ Node ID: 0 forward at: 50901
 Node ID: 0PktID: 60src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.0901e+07ns, PktID= 60: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.0901e+07ns, PktID= 60: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 50917.2
 Node ID: 7 forward at: 50918.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+5.09398e+07ns, PktID= 59: src:9 dest:14
@@ -3750,6 +3911,7 @@ Node ID: 0 forward at: 51027
 Node ID: 0PktID: 61src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.1027e+07ns, PktID= 61: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.1027e+07ns, PktID= 61: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 51043.2
 Node ID: 7 forward at: 51044.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+5.10663e+07ns, PktID= 60: src:9 dest:14
@@ -3763,6 +3925,7 @@ Node ID: 0 forward at: 51153
 Node ID: 0PktID: 62src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.1153e+07ns, PktID= 62: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.1153e+07ns, PktID= 62: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 51169.2
 Node ID: 7 forward at: 51170.6
 Node ID: 1 forward at: 51192.7
@@ -3775,6 +3938,7 @@ Node ID: 0 forward at: 51279
 Node ID: 0PktID: 63src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.1279e+07ns, PktID= 63: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.1279e+07ns, PktID= 63: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 51295.2
 Node ID: 7 forward at: 51296.6
 Node ID: 1 forward at: 51318.7
@@ -3787,6 +3951,7 @@ Node ID: 0 forward at: 51405
 Node ID: 0PktID: 64src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.1405e+07ns, PktID= 64: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.1405e+07ns, PktID= 64: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 51421.2
 Node ID: 7 forward at: 51422.6
 Node ID: 1 forward at: 51444.7
@@ -3799,6 +3964,7 @@ Node ID: 0 forward at: 51531
 Node ID: 0PktID: 65src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.1531e+07ns, PktID= 65: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.1531e+07ns, PktID= 65: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 51547.2
 Node ID: 7 forward at: 51548.6
 Node ID: 1 forward at: 51570.7
@@ -3811,6 +3977,7 @@ Node ID: 0 forward at: 51657
 Node ID: 0PktID: 66src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.1657e+07ns, PktID= 66: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.1657e+07ns, PktID= 66: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 51673.2
 Node ID: 7 forward at: 51674.6
 Node ID: 1 forward at: 51696.7
@@ -3823,6 +3990,7 @@ Node ID: 0 forward at: 51783
 Node ID: 0PktID: 67src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.1783e+07ns, PktID= 67: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.1783e+07ns, PktID= 67: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 51799.2
 Node ID: 7 forward at: 51800.6
 Node ID: 1 forward at: 51822.7
@@ -3922,6 +4090,7 @@ Node ID: 0 forward at: 52917
 Node ID: 0PktID: 76src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.2917e+07ns, PktID= 76: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.2917e+07ns, PktID= 76: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 52933.2
 Node ID: 7 forward at: 52934.6
 Node ID: 1 forward at: 52956.7
@@ -3934,6 +4103,7 @@ Node ID: 0 forward at: 53043
 Node ID: 0PktID: 77src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.3043e+07ns, PktID= 77: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.3043e+07ns, PktID= 77: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 53059.2
 Node ID: 7 forward at: 53060.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+5.30815e+07ns, PktID= 76: src:9 dest:14
@@ -3947,6 +4117,7 @@ Node ID: 0 forward at: 53169
 Node ID: 0PktID: 78src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.3169e+07ns, PktID= 78: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.3169e+07ns, PktID= 78: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 53185.2
 Node ID: 7 forward at: 53186.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+5.3208e+07ns, PktID= 77: src:9 dest:14
@@ -3960,6 +4131,7 @@ Node ID: 0 forward at: 53295
 Node ID: 0PktID: 79src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.3295e+07ns, PktID= 79: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.3295e+07ns, PktID= 79: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 53311.2
 Node ID: 7 forward at: 53312.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+5.33345e+07ns, PktID= 78: src:9 dest:14
@@ -3973,6 +4145,7 @@ Node ID: 0 forward at: 53421
 Node ID: 0PktID: 80src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.3421e+07ns, PktID= 80: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.3421e+07ns, PktID= 80: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 53437.2
 Node ID: 7 forward at: 53438.6
 Node ID: 1 forward at: 53460.7
@@ -3985,6 +4158,7 @@ Node ID: 0 forward at: 53547
 Node ID: 0PktID: 81src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.3547e+07ns, PktID= 81: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.3547e+07ns, PktID= 81: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 53563.2
 Node ID: 7 forward at: 53564.6
 Node ID: 1 forward at: 53586.7
@@ -3997,6 +4171,7 @@ Node ID: 0 forward at: 53673
 Node ID: 0PktID: 82src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.3673e+07ns, PktID= 82: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.3673e+07ns, PktID= 82: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 53689.2
 Node ID: 7 forward at: 53690.6
 Node ID: 1 forward at: 53712.7
@@ -4009,6 +4184,7 @@ Node ID: 0 forward at: 53799
 Node ID: 0PktID: 83src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.3799e+07ns, PktID= 83: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.3799e+07ns, PktID= 83: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 53815.2
 Node ID: 7 forward at: 53816.6
 Node ID: 1 forward at: 53838.7
@@ -4021,6 +4197,7 @@ Node ID: 0 forward at: 53925
 Node ID: 0PktID: 84src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.3925e+07ns, PktID= 84: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.3925e+07ns, PktID= 84: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 53941.2
 Node ID: 7 forward at: 53942.6
 Node ID: 1 forward at: 53964.7
@@ -4130,6 +4307,7 @@ Node ID: 0 forward at: 55185
 Node ID: 0PktID: 94src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.5185e+07ns, PktID= 94: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.5185e+07ns, PktID= 94: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 55201.2
 Node ID: 7 forward at: 55202.6
 Node ID: 1 forward at: 55224.7
@@ -4142,6 +4320,7 @@ Node ID: 0 forward at: 55311
 Node ID: 0PktID: 95src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.5311e+07ns, PktID= 95: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.5311e+07ns, PktID= 95: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 55327.2
 Node ID: 7 forward at: 55328.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+5.53497e+07ns, PktID= 94: src:9 dest:14
@@ -4155,6 +4334,7 @@ Node ID: 0 forward at: 55437
 Node ID: 0PktID: 96src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.5437e+07ns, PktID= 96: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.5437e+07ns, PktID= 96: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 55453.2
 Node ID: 7 forward at: 55454.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+5.54762e+07ns, PktID= 95: src:9 dest:14
@@ -4168,6 +4348,7 @@ Node ID: 0 forward at: 55563
 Node ID: 0PktID: 97src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.5563e+07ns, PktID= 97: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.5563e+07ns, PktID= 97: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 55579.2
 Node ID: 7 forward at: 55580.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+5.56027e+07ns, PktID= 96: src:9 dest:14
@@ -4180,6 +4361,7 @@ Node ID: 0 forward at: 55689
 Node ID: 0PktID: 98src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.5689e+07ns, PktID= 98: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.5689e+07ns, PktID= 98: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 55705.2
 Node ID: 7 forward at: 55706.6
 Node ID: 1 forward at: 55728.7
@@ -4192,6 +4374,7 @@ Node ID: 0 forward at: 55815
 Node ID: 0PktID: 99src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.5815e+07ns, PktID= 99: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.5815e+07ns, PktID= 99: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 55831.2
 Node ID: 7 forward at: 55832.6
 Node ID: 1 forward at: 55854.7
@@ -4204,6 +4387,7 @@ Node ID: 0 forward at: 55941
 Node ID: 0PktID: 100src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.5941e+07ns, PktID= 100: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.5941e+07ns, PktID= 100: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 55957.2
 Node ID: 7 forward at: 55958.6
 Node ID: 1 forward at: 55980.7
@@ -4216,6 +4400,7 @@ Node ID: 0 forward at: 56067
 Node ID: 0PktID: 101src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.6067e+07ns, PktID= 101: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.6067e+07ns, PktID= 101: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 56083.2
 Node ID: 7 forward at: 56084.6
 Node ID: 1 forward at: 56106.7
@@ -4228,6 +4413,7 @@ Node ID: 0 forward at: 56193
 Node ID: 0PktID: 102src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.6193e+07ns, PktID= 102: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.6193e+07ns, PktID= 102: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 56209.2
 Node ID: 7 forward at: 56210.6
 Node ID: 1 forward at: 56232.7
@@ -4327,6 +4513,7 @@ Node ID: 0 forward at: 57327
 Node ID: 0PktID: 111src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.7327e+07ns, PktID= 111: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.7327e+07ns, PktID= 111: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 57343.2
 Node ID: 7 forward at: 57344.6
 Node ID: 1 forward at: 57366.7
@@ -4339,6 +4526,7 @@ Node ID: 0 forward at: 57453
 Node ID: 0PktID: 112src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.7453e+07ns, PktID= 112: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.7453e+07ns, PktID= 112: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 57469.2
 Node ID: 7 forward at: 57470.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+5.74915e+07ns, PktID= 111: src:9 dest:14
@@ -4352,6 +4540,7 @@ Node ID: 0 forward at: 57579
 Node ID: 0PktID: 113src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.7579e+07ns, PktID= 113: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.7579e+07ns, PktID= 113: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 57595.2
 Node ID: 7 forward at: 57596.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+5.76179e+07ns, PktID= 112: src:9 dest:14
@@ -4365,6 +4554,7 @@ Node ID: 0 forward at: 57705
 Node ID: 0PktID: 114src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.7705e+07ns, PktID= 114: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.7705e+07ns, PktID= 114: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 57721.2
 Node ID: 7 forward at: 57722.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+5.77444e+07ns, PktID= 113: src:9 dest:14
@@ -4378,6 +4568,7 @@ Node ID: 0 forward at: 57831
 Node ID: 0PktID: 115src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.7831e+07ns, PktID= 115: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.7831e+07ns, PktID= 115: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 57847.2
 Node ID: 7 forward at: 57848.6
 Node ID: 1 forward at: 57870.7
@@ -4390,6 +4581,7 @@ Node ID: 0 forward at: 57957
 Node ID: 0PktID: 116src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.7957e+07ns, PktID= 116: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.7957e+07ns, PktID= 116: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 57973.2
 Node ID: 7 forward at: 57974.6
 Node ID: 1 forward at: 57996.7
@@ -4402,6 +4594,7 @@ Node ID: 0 forward at: 58083
 Node ID: 0PktID: 117src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.8083e+07ns, PktID= 117: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.8083e+07ns, PktID= 117: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 58099.2
 Node ID: 7 forward at: 58100.6
 Node ID: 1 forward at: 58122.7
@@ -4414,6 +4607,7 @@ Node ID: 0 forward at: 58209
 Node ID: 0PktID: 118src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.8209e+07ns, PktID= 118: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.8209e+07ns, PktID= 118: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 58225.2
 Node ID: 7 forward at: 58226.6
 Node ID: 1 forward at: 58248.7
@@ -4426,6 +4620,7 @@ Node ID: 0 forward at: 58335
 Node ID: 0PktID: 119src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.8335e+07ns, PktID= 119: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.8335e+07ns, PktID= 119: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 58351.2
 Node ID: 7 forward at: 58352.6
 Node ID: 1 forward at: 58374.7
@@ -4535,6 +4730,7 @@ Node ID: 0 forward at: 59595
 Node ID: 0PktID: 129src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.9595e+07ns, PktID= 129: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.9595e+07ns, PktID= 129: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 59611.2
 Node ID: 7 forward at: 59612.6
 Node ID: 1 forward at: 59634.7
@@ -4547,6 +4743,7 @@ Node ID: 0 forward at: 59721
 Node ID: 0PktID: 130src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.9721e+07ns, PktID= 130: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.9721e+07ns, PktID= 130: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 59737.2
 Node ID: 7 forward at: 59738.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+5.97597e+07ns, PktID= 129: src:9 dest:14
@@ -4560,6 +4757,7 @@ Node ID: 0 forward at: 59847
 Node ID: 0PktID: 131src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.9847e+07ns, PktID= 131: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.9847e+07ns, PktID= 131: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 59863.2
 Node ID: 7 forward at: 59864.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+5.98861e+07ns, PktID= 130: src:9 dest:14
@@ -4573,6 +4771,7 @@ Node ID: 0 forward at: 59973
 Node ID: 0PktID: 132src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+5.9973e+07ns, PktID= 132: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+5.9973e+07ns, PktID= 132: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 59989.2
 Node ID: 7 forward at: 59990.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.00126e+07ns, PktID= 131: src:9 dest:14
@@ -4585,6 +4784,7 @@ Node ID: 0 forward at: 60099
 Node ID: 0PktID: 133src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.0099e+07ns, PktID= 133: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.0099e+07ns, PktID= 133: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 60115.2
 Node ID: 7 forward at: 60116.6
 Node ID: 1 forward at: 60138.7
@@ -4597,6 +4797,7 @@ Node ID: 0 forward at: 60225
 Node ID: 0PktID: 134src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.0225e+07ns, PktID= 134: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.0225e+07ns, PktID= 134: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 60241.2
 Node ID: 7 forward at: 60242.6
 Node ID: 1 forward at: 60264.7
@@ -4609,6 +4810,7 @@ Node ID: 0 forward at: 60351
 Node ID: 0PktID: 135src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.0351e+07ns, PktID= 135: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.0351e+07ns, PktID= 135: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 60367.2
 Node ID: 7 forward at: 60368.6
 Node ID: 1 forward at: 60390.7
@@ -4621,6 +4823,7 @@ Node ID: 0 forward at: 60477
 Node ID: 0PktID: 136src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.0477e+07ns, PktID= 136: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.0477e+07ns, PktID= 136: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 60493.2
 Node ID: 7 forward at: 60494.6
 Node ID: 1 forward at: 60516.7
@@ -4633,6 +4836,7 @@ Node ID: 0 forward at: 60603
 Node ID: 0PktID: 137src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.0603e+07ns, PktID= 137: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.0603e+07ns, PktID= 137: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 60619.2
 Node ID: 7 forward at: 60620.6
 Node ID: 1 forward at: 60642.7
@@ -4743,6 +4947,7 @@ Node ID: 0 forward at: 61863
 Node ID: 0PktID: 147src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.1863e+07ns, PktID= 147: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.1863e+07ns, PktID= 147: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 61879.2
 Node ID: 7 forward at: 61880.6
 Node ID: 1 forward at: 61902.7
@@ -4754,6 +4959,7 @@ Node ID: 0 forward at: 61989
 Node ID: 0PktID: 148src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.1989e+07ns, PktID= 148: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.1989e+07ns, PktID= 148: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 62005.2
 Node ID: 7 forward at: 62006.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.20279e+07ns, PktID= 147: src:9 dest:14
@@ -4767,6 +4973,7 @@ Node ID: 0 forward at: 62115
 Node ID: 0PktID: 149src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.2115e+07ns, PktID= 149: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.2115e+07ns, PktID= 149: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 62131.2
 Node ID: 7 forward at: 62132.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.21544e+07ns, PktID= 148: src:9 dest:14
@@ -4780,6 +4987,7 @@ Node ID: 0 forward at: 62241
 Node ID: 0PktID: 150src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.2241e+07ns, PktID= 150: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.2241e+07ns, PktID= 150: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 62257.2
 Node ID: 7 forward at: 62258.6
 Node ID: 1 forward at: 62280.7
@@ -4792,6 +5000,7 @@ Node ID: 0 forward at: 62367
 Node ID: 0PktID: 151src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.2367e+07ns, PktID= 151: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.2367e+07ns, PktID= 151: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 62383.2
 Node ID: 7 forward at: 62384.6
 Node ID: 1 forward at: 62406.7
@@ -4804,6 +5013,7 @@ Node ID: 0 forward at: 62493
 Node ID: 0PktID: 152src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.2493e+07ns, PktID= 152: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.2493e+07ns, PktID= 152: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 62509.2
 Node ID: 7 forward at: 62510.6
 Node ID: 1 forward at: 62532.7
@@ -4816,6 +5026,7 @@ Node ID: 0 forward at: 62619
 Node ID: 0PktID: 153src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.2619e+07ns, PktID= 153: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.2619e+07ns, PktID= 153: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 62635.2
 Node ID: 7 forward at: 62636.6
 Node ID: 1 forward at: 62658.7
@@ -4828,6 +5039,7 @@ Node ID: 0 forward at: 62745
 Node ID: 0PktID: 154src: 9 -dest: 14 queue backlog: 19 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.2745e+07ns, PktID= 154: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.2745e+07ns, PktID= 154: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 62761.2
 Node ID: 7 forward at: 62762.6
 Node ID: 1 forward at: 62784.7
@@ -4862,6 +5074,7 @@ Node ID: 0 forward at: 63123
 Node ID: 0PktID: 157src: 9 -dest: 14 queue backlog: 17 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.3123e+07ns, PktID= 157: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.3123e+07ns, PktID= 157: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 63139.2
 Node ID: 7 forward at: 63140.6
 Node ID: 1 forward at: 63162.7
@@ -4873,6 +5086,7 @@ Node ID: 0 forward at: 63249
 Node ID: 0PktID: 158src: 9 -dest: 14 queue backlog: 15 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.3249e+07ns, PktID= 158: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.3249e+07ns, PktID= 158: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 63265.2
 Node ID: 7 forward at: 63266.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.32674e+07ns, PktID= 157: src:9 dest:14
@@ -4886,6 +5100,7 @@ Node ID: 0 forward at: 63375
 Node ID: 0PktID: 159src: 9 -dest: 14 queue backlog: 13 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.3375e+07ns, PktID= 159: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.3375e+07ns, PktID= 159: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.3377e+07ns, PktID= 158: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.33854e+07ns, PktID= 158: src:9 dest:14
 Node ID: 6 forward at: 63391.2
@@ -4904,6 +5119,7 @@ Node ID: 0 forward at: 63501
 Node ID: 0PktID: 160src: 9 -dest: 14 queue backlog: 10 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.3501e+07ns, PktID= 160: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.3501e+07ns, PktID= 160: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 63517.2
 Node ID: 7 forward at: 63518.6
 Node ID: 1 forward at: 63540.7
@@ -4918,6 +5134,7 @@ Node ID: 0 forward at: 63627
 Node ID: 0PktID: 161src: 9 -dest: 14 queue backlog: 4 limit = 20p
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.3627e+07ns, PktID= 161: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.3627e+07ns, PktID= 161: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 Node ID: 6 forward at: 63643.2
 Node ID: 7 forward at: 63644.6
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.36637e+07ns, PktID= 161: src:9 dest:14
@@ -4931,6 +5148,7 @@ Node ID: 10 forward at: 63747.9
 Node ID: 0 forward at: 63753
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.3753e+07ns, PktID= 162: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.3753e+07ns, PktID= 162: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.37589e+07ns, PktID= 162: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.37673e+07ns, PktID= 162: src:9 dest:14
 Node ID: 6 forward at: 63769.2
@@ -4944,6 +5162,7 @@ Node ID: 10 forward at: 63874.4
 Node ID: 0 forward at: 63879
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.3879e+07ns, PktID= 163: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.3879e+07ns, PktID= 163: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.38849e+07ns, PktID= 163: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.38933e+07ns, PktID= 163: src:9 dest:14
 Node ID: 6 forward at: 63895.2
@@ -4956,6 +5175,7 @@ Node ID: 10 forward at: 64000.9
 Node ID: 0 forward at: 64005
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.4005e+07ns, PktID= 164: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.4005e+07ns, PktID= 164: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 0 4: 500; MAXPKTNUM = 500
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.40109e+07ns, PktID= 164: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.40193e+07ns, PktID= 164: src:9 dest:14
@@ -4970,6 +5190,7 @@ Node ID: 10 forward at: 64127.4
 Node ID: 0 forward at: 64131
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.4131e+07ns, PktID= 165: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.4131e+07ns, PktID= 165: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.4131e+07ns, PktID= 165: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.41395e+07ns, PktID= 165: src:9 dest:14
 Node ID: 6 forward at: 64147.2
@@ -4981,6 +5202,7 @@ Node ID: 2 forward at: 64252.2
 Node ID: 0 forward at: 64257
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.4257e+07ns, PktID= 166: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.4257e+07ns, PktID= 166: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.4257e+07ns, PktID= 166: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.42655e+07ns, PktID= 166: src:9 dest:14
 Node ID: 6 forward at: 64273.2
@@ -4994,6 +5216,7 @@ Node ID: 2 forward at: 64378.7
 Node ID: 0 forward at: 64383
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.4383e+07ns, PktID= 167: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.4383e+07ns, PktID= 167: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.4383e+07ns, PktID= 167: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.43915e+07ns, PktID= 167: src:9 dest:14
 Node ID: 6 forward at: 64399.2
@@ -5004,6 +5227,7 @@ Node ID: 1 forward at: 64422.7
 Node ID: 0 forward at: 64509
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.4509e+07ns, PktID= 168: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.4509e+07ns, PktID= 168: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.4509e+07ns, PktID= 168: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.45175e+07ns, PktID= 168: src:9 dest:14
 Node ID: 6 forward at: 64525.2
@@ -5014,6 +5238,7 @@ Node ID: 1 forward at: 64548.7
 Node ID: 0 forward at: 64635
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.4635e+07ns, PktID= 169: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.4635e+07ns, PktID= 169: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.4635e+07ns, PktID= 169: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.46435e+07ns, PktID= 169: src:9 dest:14
 Node ID: 6 forward at: 64651.2
@@ -5025,6 +5250,7 @@ Node ID: 2 forward at: 64732.8
 Node ID: 0 forward at: 64761
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.4761e+07ns, PktID= 170: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.4761e+07ns, PktID= 170: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.4761e+07ns, PktID= 170: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.47695e+07ns, PktID= 170: src:9 dest:14
 Node ID: 6 forward at: 64777.2
@@ -5036,6 +5262,7 @@ Node ID: 2 forward at: 64842.4
 Node ID: 0 forward at: 64887
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.4887e+07ns, PktID= 171: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.4887e+07ns, PktID= 171: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.4887e+07ns, PktID= 171: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.48955e+07ns, PktID= 171: src:9 dest:14
 Node ID: 6 forward at: 64903.2
@@ -5047,6 +5274,7 @@ Node ID: 2 forward at: 64952
 Node ID: 0 forward at: 65013
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.5013e+07ns, PktID= 172: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.5013e+07ns, PktID= 172: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.5013e+07ns, PktID= 172: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.50215e+07ns, PktID= 172: src:9 dest:14
 Node ID: 6 forward at: 65029.2
@@ -5059,6 +5287,7 @@ Node ID: 2 forward at: 65129.1
 Node ID: 0 forward at: 65139
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.5139e+07ns, PktID= 173: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.5139e+07ns, PktID= 173: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.5139e+07ns, PktID= 173: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.51475e+07ns, PktID= 173: src:9 dest:14
 Node ID: 6 forward at: 65155.2
@@ -5070,6 +5299,7 @@ Node ID: 2 forward at: 65224.3
 Node ID: 0 forward at: 65265
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.5265e+07ns, PktID= 174: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.5265e+07ns, PktID= 174: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.5265e+07ns, PktID= 174: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.52735e+07ns, PktID= 174: src:9 dest:14
 Node ID: 6 forward at: 65281.2
@@ -5082,6 +5312,7 @@ Node ID: 10 forward at: 65383.7
 Node ID: 0 forward at: 65391
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.5391e+07ns, PktID= 175: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.5391e+07ns, PktID= 175: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.5391e+07ns, PktID= 175: src:9 dest:14
 16 19: 500; MAXPKTNUM = 500
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.53995e+07ns, PktID= 175: src:9 dest:14
@@ -5096,6 +5327,7 @@ Node ID: 10 forward at: 65510.2
 Node ID: 0 forward at: 65517
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.5517e+07ns, PktID= 176: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.5517e+07ns, PktID= 176: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.5517e+07ns, PktID= 176: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.55255e+07ns, PktID= 176: src:9 dest:14
 Node ID: 6 forward at: 65533.2
@@ -5108,6 +5340,7 @@ Node ID: 10 forward at: 65636.7
 Node ID: 0 forward at: 65643
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.5643e+07ns, PktID= 177: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.5643e+07ns, PktID= 177: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.5643e+07ns, PktID= 177: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.56515e+07ns, PktID= 177: src:9 dest:14
 Node ID: 6 forward at: 65659.2
@@ -5120,6 +5353,7 @@ Node ID: 10 forward at: 65763.2
 Node ID: 0 forward at: 65769
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.5769e+07ns, PktID= 178: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.5769e+07ns, PktID= 178: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.5769e+07ns, PktID= 178: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.57775e+07ns, PktID= 178: src:9 dest:14
 Node ID: 6 forward at: 65785.2
@@ -5132,6 +5366,7 @@ Node ID: 10 forward at: 65889.7
 Node ID: 0 forward at: 65895
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.5895e+07ns, PktID= 179: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.5895e+07ns, PktID= 179: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.5895e+07ns, PktID= 179: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.59035e+07ns, PktID= 179: src:9 dest:14
 Node ID: 6 forward at: 65911.2
@@ -5144,6 +5379,7 @@ Node ID: 10 forward at: 66016.1
 Node ID: 0 forward at: 66021
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.6021e+07ns, PktID= 180: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.6021e+07ns, PktID= 180: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.6021e+07ns, PktID= 180: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.60295e+07ns, PktID= 180: src:9 dest:14
 Node ID: 6 forward at: 66037.2
@@ -5160,6 +5396,7 @@ Node ID: 10 forward at: 66142.6
 Node ID: 0 forward at: 66147
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.6147e+07ns, PktID= 181: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.6147e+07ns, PktID= 181: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.6147e+07ns, PktID= 181: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.61555e+07ns, PktID= 181: src:9 dest:14
 Node ID: 6 forward at: 66163.2
@@ -5172,6 +5409,7 @@ Node ID: 10 forward at: 66269.1
 Node ID: 0 forward at: 66273
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.6273e+07ns, PktID= 182: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.6273e+07ns, PktID= 182: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.6273e+07ns, PktID= 182: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.62815e+07ns, PktID= 182: src:9 dest:14
 Node ID: 6 forward at: 66289.2
@@ -5184,6 +5422,7 @@ Node ID: 2 forward at: 66352.5
 Node ID: 0 forward at: 66399
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.6399e+07ns, PktID= 183: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.6399e+07ns, PktID= 183: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.6399e+07ns, PktID= 183: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.64075e+07ns, PktID= 183: src:9 dest:14
 Node ID: 6 forward at: 66415.2
@@ -5195,6 +5434,7 @@ Node ID: 2 forward at: 66478.5
 Node ID: 0 forward at: 66525
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.6525e+07ns, PktID= 184: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.6525e+07ns, PktID= 184: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.6525e+07ns, PktID= 184: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.65335e+07ns, PktID= 184: src:9 dest:14
 Node ID: 6 forward at: 66541.2
@@ -5208,6 +5448,7 @@ Node ID: 10 forward at: 66623.2
 Node ID: 0 forward at: 66651
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.6651e+07ns, PktID= 185: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.6651e+07ns, PktID= 185: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.6651e+07ns, PktID= 185: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.66595e+07ns, PktID= 185: src:9 dest:14
 Node ID: 6 forward at: 66667.2
@@ -5220,6 +5461,7 @@ Node ID: 10 forward at: 66732.9
 Node ID: 0 forward at: 66777
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.6777e+07ns, PktID= 186: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.6777e+07ns, PktID= 186: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.6777e+07ns, PktID= 186: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.67855e+07ns, PktID= 186: src:9 dest:14
 Node ID: 6 forward at: 66793.2
@@ -5232,6 +5474,7 @@ Node ID: 2 forward at: 66856.5
 Node ID: 0 forward at: 66903
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.6903e+07ns, PktID= 187: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.6903e+07ns, PktID= 187: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.6903e+07ns, PktID= 187: src:9 dest:14
 0 14: 500; MAXPKTNUM = 500
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.69115e+07ns, PktID= 187: src:9 dest:14
@@ -5246,6 +5489,7 @@ Node ID: 10 forward at: 67019.5
 Node ID: 0 forward at: 67029
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.7029e+07ns, PktID= 188: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.7029e+07ns, PktID= 188: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.7029e+07ns, PktID= 188: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.70375e+07ns, PktID= 188: src:9 dest:14
 Node ID: 6 forward at: 67045.2
@@ -5261,6 +5505,7 @@ Node ID: 10 forward at: 67114.7
 Node ID: 0 forward at: 67155
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.7155e+07ns, PktID= 189: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.7155e+07ns, PktID= 189: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.7155e+07ns, PktID= 189: src:9 dest:14
 14 6: 500; MAXPKTNUM = 500
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.71635e+07ns, PktID= 189: src:9 dest:14
@@ -5275,6 +5520,7 @@ Node ID: 10 forward at: 67240.7
 Node ID: 0 forward at: 67281
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.7281e+07ns, PktID= 190: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.7281e+07ns, PktID= 190: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.7281e+07ns, PktID= 190: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.72895e+07ns, PktID= 190: src:9 dest:14
 Node ID: 6 forward at: 67297.2
@@ -5287,6 +5533,7 @@ Node ID: 10 forward at: 67366.7
 Node ID: 0 forward at: 67407
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.7407e+07ns, PktID= 191: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.7407e+07ns, PktID= 191: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.7407e+07ns, PktID= 191: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.74155e+07ns, PktID= 191: src:9 dest:14
 Node ID: 6 forward at: 67423.2
@@ -5299,6 +5546,7 @@ Node ID: 10 forward at: 67486.9
 Node ID: 0 forward at: 67533
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.7533e+07ns, PktID= 192: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.7533e+07ns, PktID= 192: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.7533e+07ns, PktID= 192: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.75415e+07ns, PktID= 192: src:9 dest:14
 Node ID: 6 forward at: 67549.2
@@ -5311,6 +5559,7 @@ Node ID: 10 forward at: 67612.9
 Node ID: 0 forward at: 67659
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.7659e+07ns, PktID= 193: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.7659e+07ns, PktID= 193: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.7659e+07ns, PktID= 193: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.76675e+07ns, PktID= 193: src:9 dest:14
 Node ID: 6 forward at: 67675.2
@@ -5325,6 +5574,7 @@ Node ID: 10 forward at: 67738.9
 Node ID: 0 forward at: 67785
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.7785e+07ns, PktID= 194: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.7785e+07ns, PktID= 194: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.7785e+07ns, PktID= 194: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.77935e+07ns, PktID= 194: src:9 dest:14
 Node ID: 6 forward at: 67801.2
@@ -5339,6 +5589,7 @@ Node ID: 10 forward at: 67864.9
 Node ID: 0 forward at: 67911
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.7911e+07ns, PktID= 195: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.7911e+07ns, PktID= 195: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.7911e+07ns, PktID= 195: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.79195e+07ns, PktID= 195: src:9 dest:14
 Node ID: 6 forward at: 67927.2
@@ -5352,6 +5603,7 @@ Node ID: 10 forward at: 67990.9
 Node ID: 0 forward at: 68037
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.8037e+07ns, PktID= 196: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.8037e+07ns, PktID= 196: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.8037e+07ns, PktID= 196: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.80455e+07ns, PktID= 196: src:9 dest:14
 Node ID: 6 forward at: 68053.2
@@ -5367,6 +5619,7 @@ Node ID: 10 forward at: 68116.9
 Node ID: 0 forward at: 68163
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.8163e+07ns, PktID= 197: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.8163e+07ns, PktID= 197: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.8163e+07ns, PktID= 197: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.81715e+07ns, PktID= 197: src:9 dest:14
 Node ID: 6 forward at: 68179.2
@@ -5379,6 +5632,7 @@ Node ID: 10 forward at: 68242.9
 Node ID: 0 forward at: 68289
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.8289e+07ns, PktID= 198: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.8289e+07ns, PktID= 198: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.8289e+07ns, PktID= 198: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.82975e+07ns, PktID= 198: src:9 dest:14
 Node ID: 6 forward at: 68305.2
@@ -5391,6 +5645,7 @@ Node ID: 10 forward at: 68368.9
 Node ID: 0 forward at: 68415
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.8415e+07ns, PktID= 199: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.8415e+07ns, PktID= 199: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.8415e+07ns, PktID= 199: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.84235e+07ns, PktID= 199: src:9 dest:14
 Node ID: 6 forward at: 68431.2
@@ -5403,6 +5658,7 @@ Node ID: 10 forward at: 68494.9
 Node ID: 0 forward at: 68541
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.8541e+07ns, PktID= 200: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.8541e+07ns, PktID= 200: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.8541e+07ns, PktID= 200: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.85495e+07ns, PktID= 200: src:9 dest:14
 Node ID: 6 forward at: 68557.2
@@ -5415,6 +5671,7 @@ Node ID: 10 forward at: 68620.9
 Node ID: 0 forward at: 68667
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.8667e+07ns, PktID= 201: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.8667e+07ns, PktID= 201: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.8667e+07ns, PktID= 201: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.86755e+07ns, PktID= 201: src:9 dest:14
 Node ID: 6 forward at: 68683.2
@@ -5429,6 +5686,7 @@ Node ID: 10 forward at: 68746.9
 Node ID: 0 forward at: 68793
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.8793e+07ns, PktID= 202: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.8793e+07ns, PktID= 202: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.8793e+07ns, PktID= 202: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.88015e+07ns, PktID= 202: src:9 dest:14
 Node ID: 6 forward at: 68809.2
@@ -5441,6 +5699,7 @@ Node ID: 10 forward at: 68872.9
 Node ID: 0 forward at: 68919
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.8919e+07ns, PktID= 203: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.8919e+07ns, PktID= 203: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.8919e+07ns, PktID= 203: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.89275e+07ns, PktID= 203: src:9 dest:14
 Node ID: 6 forward at: 68935.2
@@ -5453,6 +5712,7 @@ Node ID: 10 forward at: 68998.9
 Node ID: 0 forward at: 69045
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.9045e+07ns, PktID= 204: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.9045e+07ns, PktID= 204: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.9045e+07ns, PktID= 204: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.90535e+07ns, PktID= 204: src:9 dest:14
 Node ID: 6 forward at: 69061.2
@@ -5467,6 +5727,7 @@ Node ID: 10 forward at: 69124.9
 Node ID: 0 forward at: 69171
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.9171e+07ns, PktID= 205: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.9171e+07ns, PktID= 205: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.9171e+07ns, PktID= 205: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.91795e+07ns, PktID= 205: src:9 dest:14
 Node ID: 6 forward at: 69187.2
@@ -5480,6 +5741,7 @@ Node ID: 10 forward at: 69250.9
 Node ID: 0 forward at: 69297
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.9297e+07ns, PktID= 206: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.9297e+07ns, PktID= 206: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.9297e+07ns, PktID= 206: src:9 dest:14
 3 19: 500; MAXPKTNUM = 500
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.93055e+07ns, PktID= 206: src:9 dest:14
@@ -5493,6 +5755,7 @@ Node ID: 10 forward at: 69376.9
 Node ID: 0 forward at: 69423
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.9423e+07ns, PktID= 207: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.9423e+07ns, PktID= 207: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.9423e+07ns, PktID= 207: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.94315e+07ns, PktID= 207: src:9 dest:14
 Node ID: 6 forward at: 69439.2
@@ -5507,6 +5770,7 @@ Node ID: 10 forward at: 69502.9
 Node ID: 0 forward at: 69549
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.9549e+07ns, PktID= 208: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.9549e+07ns, PktID= 208: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.9549e+07ns, PktID= 208: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.95575e+07ns, PktID= 208: src:9 dest:14
 Node ID: 6 forward at: 69565.2
@@ -5519,6 +5783,7 @@ Node ID: 10 forward at: 69628.9
 Node ID: 0 forward at: 69675
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.9675e+07ns, PktID= 209: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.9675e+07ns, PktID= 209: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.9675e+07ns, PktID= 209: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.96835e+07ns, PktID= 209: src:9 dest:14
 Node ID: 6 forward at: 69691.2
@@ -5531,6 +5796,7 @@ Node ID: 10 forward at: 69754.9
 Node ID: 0 forward at: 69801
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.9801e+07ns, PktID= 210: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.9801e+07ns, PktID= 210: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.9801e+07ns, PktID= 210: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.98095e+07ns, PktID= 210: src:9 dest:14
 Node ID: 6 forward at: 69817.2
@@ -5543,6 +5809,7 @@ Node ID: 10 forward at: 69880.9
 Node ID: 0 forward at: 69927
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+6.9927e+07ns, PktID= 211: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+6.9927e+07ns, PktID= 211: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+6.9927e+07ns, PktID= 211: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+6.99355e+07ns, PktID= 211: src:9 dest:14
 Node ID: 6 forward at: 69943.2
@@ -5555,6 +5822,7 @@ Node ID: 10 forward at: 70006.9
 Node ID: 0 forward at: 70053
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.0053e+07ns, PktID= 212: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.0053e+07ns, PktID= 212: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.0053e+07ns, PktID= 212: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.00615e+07ns, PktID= 212: src:9 dest:14
 Node ID: 6 forward at: 70069.2
@@ -5568,6 +5836,7 @@ Node ID: 10 forward at: 70132.9
 Node ID: 0 forward at: 70179
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.0179e+07ns, PktID= 213: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.0179e+07ns, PktID= 213: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.0179e+07ns, PktID= 213: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.01875e+07ns, PktID= 213: src:9 dest:14
 Node ID: 6 forward at: 70195.2
@@ -5582,6 +5851,7 @@ Node ID: 10 forward at: 70258.9
 Node ID: 0 forward at: 70305
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.0305e+07ns, PktID= 214: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.0305e+07ns, PktID= 214: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.0305e+07ns, PktID= 214: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.03135e+07ns, PktID= 214: src:9 dest:14
 Node ID: 6 forward at: 70321.2
@@ -5595,6 +5865,7 @@ Node ID: 10 forward at: 70384.9
 Node ID: 0 forward at: 70431
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.0431e+07ns, PktID= 215: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.0431e+07ns, PktID= 215: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.0431e+07ns, PktID= 215: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.04395e+07ns, PktID= 215: src:9 dest:14
 Node ID: 6 forward at: 70447.2
@@ -5609,6 +5880,7 @@ Node ID: 10 forward at: 70510.9
 Node ID: 0 forward at: 70557
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.0557e+07ns, PktID= 216: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.0557e+07ns, PktID= 216: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.0557e+07ns, PktID= 216: src:9 dest:14
 0 16: 500; MAXPKTNUM = 500
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.05655e+07ns, PktID= 216: src:9 dest:14
@@ -5625,6 +5897,7 @@ Node ID: 10 forward at: 70636.9
 Node ID: 0 forward at: 70683
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.0683e+07ns, PktID= 217: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.0683e+07ns, PktID= 217: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.0683e+07ns, PktID= 217: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.06915e+07ns, PktID= 217: src:9 dest:14
 Node ID: 6 forward at: 70699.2
@@ -5637,6 +5910,7 @@ Node ID: 10 forward at: 70762.9
 Node ID: 0 forward at: 70809
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.0809e+07ns, PktID= 218: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.0809e+07ns, PktID= 218: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.0809e+07ns, PktID= 218: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.08175e+07ns, PktID= 218: src:9 dest:14
 Node ID: 6 forward at: 70825.2
@@ -5649,6 +5923,7 @@ Node ID: 10 forward at: 70888.9
 Node ID: 0 forward at: 70935
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.0935e+07ns, PktID= 219: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.0935e+07ns, PktID= 219: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.0935e+07ns, PktID= 219: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.09435e+07ns, PktID= 219: src:9 dest:14
 Node ID: 6 forward at: 70951.2
@@ -5661,6 +5936,7 @@ Node ID: 10 forward at: 71014.9
 Node ID: 0 forward at: 71061
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.1061e+07ns, PktID= 220: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.1061e+07ns, PktID= 220: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.1061e+07ns, PktID= 220: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.10695e+07ns, PktID= 220: src:9 dest:14
 Node ID: 6 forward at: 71077.2
@@ -5674,6 +5950,7 @@ Node ID: 10 forward at: 71140.9
 Node ID: 0 forward at: 71187
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.1187e+07ns, PktID= 221: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.1187e+07ns, PktID= 221: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.1187e+07ns, PktID= 221: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.11955e+07ns, PktID= 221: src:9 dest:14
 Node ID: 6 forward at: 71203.2
@@ -5686,6 +5963,7 @@ Node ID: 10 forward at: 71266.9
 Node ID: 0 forward at: 71313
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.1313e+07ns, PktID= 222: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.1313e+07ns, PktID= 222: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.1313e+07ns, PktID= 222: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.13215e+07ns, PktID= 222: src:9 dest:14
 Node ID: 6 forward at: 71329.2
@@ -5698,6 +5976,7 @@ Node ID: 10 forward at: 71392.9
 Node ID: 0 forward at: 71439
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.1439e+07ns, PktID= 223: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.1439e+07ns, PktID= 223: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.1439e+07ns, PktID= 223: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.14475e+07ns, PktID= 223: src:9 dest:14
 Node ID: 6 forward at: 71455.2
@@ -5710,6 +5989,7 @@ Node ID: 10 forward at: 71518.9
 Node ID: 0 forward at: 71565
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.1565e+07ns, PktID= 224: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.1565e+07ns, PktID= 224: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.1565e+07ns, PktID= 224: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.15735e+07ns, PktID= 224: src:9 dest:14
 Node ID: 6 forward at: 71581.2
@@ -5722,6 +6002,7 @@ Node ID: 10 forward at: 71644.9
 Node ID: 0 forward at: 71691
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.1691e+07ns, PktID= 225: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.1691e+07ns, PktID= 225: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.1691e+07ns, PktID= 225: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.16995e+07ns, PktID= 225: src:9 dest:14
 Node ID: 6 forward at: 71707.2
@@ -5736,6 +6017,7 @@ Node ID: 10 forward at: 71770.9
 Node ID: 0 forward at: 71817
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.1817e+07ns, PktID= 226: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.1817e+07ns, PktID= 226: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.1817e+07ns, PktID= 226: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.18255e+07ns, PktID= 226: src:9 dest:14
 Node ID: 6 forward at: 71833.2
@@ -5748,6 +6030,7 @@ Node ID: 10 forward at: 71896.9
 Node ID: 0 forward at: 71943
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.1943e+07ns, PktID= 227: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.1943e+07ns, PktID= 227: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.1943e+07ns, PktID= 227: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.19515e+07ns, PktID= 227: src:9 dest:14
 Node ID: 6 forward at: 71959.2
@@ -5760,6 +6043,7 @@ Node ID: 10 forward at: 72022.9
 Node ID: 0 forward at: 72069
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.2069e+07ns, PktID= 228: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.2069e+07ns, PktID= 228: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.2069e+07ns, PktID= 228: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.20775e+07ns, PktID= 228: src:9 dest:14
 Node ID: 6 forward at: 72085.2
@@ -5772,6 +6056,7 @@ Node ID: 10 forward at: 72148.9
 Node ID: 0 forward at: 72195
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.2195e+07ns, PktID= 229: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.2195e+07ns, PktID= 229: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.2195e+07ns, PktID= 229: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.22035e+07ns, PktID= 229: src:9 dest:14
 Node ID: 6 forward at: 72211.2
@@ -5784,6 +6069,7 @@ Node ID: 10 forward at: 72274.9
 Node ID: 0 forward at: 72321
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.2321e+07ns, PktID= 230: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.2321e+07ns, PktID= 230: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.2321e+07ns, PktID= 230: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.23295e+07ns, PktID= 230: src:9 dest:14
 Node ID: 6 forward at: 72337.2
@@ -5796,6 +6082,7 @@ Node ID: 10 forward at: 72400.9
 Node ID: 0 forward at: 72447
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.2447e+07ns, PktID= 231: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.2447e+07ns, PktID= 231: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.2447e+07ns, PktID= 231: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.24555e+07ns, PktID= 231: src:9 dest:14
 Node ID: 6 forward at: 72463.2
@@ -5810,6 +6097,7 @@ Node ID: 10 forward at: 72526.9
 Node ID: 0 forward at: 72573
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.2573e+07ns, PktID= 232: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.2573e+07ns, PktID= 232: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.2573e+07ns, PktID= 232: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.25815e+07ns, PktID= 232: src:9 dest:14
 Node ID: 6 forward at: 72589.2
@@ -5822,6 +6110,7 @@ Node ID: 10 forward at: 72652.9
 Node ID: 0 forward at: 72699
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.2699e+07ns, PktID= 233: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.2699e+07ns, PktID= 233: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.2699e+07ns, PktID= 233: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.27075e+07ns, PktID= 233: src:9 dest:14
 Node ID: 6 forward at: 72715.2
@@ -5834,6 +6123,7 @@ Node ID: 10 forward at: 72778.9
 Node ID: 0 forward at: 72825
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.2825e+07ns, PktID= 234: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.2825e+07ns, PktID= 234: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.2825e+07ns, PktID= 234: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.28335e+07ns, PktID= 234: src:9 dest:14
 Node ID: 6 forward at: 72841.2
@@ -5848,6 +6138,7 @@ Node ID: 10 forward at: 72904.9
 Node ID: 0 forward at: 72951
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.2951e+07ns, PktID= 235: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.2951e+07ns, PktID= 235: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.2951e+07ns, PktID= 235: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.29595e+07ns, PktID= 235: src:9 dest:14
 Node ID: 6 forward at: 72967.2
@@ -5860,6 +6151,7 @@ Node ID: 10 forward at: 73030.9
 Node ID: 0 forward at: 73077
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.3077e+07ns, PktID= 236: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.3077e+07ns, PktID= 236: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.3077e+07ns, PktID= 236: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.30855e+07ns, PktID= 236: src:9 dest:14
 Node ID: 6 forward at: 73093.2
@@ -5872,6 +6164,7 @@ Node ID: 10 forward at: 73156.9
 Node ID: 0 forward at: 73203
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.3203e+07ns, PktID= 237: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.3203e+07ns, PktID= 237: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.3203e+07ns, PktID= 237: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.32115e+07ns, PktID= 237: src:9 dest:14
 Node ID: 6 forward at: 73219.2
@@ -5886,6 +6179,7 @@ Node ID: 10 forward at: 73282.9
 Node ID: 0 forward at: 73329
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.3329e+07ns, PktID= 238: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.3329e+07ns, PktID= 238: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.3329e+07ns, PktID= 238: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.33375e+07ns, PktID= 238: src:9 dest:14
 Node ID: 6 forward at: 73345.2
@@ -5898,6 +6192,7 @@ Node ID: 10 forward at: 73408.9
 Node ID: 0 forward at: 73455
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.3455e+07ns, PktID= 239: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.3455e+07ns, PktID= 239: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.3455e+07ns, PktID= 239: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.34635e+07ns, PktID= 239: src:9 dest:14
 Node ID: 6 forward at: 73471.2
@@ -5909,6 +6204,7 @@ Node ID: 10 forward at: 73534.9
 Node ID: 0 forward at: 73581
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.3581e+07ns, PktID= 240: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.3581e+07ns, PktID= 240: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.3581e+07ns, PktID= 240: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.35895e+07ns, PktID= 240: src:9 dest:14
 Node ID: 6 forward at: 73597.2
@@ -5922,6 +6218,7 @@ Node ID: 10 forward at: 73660.9
 Node ID: 0 forward at: 73707
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.3707e+07ns, PktID= 241: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.3707e+07ns, PktID= 241: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.3707e+07ns, PktID= 241: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.37155e+07ns, PktID= 241: src:9 dest:14
 Node ID: 7 forward at: 73724.6
@@ -5932,6 +6229,7 @@ Node ID: 10 forward at: 73786.9
 Node ID: 0 forward at: 73833
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.3833e+07ns, PktID= 242: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.3833e+07ns, PktID= 242: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.3833e+07ns, PktID= 242: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.38415e+07ns, PktID= 242: src:9 dest:14
 Node ID: 7 forward at: 73850.6
@@ -5944,6 +6242,7 @@ Node ID: 10 forward at: 73912.9
 Node ID: 0 forward at: 73959
 /NodeList/0/$ns3::Ipv4L3Protocol/Tx	+7.3959e+07ns, PktID= 243: src:9 dest:14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/MacTx	+7.3959e+07ns, PktID= 243: src:9 dest:14
+/NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/TxQueue/Enqueue: trace_NetDeviceQueueEnqueue from 9 to 14
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxBegin	+7.3959e+07ns, PktID= 243: src:9 dest:14
 4 9: 500; MAXPKTNUM = 500
 /NodeList/0/DeviceList/1/$ns3::PointToPointNetDevice/PhyTxEnd	+7.39675e+07ns, PktID= 243: src:9 dest:14
@@ -6025,4 +6324,4 @@ Node ID: 10 forward at: 77314.9
 9 17: 500; MAXPKTNUM = 500
 17 9: 500; MAXPKTNUM = 500
 
-Done.
+Interrupted 

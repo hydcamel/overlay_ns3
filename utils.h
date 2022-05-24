@@ -37,6 +37,8 @@ void trace_NetDeviceQueueDrop(std::string context, Ptr<const Packet> packet);
 void trace_NetDeviceDropBeforeEnqueue(std::string context, Ptr<const Packet> packet);
 void trace_NetDeviceQueueEnqueue(std::string context, Ptr<const Packet> packet);
 
+void trace_TCDrop(Ptr<const Packet> packet);
+
 
 
 void trace_Ipv4L3PDrop(std::string context, const Ipv4Header &header, Ptr< const Packet > packet, Ipv4L3Protocol::DropReason reason, Ptr< Ipv4 > ipv4, uint32_t interface);

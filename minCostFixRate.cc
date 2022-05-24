@@ -9,6 +9,7 @@
 #include "overlayApplication.h"
 #include "ns3/application.h"
 #include "ns3/traffic-control-helper.h"
+#include "ns3/traffic-control-layer.h"
 #include "utils.h"
 #include "netw.h"
 #include <vector>
@@ -89,6 +90,7 @@ int main(int argc, char *argv[])
         underlayNodes.Get(i)->AddApplication(vec_app[i]);
         vec_app[i]->SetRecvSocket();
     }
+    netw_meta.register_vecApp(&vec_app);
 
     std::vector<PointToPointHelper> links(netw_meta.delay.size());
     std::vector<NetDeviceContainer> NetDevices(netw_meta.delay.size());
@@ -144,10 +146,25 @@ int main(int argc, char *argv[])
     
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
     TrafficControlHelper TC_helper;
-    for (uint32_t i = 0; i < NetDevices.size(); i++)
+    /* for (uint32_t i = 0; i < NetDevices.size(); i++)
     {
         TC_helper.Uninstall(NetDevices[i]);
+    } */
+    for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
+    {
+        for (uint32_t l = 1; l < underlayNodes.Get(i)->GetNDevices(); l++)
+        {
+            TC_helper.Uninstall(underlayNodes.Get(i)->GetDevice(l));
+        }
     }
+/*     for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
+    {
+        Ptr<TrafficControlLayer> tc = underlayNodes.Get(i)->GetObject<TrafficControlLayer> ();
+        tc->TraceConnectWithoutContext("TcDrop", MakeCallback(&trace_TCDrop));
+    } */
+    
+
+
     /* Ptr<OutputStreamWrapper> routingStream = Create<OutputStreamWrapper>(&std::cout);
     Ipv4RoutingHelper::PrintRoutingTableAllAt( Seconds(0), routingStream, Time::Unit::S); */
 
@@ -169,9 +186,9 @@ int main(int argc, char *argv[])
     /**
      * Flow Monitor
      **/
-    /* Ptr<FlowMonitor> flow_monitor;
-    FlowMonitorHelper flow_helper;
-    flow_monitor = flow_helper.InstallAll(); */
+    // Ptr<FlowMonitor> flow_monitor;
+    // FlowMonitorHelper flow_helper;
+    // flow_monitor = flow_helper.InstallAll();
 
     Config::Connect( "/NodeList/0/$ns3::Ipv4L3Protocol/Rx", MakeCallback(&rxTraceIpv4) );
     Config::Connect( "/NodeList/0/$ns3::Ipv4L3Protocol/Tx", MakeCallback(&txTraceIpv4) );
@@ -193,7 +210,7 @@ int main(int argc, char *argv[])
 
     Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/TxQueue/Drop", MakeCallback(&trace_NetDeviceQueueDrop));
     Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/TxQueue/DropBeforeEnqueue", MakeCallback(&trace_NetDeviceDropBeforeEnqueue));
-    // Config::Connect("/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/TxQueue/Enqueue", MakeCallback(&trace_NetDeviceQueueEnqueue));
+    Config::Connect("/NodeList/0/DeviceList/*/$ns3::PointToPointNetDevice/TxQueue/Enqueue", MakeCallback(&trace_NetDeviceQueueEnqueue));
 
     NS_LOG_INFO("Run Simulation.");
     // std::cout << "before run" << std::endl;

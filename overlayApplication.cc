@@ -302,8 +302,8 @@ namespace ns3
                     meta->time_span_flows[keys] = Simulator::Now().ToDouble(Time::US) - meta->time_span_flows[keys];
                 }
 
-                packet->RemoveAllPacketTags();
-                packet->RemoveAllByteTags();
+                // packet->RemoveAllPacketTags();
+                // packet->RemoveAllByteTags();
             }
             else
             {
@@ -454,5 +454,14 @@ namespace ns3
             std::cout << "congestion at " << m_local_ID << "from " << src << " to " << dest << "with " << std::endl;
             meta->cnt_congestion[std::to_string(src) + ' ' + std::to_string(dest)]++;
         }
+    }
+
+    void overlayApplication::NotifyRetransmission(uint32_t src, uint32_t dest, uint32_t valPktID)
+    {
+        meta->notify_pktLoss(src, dest, valPktID);
+    }
+    void overlayApplication::SetMSent(uint32_t idx, uint32_t val)
+    {
+        m_sent[idx] = val;
     }
 }

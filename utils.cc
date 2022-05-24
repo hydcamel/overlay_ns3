@@ -121,7 +121,20 @@ void trace_NetDeviceQueueEnqueue(std::string context, Ptr<const Packet> packet)
 {
     SDtag tagPktRecv;
     packet->PeekPacketTag(tagPktRecv);
-    std::cout << context << ": trace_NetDeviceQueueEnqueue from " << (uint32_t)tagPktRecv.GetSourceID() << " to " << (uint32_t)tagPktRecv.GetDestID() << std::endl;
+    if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
+    {
+        std::cout << context << ": trace_NetDeviceQueueEnqueue from " << (uint32_t)tagPktRecv.GetSourceID() << " to " << (uint32_t)tagPktRecv.GetDestID() << std::endl;
+    }
+}
+
+void trace_TCDrop(Ptr<const Packet> packet)
+{
+    SDtag tagPktRecv;
+    packet->PeekPacketTag(tagPktRecv);
+    if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
+    {
+        std::cout << "Trace_TCDrop from " << (uint32_t)tagPktRecv.GetSourceID() << " to " << (uint32_t)tagPktRecv.GetDestID() << std::endl;
+    }
 }
 
 }

@@ -32,7 +32,7 @@ TypeId SDtag::GetTypeId (void)
                    "ID of the Packet",
                    EmptyAttributeValue (),
                    MakeUintegerAccessor (&SDtag::GetPktID),
-                   MakeUintegerChecker<uint16_t> ())
+                   MakeUintegerChecker<uint32_t> ())
   ;
   return tid;
 }
@@ -43,7 +43,7 @@ TypeId SDtag::GetInstanceTypeId (void) const
 }
 uint32_t SDtag::GetSerializedSize (void) const
 {
-    return 13;
+    return 15;
 }
 void SDtag::Serialize (TagBuffer i) const
 {
@@ -51,7 +51,7 @@ void SDtag::Serialize (TagBuffer i) const
     i.WriteU8 (DestID);
     i.WriteU8(currentHop);
     i.WriteU64(StartTime);
-    i.WriteU16 (PktID);
+    i.WriteU32 (PktID);
 }
 void SDtag::Deserialize (TagBuffer i)
 {
@@ -59,7 +59,7 @@ void SDtag::Deserialize (TagBuffer i)
     DestID = i.ReadU8 ();
     currentHop = i.ReadU8();
     StartTime = i.ReadU64();
-    PktID = i.ReadU16();
+    PktID = i.ReadU32();
 }
 void SDtag::Print (std::ostream &os) const
 {
@@ -101,11 +101,11 @@ void SDtag::SetStartTime (uint64_t value)
 {
     StartTime = value;
 }
-void SDtag::SetPktID (uint16_t value)
+void SDtag::SetPktID (uint32_t value)
 {
     PktID = value;
 }
-uint16_t SDtag::GetPktID (void) const
+uint32_t SDtag::GetPktID (void) const
 {
     return PktID;
 }

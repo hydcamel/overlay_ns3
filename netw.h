@@ -4,6 +4,8 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include "ns3/ptr.h"
+#include "overlayApplication.h"
 
 #define AppPktSize 1024
 #define IPPktSize 1052
@@ -29,8 +31,11 @@ public:
     void read_demands(std::string filename);
     void write_average_delay(std::string filename);
     void write_congestion_cnt(std::string filename);
+    void register_vecApp(std::vector<Ptr<overlayApplication>>* input);
+    void notify_pktLoss(uint32_t src, uint32_t dest, uint32_t valPktID);
 
     std::vector<int> w, bw, delay;
+    std::vector<Ptr<overlayApplication>>* vec_app;
     //std::vector<int> src, dest;
     //std::map<std::pair<int, int>, int> edges;
     std::map<std::string, int> edges;
