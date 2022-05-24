@@ -96,7 +96,7 @@ namespace ns3
     void overlayApplication::InitApp(netw *netw_meta, uint32_t localId, uint32_t MaxPktSize)
     {
         meta = netw_meta;
-        m_sent.resize(meta->n_nodes, 0);
+        // m_sent.resize(meta->n_nodes, 0);
         m_count.resize(meta->n_nodes, MaxPktSize);
         tab_socket.resize(meta->n_nodes, 0);
         // tab_peerAddress.resize(meta.n_nodes);
@@ -285,6 +285,12 @@ namespace ns3
             std::vector<int> &routes = meta->routing_map[keys];
             // packet->PrintPacketTags(std::cout);
             // tagPktRecv.Print(std::cout);
+            if (CheckPktSanity(keys, tagPktRecv.GetPktID()) == false)
+            {
+                NotifyRetransmission((uint32_t)tagPktRecv.GetSourceID(), (uint32_t)tagPktRecv.GetDestID(), pkt_num_table[keys]);
+                continue;
+            }
+            
             if (tagPktRecv.GetDestID() == GetLocalID())
             {
                 /* if (meta->cnt_pkt.count(keys) == 0)
@@ -353,7 +359,8 @@ namespace ns3
         tagToSend.SetSourceID(m_local_ID);
         tagToSend.SetDestID(idx);
         tagToSend.SetCurrentHop(1);
-        tagToSend.SetPktID(m_sent[idx]);
+        tagToSend.SetPktID(meta->m_sent[m_local_ID][idx]);
+        // tagToSend.SetPktID(m_sent[idx]);
         // std::cout << Simulator::Now().As(Time::NS) << std::endl;
         tagToSend.SetStartTime(Simulator::Now().ToInteger(Time::NS));
 
@@ -367,9 +374,11 @@ namespace ns3
 
         // std::cout << "Source ID: " << m_local_ID << ", target ID: " << idx << ", next hop" << routes[1] << "at time: " << tagToSend.GetStartTime() << " " << Simulator::Now().As(Time::NS) << std::endl;
 
-        CheckCongestion(map_neighbor_device[routes[1]], m_local_ID, idx, (uint16_t)m_sent[idx]);
+        // CheckCongestion(map_neighbor_device[routes[1]], m_local_ID, idx, (uint16_t)m_sent[idx]);
+        CheckCongestion(map_neighbor_device[routes[1]], m_local_ID, idx, meta->m_sent[m_local_ID][idx]);
         tab_socket[routes[1]]->Send(p);
-        ++m_sent[idx];
+        ++meta->m_sent[m_local_ID][idx];
+        // ++m_sent[idx];
 
         /* if (Ipv4Address::IsMatchingType(tab_peerAddress[idx]))
         {
@@ -380,11 +389,11 @@ namespace ns3
             NS_LOG_INFO("At time " << Simulator::Now().As(Time::S) << " client sent " << m_size << " bytes to " << InetSocketAddress::ConvertFrom(tab_peerAddress[idx]).GetIpv4() << " port " << InetSocketAddress::ConvertFrom(tab_peerAddress[idx]).GetPort());
         } */
 
-        if (m_sent[idx] < m_count[idx])
+        if (meta->m_sent[m_local_ID][idx] < m_count[idx])
         {
             ScheduleTransmit(m_interval[idx], idx);
         }
-        if (m_sent[idx] >= m_count[idx] && m_local_ID == SRC && tagToSend.GetDestID() == DEST)
+        if (meta->m_sent[m_local_ID][idx] >= m_count[idx] && m_local_ID == SRC && tagToSend.GetDestID() == DEST)
         {
             std::cout << "Node ID: " << m_local_ID << " ends at " << Simulator::Now().ToDouble(Time::US) << std::endl;
         }
@@ -458,10 +467,32 @@ namespace ns3
 
     void overlayApplication::NotifyRetransmission(uint32_t src, uint32_t dest, uint32_t valPktID)
     {
+        if (src == SRC && dest == DEST)
+        {
+            std::cout << "At Node" << m_local_ID << " retransmission from " << src << " to " << dest << " as expecting " << valPktID << std::endl;
+        }
+        
         meta->notify_pktLoss(src, dest, valPktID);
     }
-    void overlayApplication::SetMSent(uint32_t idx, uint32_t val)
+    // void overlayApplication::SetMSent(uint32_t idx, uint32_t val)
+    // {
+    //     m_sent[idx] = val;
+    // }
+    bool overlayApplication::CheckPktSanity(std::string SDKey, uint32_t newID)
     {
-        m_sent[idx] = val;
+        if (pkt_num_table.count(SDKey) == 0)
+        {
+            pkt_num_table.insert(std::pair<std::string, uint32_t> (SDKey, 0));
+        }
+        if (newID > pkt_num_table[SDKey])
+        {
+            return false;
+        }
+        else
+        {
+            pkt_num_table[SDKey] ++;
+            return true;
+        }
+        
     }
 }

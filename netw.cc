@@ -41,9 +41,11 @@ void netw::read_underlay(std::string filename)
 				{
 					iss >> temp >> n_nodes;
 					adj_mat.resize(n_nodes);
+					m_sent.resize(n_nodes);
 					for (uint32_t i = 0; i < n_nodes; i++)
 					{
 						adj_mat[i].resize(n_nodes, false);
+						m_sent[i].resize(n_nodes, 0);
 					}
 				}
 				else if (line.substr(0, 5).compare("EDGES") == 0)
@@ -197,14 +199,15 @@ void netw::write_congestion_cnt(std::string filename)
 	
 }
 
-void netw::register_vecApp(std::vector<Ptr<overlayApplication>>* input)
-{
-	vec_app = input;
-}
+// void netw::register_vecApp(std::vector<Ptr<overlayApplication>>* input)
+// {
+// 	vec_app = input;
+// }
 
 void netw::notify_pktLoss(uint32_t src, uint32_t dest, uint32_t valPktID)
 {
-	(*vec_app)[src]->SetMSent(dest, valPktID);
+	m_sent[src][dest] = valPktID;
+	// (*vec_app)[src]->SetMSent(dest, valPktID);
 }
 
 }

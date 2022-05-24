@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
         underlayNodes.Get(i)->AddApplication(vec_app[i]);
         vec_app[i]->SetRecvSocket();
     }
-    netw_meta.register_vecApp(&vec_app);
+    // netw_meta.register_vecApp(&vec_app);
 
     std::vector<PointToPointHelper> links(netw_meta.delay.size());
     std::vector<NetDeviceContainer> NetDevices(netw_meta.delay.size());

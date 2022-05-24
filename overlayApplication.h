@@ -45,7 +45,8 @@ namespace ns3
         void CheckCongestion(Ptr<Socket> skt, uint32_t src, uint32_t dest);
         void CheckCongestion(uint32_t deviceID, uint32_t src, uint32_t dest, uint16_t PktID);
         void NotifyRetransmission(uint32_t src, uint32_t dest, uint32_t valPktID);
-        void SetMSent(uint32_t idx, uint32_t val);
+        // void SetMSent(uint32_t idx, uint32_t val);
+        bool CheckPktSanity(std::string SDKey, uint32_t newID);
 
         uint32_t GetDataSize(void) const;
         uint16_t GetPort(void) const;
@@ -67,7 +68,7 @@ namespace ns3
         std::vector<Time> m_interval;
         uint32_t m_size;
 
-        std::vector<uint32_t> m_sent;
+        // std::vector<uint32_t> m_sent;
         std::vector<Ptr<Socket>> tab_socket;
         Ptr<Socket> recv_socket;
         netw* meta;
@@ -77,7 +78,7 @@ namespace ns3
         std::vector<EventId> m_sendEvent;
         uint16_t m_local_ID;
         std::unordered_map<uint32_t, uint32_t> map_neighbor_device;
-        std::unordered_map<std::string, uint32_t> route_table;
+        std::unordered_map<std::string, uint32_t> pkt_num_table;
 
         TracedCallback<Ptr<const Packet>> m_txTrace;
 
