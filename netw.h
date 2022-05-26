@@ -7,14 +7,14 @@
 #include "ns3/ptr.h"
 // #include "overlayApplication.h"
 
-#define AppPktSize 1024
-#define IPPktSize 1052
-#define MACPktSize 1054
+// #define AppPktSize 1024
+// #define IPPktSize 1052
+// #define MACPktSize 1054
 #define LISTENPORT 9
-#define MAXPKTNUM 500
+// #define MAXPKTNUM 500
 #define NSTOMS 1000000
 #define NSTOUS 1000
-#define MAXBACKLOG 200
+// #define MAXBACKLOG 200
 
 namespace ns3
 {
@@ -36,6 +36,8 @@ public:
     void notify_pktLoss(uint32_t src, uint32_t dest, uint32_t valPktID);
 
     std::vector<int> w, bw, delay;
+    uint32_t AppPktSize = 1024, IPPktSize = 1052, MACPktSize = 1054, MAXPKTNUM = 100, MAXBACKLOG = 1000;
+    uint16_t protocol_number = 150;
     // std::vector<Ptr<overlayApplication>>* vec_app;
     //std::vector<int> src, dest;
     //std::map<std::pair<int, int>, int> edges;
@@ -45,11 +47,10 @@ public:
     std::vector<std::vector<bool>> adj_mat;
     std::vector<bool> loc_overlay_nodes;
     std::vector<std::vector<uint32_t>> m_sent;
-    uint32_t n_nodes,n_edges;
+    uint32_t n_nodes,n_edges, n_overlay_nodes;
     std::map<std::string, std::vector<int>> routing_map;
-    std::map<std::string, float> overlay_demands;
-    std::map<std::string, double> average_delay;
-    std::unordered_map<std::string, double> time_span_flows;
+    std::map<std::string, std::vector<bool>>  cnt_queuing;
+    std::map<std::string, int> overlay_demands;
     std::unordered_map<std::string, int32_t> cnt_pkt;
     std::unordered_map<std::string, int32_t> cnt_congestion;
 };

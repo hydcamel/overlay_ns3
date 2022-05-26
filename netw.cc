@@ -107,6 +107,7 @@ void netw::read_overlay(std::string file_overlay_nodes)
 	getline(infile_onodes, line);
 	std::istringstream iss(line);
 	iss >> n_onodes >> temp;
+	n_overlay_nodes = n_onodes;
 	if (infile_onodes.is_open())
 	{
 		std::cout << "overlay_file: " << file_overlay_nodes << std::endl;
@@ -118,6 +119,7 @@ void netw::read_overlay(std::string file_overlay_nodes)
 		loc_overlay_nodes[idx_node] = true;
 	}
 }
+	
 
 netw::~netw()
 {
@@ -165,12 +167,17 @@ void netw::read_demands(std::string filename)
 		std::istringstream iss(line);
 		iss >> src >> dest >> demand_val;
 		overlay_demands.insert( std::pair<std::string, float>(std::to_string(src) + " " + std::to_string(dest), demand_val) );
-		average_delay.insert( std::pair<std::string, double>(std::to_string(src) + " " + std::to_string(dest), 0) );
-		time_span_flows.insert( std::pair<std::string, double>(std::to_string(src) + " " + std::to_string(dest), 0) );
+		cnt_queuing.insert( std::pair<std::string, double>(std::to_string(src) + " " + std::to_string(dest), std::vector<bool>(10)) );
 		demands_vec.emplace_back( std::pair<int, int>(src, dest) );
 		cnt_pkt.insert( std::pair<std::string, uint32_t>(std::to_string(src) + " " + std::to_string(dest), 0) );
 		cnt_congestion.insert( std::pair<std::string, uint32_t>(std::to_string(src) + " " + std::to_string(dest), 0) );
 	}
+	cnt_queuing.resize(demands_vec.size());
+	for (uint32_t i = 0; i < demands_vec.size(); i++)
+	{
+		cnt_queuing[i].resize( demands_vec.size() );
+	}
+	
 }
 
 void netw::write_average_delay(std::string filename)
