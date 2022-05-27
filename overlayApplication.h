@@ -30,18 +30,16 @@ namespace ns3
         virtual ~overlayApplication();
         void InitApp(netw* meta, uint32_t localId, uint32_t MaxPktSize);
 
-        void SetRemote(Address ip, uint16_t idx);
-        void AddRemote(Address ip);
-        void SetSocket(Address ip, uint32_t idx, uint32_t deviceID);
+        void SetNeighbor(Address macAddr, uint32_t idx);
+        Address GetNeighbor(uint32_t idx);
         
         void SetLocalID(uint32_t localID);
         uint16_t GetLocalID(void) const;
-        void SetCount(uint32_t MaxPackets);
         void SetInterval(uint32_t idx, float Interval);
+        void SetProbeInterval(float Interval);
         //std::vector<uint32_t> GetCount(void) const;
 
         void SetDataSize(uint32_t dataSize);
-        void SetRecvSocket(void);
         void CheckCongestion(Ptr<Socket> skt, uint32_t src, uint32_t dest);
         void CheckCongestion(uint32_t deviceID, uint32_t src, uint32_t dest, uint16_t PktID);
         void NotifyRetransmission(uint32_t src, uint32_t dest, uint32_t valPktID);
@@ -64,15 +62,13 @@ namespace ns3
 
         void HandleRead(Ptr<Socket> socket);
 
-        std::vector<uint32_t> m_count;
+        std::vector<uint32_t> m_count; // count of probes, not background
         std::vector<Time> m_interval;
+        Time probe_interval;
         uint32_t m_size;
 
-        // std::vector<uint32_t> m_sent;
-        std::vector<Ptr<Socket>> tab_socket;
-        Ptr<Socket> recv_socket;
         netw* meta;
-        //std::vector<Address> tab_peerAddress;
+        std::unordered_map<uint32_t, Address> tab_neighborAddress;
         uint16_t m_peerPort;
         uint16_t ListenPort;
         std::vector<EventId> m_sendEvent;

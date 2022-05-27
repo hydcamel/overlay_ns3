@@ -98,12 +98,9 @@ namespace ns3
         meta = netw_meta;
         // m_sent.resize(meta->n_nodes, 0);
         m_count.resize(meta->n_nodes, MaxPktSize);
-        tab_socket.resize(meta->n_nodes, 0);
-        // tab_peerAddress.resize(meta.n_nodes);
         m_interval.resize(meta->n_nodes);
         // m_socket = 0;
         m_peerPort = 9;
-        recv_socket = 0;
         m_sendEvent.resize(meta->n_nodes, EventId());
         SetLocalID(localId);
         is_overlay = meta->loc_overlay_nodes[localId];
@@ -112,10 +109,15 @@ namespace ns3
     overlayApplication::~overlayApplication()
     {
         NS_LOG_FUNCTION(this);
-        tab_socket.clear();
-        recv_socket = 0;
+        m_count.clear();
+        m_interval.clear();
+        tab_neighborAddress.clear();
+        map_neighbor_device.clear();
+        pkt_num_table.clear();
+        // recv_socket = 0;
         // m_socket = 0;
     }
+
     void overlayApplication::DoDispose(void)
     {
         NS_LOG_FUNCTION(this);
@@ -141,76 +143,49 @@ namespace ns3
         NS_LOG_FUNCTION(this);
         return m_local_ID;
     }
-    void overlayApplication::SetCount(uint32_t MaxPackets)
+    void overlayApplication::SetNeighbor(Address macAddr, uint32_t idx)
     {
-        NS_LOG_FUNCTION(this);
-        m_count.assign(tab_socket.size(), MaxPackets);
+        tab_neighborAddress.insert( std::pair<uint32_t, Address>(idx, macAddr) );
+    }
+    Address overlayApplication::GetNeighbor(uint32_t idx)
+    {
+        if (tab_neighborAddress.count(idx) != 0)
+        {
+            return tab_neighborAddress[idx];
+        }
+        else
+        {
+            std::cout << "Get non-existing neighbor" << std::endl;
+            exit(-1);
+        }
     }
     void overlayApplication::SetInterval(uint32_t idx, float Interval)
     {
         NS_LOG_FUNCTION(this);
         m_interval[idx] = Time(std::to_string(Interval) + 's');
     }
+    void overlayApplication::SetProbeInterval(float Interval)
+    {
+        NS_LOG_FUNCTION(this);
+        probe_interval = Time(std::to_string(Interval) + 's');
+    }
     uint16_t overlayApplication::GetPort(void) const
     {
         NS_LOG_FUNCTION(this);
         return m_peerPort;
     }
-    void overlayApplication::SetSocket(Address ip, uint32_t idx, uint32_t deviceID)
-    {
-        NS_LOG_FUNCTION(this);
-        if (tab_socket[idx] == 0)
-        {
-            TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
-            // std::cout << "Node ID:" << m_local_ID << "set skt for " << idx << ": " << ip << std::endl;
-            tab_socket[idx] = Socket::CreateSocket(GetNode(), tid);
-            if (Ipv4Address::IsMatchingType(ip) == true)
-            {
-                if (tab_socket[idx]->Bind() == -1)
-                {
-                    NS_FATAL_ERROR("Failed to bind socket");
-                }
-                tab_socket[idx]->Connect(InetSocketAddress(Ipv4Address::ConvertFrom(ip), m_peerPort));
-            }
-            else if (InetSocketAddress::IsMatchingType(ip) == true)
-            {
-                if (tab_socket[idx]->Bind() == -1)
-                {
-                    NS_FATAL_ERROR("Failed to bind socket");
-                }
-                tab_socket[idx]->Connect(ip);
-            }
-            else
-            {
-                NS_ASSERT_MSG(false, "Incompatible address type: " << ip);
-            }
-            tab_socket[idx]->SetAllowBroadcast(false);
-            map_neighbor_device.insert(std::pair<uint32_t, uint32_t>(idx, deviceID));
-        }
-        else
-        {
-            std::cout << "create an existing socket" << std::endl;
-        }
-    }
-    /* void overlayApplication::SetRemote(Address ip, uint16_t idx)
-    {
-        if (tab_peerAddress.size() - 1 < idx)
-        {
-            std::cout << "index out of range" << std::endl;
-            exit(-1);
-        }
-        tab_peerAddress[idx] = ip;
-    }
-    void overlayApplication::AddRemote(Address ip)
-    {
-        tab_peerAddress.emplace_back(ip);
-    } */
     void overlayApplication::StartApplication(void)
     {
         NS_LOG_FUNCTION(this);
         /**
-         * Set up socket for initiating flows
+         * Set up socket for background flows: to each underlay neighbor
          **/
+        std::unordered_map<uint32_t, Address>::iterator it;
+        for (it = tab_neighborAddress.begin(); it != tab_neighborAddress.end(); it++)
+        {
+            /* code */
+        }
+        
         std::map<std::string, float>::iterator it;
         if (meta->loc_overlay_nodes[GetLocalID()] == true) // only if self is overlay, it can schedule flows
         {
@@ -238,20 +213,6 @@ namespace ns3
         }
     }
 
-    void overlayApplication::SetRecvSocket(void)
-    {
-        /**
-         * Set up socket for forwarding
-         **/
-        TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
-        recv_socket = Socket::CreateSocket(GetNode(), tid);
-        InetSocketAddress local = InetSocketAddress(Ipv4Address::GetAny(), ListenPort);
-        if (recv_socket->Bind(local) == -1)
-        {
-            NS_FATAL_ERROR("Failed to bind socket");
-        }
-        recv_socket->SetRecvCallback(MakeCallback(&overlayApplication::HandleRead, this));
-    }
     void overlayApplication::HandleRead(Ptr<Socket> socket)
     {
         NS_LOG_FUNCTION(this << socket);

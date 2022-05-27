@@ -116,11 +116,11 @@ int main(int argc, char *argv[])
     fact.Set("RemotePort", UintegerValue(LISTENPORT));
     fact.Set("ListenPort", UintegerValue(LISTENPORT));
     // fact.Set ("MaxPackets", UintegerValue (1));
-    fact.Set("PacketSize", UintegerValue(AppPktSize));
+    fact.Set("PacketSize", UintegerValue(netw_meta._AppPktSize));
     for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
     {
         vec_app[i] = fact.Create<overlayApplication>();
-        vec_app[i]->InitApp(&netw_meta, i, MAXPKTNUM);
+        vec_app[i]->InitApp(&netw_meta, i, netw_meta._MAXPKTNUM);
         vec_app[i]->SetStartTime(Seconds(0));
         vec_app[i]->SetStopTime(Minutes(1000));
         underlayNodes.Get(i)->AddApplication(vec_app[i]);
