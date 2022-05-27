@@ -26,15 +26,15 @@ public:
     void SetCurrentHop (uint8_t value);
     void AddCurrentHop (void);
     uint8_t GetCurrentHop (void) const;
-    uint64_t GetStartTime (void) const;
-    void SetStartTime (uint64_t value);
+    uint8_t GetIsProbe (void) const;
+    void SetIsProbe (uint8_t value);
     void SetPktID (uint32_t value);
     uint32_t GetPktID (void) const;
 private:
     uint8_t SourceID;
     uint8_t DestID;
     uint8_t currentHop;
-    uint64_t StartTime;
+    uint8_t IsProbe;
     uint32_t PktID;
 };
 

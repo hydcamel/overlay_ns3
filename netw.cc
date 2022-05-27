@@ -118,6 +118,13 @@ void netw::read_overlay(std::string file_overlay_nodes)
 		iss >> idx_node;
 		loc_overlay_nodes[idx_node] = true;
 	}
+	cnt_queuing.resize(n_overlay_nodes*(n_overlay_nodes-1));
+	tunnel_vec.resize(n_overlay_nodes*(n_overlay_nodes-1));
+	for (uint32_t i = 0; i < n_overlay_nodes*(n_overlay_nodes-1); i++)
+	{
+		cnt_queuing[i].resize( _MAXPKTNUM, false );
+	}
+	
 }
 	
 
@@ -135,6 +142,7 @@ void netw::read_routing_map(std::string filename)
     std::string temp;
     std::string line;
 	int src, dest, n_route_nodes;
+	uint32_t idx_iter = 0;
 
 	if (infile.is_open())
 	{
@@ -150,6 +158,12 @@ void netw::read_routing_map(std::string filename)
 				iss >> val[i];
 			}
 			routing_map.insert( std::pair<std::string, std::vector<int>>(key, val) );
+
+			tunnel_hashmap.insert( std::pair<std::string, uint32_t>(key, idx_iter) );
+			tunnel_vec[idx_iter] = std::pair<int, int>(src, dest);
+			cnt_pkt.insert( std::pair<std::string, uint32_t>(key, 0) );
+			cnt_congestion.insert( std::pair<std::string, uint32_t>(key, 0) );
+			++idx_iter;
 		}
 	}
 }
@@ -166,48 +180,18 @@ void netw::read_demands(std::string filename)
 	{
 		std::istringstream iss(line);
 		iss >> src >> dest >> demand_val;
-		overlay_demands.insert( std::pair<std::string, float>(std::to_string(src) + " " + std::to_string(dest), demand_val) );
-		cnt_queuing.insert( std::pair<std::string, double>(std::to_string(src) + " " + std::to_string(dest), std::vector<bool>(10)) );
-		demands_vec.emplace_back( std::pair<int, int>(src, dest) );
 		cnt_pkt.insert( std::pair<std::string, uint32_t>(std::to_string(src) + " " + std::to_string(dest), 0) );
 		cnt_congestion.insert( std::pair<std::string, uint32_t>(std::to_string(src) + " " + std::to_string(dest), 0) );
 	}
-	cnt_queuing.resize(demands_vec.size());
-	for (uint32_t i = 0; i < demands_vec.size(); i++)
-	{
-		cnt_queuing[i].resize( demands_vec.size() );
-	}
-	
-}
-
-void netw::write_average_delay(std::string filename)
-{
-	std::ofstream wrfile(filename);
-	std::string key;
-	//uint16_t n_bits = MACPktSize * MAXPKTNUM * 8;
-	/* for (uint16_t i = 0; i < demands_vec.size(); i++)
-	{
-		key = std::to_string(demands_vec[i].first) + ' ' + std::to_string(demands_vec[i].second);
-		std::cout << time_span_flows[key] << " ";
-	} */
-	std::cout << std::endl;
-	for (uint16_t i = 0; i < demands_vec.size(); i++)
-	{
-		key = std::to_string(demands_vec[i].first) + ' ' + std::to_string(demands_vec[i].second);
-		//wrfile << key << " " << std::to_string( double(n_bits) / (double(average_delay[key]) / 1000000000) ) << std::endl;
-		//wrfile << key << " " << std::to_string( (double(average_delay[key]) / 1000000000) / double(n_bits) ) << std::endl;
-		wrfile << key << " " << std::to_string( time_span_flows[key] ) << std::endl;
-	}
-	
 }
 
 void netw::write_congestion_cnt(std::string filename)
 {
 	std::ofstream wrfile(filename);
 	std::string key;
-	for (uint16_t i = 0; i < demands_vec.size(); i++)
+	for (uint16_t i = 0; i < tunnel_vec.size(); i++)
 	{
-		key = std::to_string(demands_vec[i].first) + ' ' + std::to_string(demands_vec[i].second);
+		key = std::to_string(tunnel_vec[i].first) + ' ' + std::to_string(tunnel_vec[i].second);
 		//wrfile << key << " " << std::to_string( double(n_bits) / (double(average_delay[key]) / 1000000000) ) << std::endl;
 		//wrfile << key << " " << std::to_string( (double(average_delay[key]) / 1000000000) / double(n_bits) ) << std::endl;
 		wrfile << key << " " << std::to_string( cnt_congestion[key] ) << std::endl;
