@@ -5,6 +5,7 @@
 #include <map>
 #include <unordered_map>
 #include "ns3/ptr.h"
+#include "ns3/nstime.h"
 // #include "overlayApplication.h"
 
 // #define AppPktSize 1024
@@ -13,8 +14,17 @@
 #define LISTENPORT 9
 // #define MAXPKTNUM 500
 #define NSTOMS 1000000
+#define USTOS 1000000
 #define NSTOUS 1000
 // #define MAXBACKLOG 200
+#define LBPKTSIZE (50.0)
+#define UBPKTSIZE (1470.0)
+#define MEDPKTSIZE (576.0)
+// #define AVGPKTSIZE ((0.4)*LBPKTSIZE + (0.4)*UBPKTSIZE + (0.2)*MEDPKTSIZE)
+#define BGPERCENTAGE (0.3)
+#define PrLBPkt (0.4)
+#define PrUBPkt (0.4)
+#define PrMEDPkt (0.2)
 
 namespace ns3
 {
@@ -34,14 +44,18 @@ public:
     void write_congestion_cnt(std::string filename);
     // void register_vecApp(std::vector<Ptr<overlayApplication>>* input);
     void notify_pktLoss(uint32_t src, uint32_t dest, uint32_t valPktID);
+    void set_background_type(std::string type_name);
 
     std::vector<int> w, bw, delay;
     uint32_t _AppPktSize = 1024, _IPPktSize = 1052, _MACPktSize = 1054, _MAXPKTNUM = 100, _MAXBACKLOG = 1000;
     uint16_t protocol_number = 150;
+    double avg_pktSize = PrLBPkt*LBPKTSIZE + PrUBPkt*UBPKTSIZE + PrMEDPkt*MEDPKTSIZE;
+    std::string background_type;
     // std::vector<Ptr<overlayApplication>>* vec_app;
     //std::vector<int> src, dest;
     //std::map<std::pair<int, int>, int> edges;
     std::map<std::string, int> edges;
+    std::vector<uint32_t> background_interval; // microseconds
     std::vector<std::pair<int, int>> edges_vec;
     std::vector<std::pair<uint32_t, uint32_t>> tunnel_vec;
     std::vector<std::vector<bool>> adj_mat;

@@ -66,6 +66,7 @@ void netw::read_underlay(std::string filename)
 					bw.resize(n_edges);
 					delay.resize(n_edges);
 					edges_vec.resize(n_edges);
+					background_interval.resize(n_edges);
 				}
 				else if (line.substr(0, 5).compare("label") == 0)
 				{
@@ -84,6 +85,7 @@ void netw::read_underlay(std::string filename)
 						edges_vec[idx] = std::pair<int, int> (src, dest);
 						adj_mat[src][dest] = true;
 						adj_mat[dest][src] = true;
+						background_interval[idx] = round( (avg_pktSize*8*USTOS) /(BGPERCENTAGE * bw[idx] * 1000) );
 						++idx;
 					}
 					++idx_true;
@@ -210,6 +212,10 @@ void netw::notify_pktLoss(uint32_t src, uint32_t dest, uint32_t valPktID)
 	// (*vec_app)[src]->SetMSent(dest, valPktID);
 }
 
+void netw::set_background_type(std::string type_name)
+{
+	background_type = type_name;
 }
 
 
+}

@@ -115,6 +115,7 @@ int main(int argc, char *argv[])
     fact.SetTypeId("ns3::overlayApplication");
     fact.Set("RemotePort", UintegerValue(LISTENPORT));
     fact.Set("ListenPort", UintegerValue(LISTENPORT));
+    fact.Set("probe_interval", TimeValue(MilliSeconds(10.0)));
     // fact.Set ("MaxPackets", UintegerValue (1));
     fact.Set("PacketSize", UintegerValue(netw_meta._AppPktSize));
     for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
@@ -139,7 +140,7 @@ int main(int argc, char *argv[])
     {
         links[i].SetChannelAttribute("Delay", StringValue(std::to_string(netw_meta.delay[i]) + "us"));
         links[i].SetDeviceAttribute("DataRate", StringValue(std::to_string(netw_meta.bw[i]) + "kbps"));
-        links[i].SetQueue("ns3::DropTailQueue", "MaxSize", QueueSizeValue(QueueSize(QueueSizeUnit::PACKETS, MAXBACKLOG)));
+        links[i].SetQueue("ns3::DropTailQueue", "MaxSize", QueueSizeValue(QueueSize(QueueSizeUnit::PACKETS, netw_meta._MAXBACKLOG)));
         // links[i].;
         NetDevices[i] = links[i].Install(underlayNodes.Get(netw_meta.edges_vec[i].first), underlayNodes.Get(netw_meta.edges_vec[i].second));
         address.Assign(NetDevices[i]);

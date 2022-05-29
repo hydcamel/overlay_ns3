@@ -37,7 +37,8 @@ namespace ns3
         void SetLocalID(uint32_t localID);
         uint16_t GetLocalID(void) const;
         void SetCount(uint32_t MaxPackets);
-        void SetInterval(uint32_t idx, float Interval);
+        // void SetInterval(uint32_t idx, float Interval);
+        void SetProbeInterval(float Interval);
         //std::vector<uint32_t> GetCount(void) const;
 
         void SetDataSize(uint32_t dataSize);
@@ -59,10 +60,17 @@ namespace ns3
         void ScheduleTransmit(Time dt, uint16_t idx);
         void Send(uint16_t idx);
 
+        void ScheduleBackground(Time dt, uint32_t idx);
+        void SendBackground(uint32_t idx);
+        uint32_t GMM_Pkt_Size(void);
+
+        void ScheduleProbing(Time dt, uint32_t idx);
+        void SendProbe(uint32_t idx);
+
         void HandleRead(Ptr<Socket> socket);
 
         std::vector<uint32_t> m_count;
-        std::vector<Time> m_interval;
+        Time probe_interval; // probe interval
         uint32_t m_size;
 
         // std::vector<uint32_t> m_sent;
@@ -72,7 +80,8 @@ namespace ns3
         //std::vector<Address> tab_peerAddress;
         uint16_t m_peerPort;
         uint16_t ListenPort;
-        std::vector<EventId> m_sendEvent;
+        std::vector<EventId> m_sendEvent; // background traffic
+        EventId probe_event;
         uint16_t m_local_ID;
         std::unordered_map<uint32_t, uint32_t> map_neighbor_device;
 

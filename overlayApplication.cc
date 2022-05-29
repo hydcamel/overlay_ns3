@@ -29,17 +29,12 @@ namespace ns3
                                 .SetParent<Application>()
                                 .SetGroupName("Applications")
                                 .AddConstructor<overlayApplication>()
-                                /* .AddAttribute("MaxPackets",
-                                              "The maximum number of packets the application will send",
-                                              UintegerValue(10),
-                                              MakeUintegerAccessor(&overlayApplication::m_count),
-                                              MakeUintegerChecker<uint32_t>())
-                                .AddAttribute("Interval",
-                                              "The time to wait between packets",
-                                              TimeValue(Seconds(1.0)),
-                                              MakeTimeAccessor(&overlayApplication::m_interval),
+                                .AddAttribute("probe_interval",
+                                              "The interval for probing",
+                                              TimeValue(MilliSeconds(10.0)),
+                                              MakeTimeAccessor(&overlayApplication::probe_interval),
                                               MakeTimeChecker())
-                                .AddAttribute("RemoteAddress",
+                                /* .AddAttribute("RemoteAddress",
                                               "The destination Address of the outbound packets",
                                               AddressValue(),
                                               MakeAddressAccessor(&overlayApplication::m_peerAddress),
@@ -100,11 +95,13 @@ namespace ns3
         m_count.resize(meta->n_nodes, MaxPktSize);
         tab_socket.resize(meta->n_nodes, 0);
         // tab_peerAddress.resize(meta.n_nodes);
-        m_interval.resize(meta->n_nodes);
+        // m_interval.resize(meta->n_nodes);
         // m_socket = 0;
         m_peerPort = 9;
         recv_socket = 0;
+        // probe_interval = 0;
         m_sendEvent.resize(meta->n_nodes, EventId());
+        probe_event = EventId();
         SetLocalID(localId);
         is_overlay = meta->loc_overlay_nodes[localId];
     }
@@ -113,7 +110,11 @@ namespace ns3
     {
         NS_LOG_FUNCTION(this);
         tab_socket.clear();
+        // m_interval.clear();
         recv_socket = 0;
+        meta = 0;
+        m_sendEvent.clear();
+        map_neighbor_device.clear();
         // m_socket = 0;
     }
     void overlayApplication::DoDispose(void)
@@ -146,11 +147,11 @@ namespace ns3
         NS_LOG_FUNCTION(this);
         m_count.assign(tab_socket.size(), MaxPackets);
     }
-    void overlayApplication::SetInterval(uint32_t idx, float Interval)
+    /* void overlayApplication::SetInterval(uint32_t idx, float Interval)
     {
         NS_LOG_FUNCTION(this);
         m_interval[idx] = Time(std::to_string(Interval) + 's');
-    }
+    } */
     uint16_t overlayApplication::GetPort(void) const
     {
         NS_LOG_FUNCTION(this);
@@ -192,50 +193,154 @@ namespace ns3
             std::cout << "create an existing socket" << std::endl;
         }
     }
-    /* void overlayApplication::SetRemote(Address ip, uint16_t idx)
+    uint32_t overlayApplication::GMM_Pkt_Size(void)
     {
-        if (tab_peerAddress.size() - 1 < idx)
+        Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable>();
+        double rng_val = rand->GetValue(0.0, 1.0);
+        if (rng_val <= PrLBPkt) return LBPKTSIZE;
+        else if (rng_val <= (PrLBPkt + PrUBPkt)) return UBPKTSIZE;
+        else return MEDPKTSIZE;
+    }
+    void overlayApplication::SendBackground(uint32_t idx)
+    {
+        NS_LOG_FUNCTION(this);
+        NS_ASSERT(m_sendEvent[idx].IsExpired());
+        SDtag tagToSend;
+        tagToSend.SetSourceID(m_local_ID);
+        tagToSend.SetDestID(idx);
+        tagToSend.SetCurrentHop(1);
+        tagToSend.SetPktID(0);
+        tagToSend.SetIsProbe(0);
+        if ( meta->background_type.compare("PktPoisson") == 0 )
         {
-            std::cout << "index out of range" << std::endl;
+            // pkt size
+            uint32_t pkt_size = GMM_Pkt_Size();
+            Ptr<Packet> p;
+            p = Create<Packet>(pkt_size);
+            m_txTrace(p);
+            p->AddPacketTag(tagToSend);
+            tab_socket[idx]->Send(p);
+            // inter-arrival time
+            Ptr<ExponentialRandomVariable> rand = CreateObject<ExponentialRandomVariable> ();
+            int edgeID = 0;
+            if (meta->edges.count( std::to_string(m_local_ID) + ' ' + std::to_string(idx) ))
+            {
+                edgeID = meta->edges[std::to_string(m_local_ID) + ' ' + std::to_string(idx)];
+            }
+            else if (meta->edges.count( std::to_string(idx) + ' ' + std::to_string(m_local_ID) ))
+            {
+                edgeID = meta->edges[std::to_string(idx) + ' ' + std::to_string(m_local_ID)];
+            }
+            else
+            {
+                std::cout << "non-existing underlay edges" << std::endl;
+                exit(-1);
+            }
+            
+            rand->SetAttribute("Mean", DoubleValue(meta->background_interval[edgeID]));
+            Time pkt_inter_arrival = MicroSeconds( rand->GetInteger() );
+            if (meta->m_sent[m_local_ID][idx] < m_count[idx])
+            {
+                ScheduleBackground(pkt_inter_arrival, idx);
+            }
+        }
+        else
+        {
+            std::cout << "Wrong Background Type" << std::endl;
             exit(-1);
         }
-        tab_peerAddress[idx] = ip;
     }
-    void overlayApplication::AddRemote(Address ip)
+    void overlayApplication::ScheduleBackground(Time dt, uint32_t idx)
     {
-        tab_peerAddress.emplace_back(ip);
-    } */
+        m_sendEvent[idx] = Simulator::Schedule(dt, &overlayApplication::SendBackground, this, idx);
+    }
+
     void overlayApplication::StartApplication(void)
     {
         NS_LOG_FUNCTION(this);
         /**
-         * Set up socket for initiating flows
+         * Set up background traffic
          **/
-        std::map<std::string, float>::iterator it;
-        if (meta->loc_overlay_nodes[GetLocalID()] == true) // only if self is overlay, it can schedule flows
+        if (meta->background_type.compare("PktPoisson") == 0)
+        {
+            for (uint32_t j = 0; j < meta->n_nodes; j++)
+            {
+                if (meta->adj_mat[m_local_ID][j] == false) continue;
+                Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable>();
+                Time random_offset = MicroSeconds(rand->GetValue(0, 50));
+                ScheduleBackground(random_offset, j);
+            }
+        }
+
+        /**
+         * Set up probing flows
+         **/
+        if (meta->loc_overlay_nodes[GetLocalID()] == true) // only if self is overlay, it can schedule probing
         {
             for (uint32_t i = 0; i < meta->n_nodes; i++)
             {
                 if (meta->loc_overlay_nodes[i] == true) // target i
                 {
-                    it = meta->overlay_demands.find(std::to_string(GetLocalID()) + " " + std::to_string(i));
-                    if (it == meta->overlay_demands.end())
-                        continue; // no such demands
-                    // set interval
-                    SetInterval(i, float(MACPktSize * 8) / it->second); // flow rate for the target i: bps
-                    // tab_socket[routes[1]]->SetAllowBroadcast(false);
-                    Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable>();
-                    Time random_offset = MicroSeconds(rand->GetValue(50, 200));
-                    meta->time_span_flows[std::to_string(m_local_ID) + ' ' + std::to_string(i)] = random_offset.ToDouble(Time::US);
-                    if (m_local_ID == SRC && i == DEST)
-                    {
-                        std::cout << "Node ID: " << m_local_ID << " start at " << random_offset.ToDouble(Time::US) << std::endl;
-                    }
-
-                    ScheduleTransmit(random_offset, i);
+                    if (meta->tunnel_hashmap.count(std::to_string(m_local_ID) + ' ' + std::to_string(i)) == 0)
+                        continue; // no such tunnel
+                    ScheduleProbing(Time(Seconds(0)), i);
                 }
             }
         }
+    }
+    
+    void overlayApplication::SendProbe(uint32_t idx)
+    {
+        NS_LOG_FUNCTION(this);
+        NS_ASSERT(m_sendEvent[idx].IsExpired());
+        SDtag tagToSend;
+        tagToSend.SetSourceID(m_local_ID);
+        tagToSend.SetDestID(idx);
+        tagToSend.SetCurrentHop(1);
+        tagToSend.SetPktID(0);
+        tagToSend.SetIsProbe(0);
+        if ( meta->background_type.compare("PktPoisson") == 0 )
+        {
+            // pkt size
+            uint32_t pkt_size = GMM_Pkt_Size();
+            Ptr<Packet> p;
+            p = Create<Packet>(pkt_size);
+            m_txTrace(p);
+            p->AddPacketTag(tagToSend);
+            tab_socket[idx]->Send(p);
+            // inter-arrival time
+            Ptr<ExponentialRandomVariable> rand = CreateObject<ExponentialRandomVariable> ();
+            int edgeID = 0;
+            if (meta->edges.count( std::to_string(m_local_ID) + ' ' + std::to_string(idx) ))
+            {
+                edgeID = meta->edges[std::to_string(m_local_ID) + ' ' + std::to_string(idx)];
+            }
+            else if (meta->edges.count( std::to_string(idx) + ' ' + std::to_string(m_local_ID) ))
+            {
+                edgeID = meta->edges[std::to_string(idx) + ' ' + std::to_string(m_local_ID)];
+            }
+            else
+            {
+                std::cout << "non-existing underlay edges" << std::endl;
+                exit(-1);
+            }
+            
+            rand->SetAttribute("Mean", DoubleValue(meta->background_interval[edgeID]));
+            Time pkt_inter_arrival = MicroSeconds( rand->GetInteger() );
+            if (meta->m_sent[m_local_ID][idx] < m_count[idx])
+            {
+                ScheduleBackground(pkt_inter_arrival, idx);
+            }
+        }
+        else
+        {
+            std::cout << "Wrong Background Type" << std::endl;
+            exit(-1);
+        }
+    }
+    void overlayApplication::ScheduleProbing(Time dt, uint32_t idx)
+    {
+        m_sendEvent[idx] = Simulator::Schedule(dt, &overlayApplication::SendProbe, this, idx);
     }
 
     void overlayApplication::SetRecvSocket(void)
