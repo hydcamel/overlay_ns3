@@ -25,6 +25,8 @@ netw::netw(std::string filename, std::string demands_file, std::string file_over
     read_overlay(file_overlay_nodes);
 	read_routing_map(route_name);
 	read_demands(demands_file);
+	set_background_type("PktPoisson");
+	probe_type = "naive";
 }
 
 void netw::read_underlay(std::string filename)

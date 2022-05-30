@@ -44,7 +44,7 @@ namespace ns3
         void SetDataSize(uint32_t dataSize);
         void SetRecvSocket(void);
         void CheckCongestion(Ptr<Socket> skt, uint32_t src, uint32_t dest);
-        void CheckCongestion(uint32_t deviceID, uint32_t src, uint32_t dest, uint16_t PktID);
+        bool CheckCongestion(uint32_t deviceID, uint32_t src, uint32_t dest, uint16_t PktID);
 
         uint32_t GetDataSize(void) const;
         uint16_t GetPort(void) const;
@@ -57,8 +57,8 @@ namespace ns3
         virtual void StartApplication(void);
         virtual void StopApplication(void);
 
-        void ScheduleTransmit(Time dt, uint16_t idx);
-        void Send(uint16_t idx);
+        // void ScheduleTransmit(Time dt, uint16_t idx);
+        // void Send(uint16_t idx);
 
         void ScheduleBackground(Time dt, uint32_t idx);
         void SendBackground(uint32_t idx);

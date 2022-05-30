@@ -25,6 +25,7 @@
 #define PrLBPkt (0.4)
 #define PrUBPkt (0.4)
 #define PrMEDPkt (0.2)
+#define ProbeSizeNaive (50)
 
 namespace ns3
 {
@@ -51,6 +52,7 @@ public:
     uint16_t protocol_number = 150;
     double avg_pktSize = PrLBPkt*LBPKTSIZE + PrUBPkt*UBPKTSIZE + PrMEDPkt*MEDPKTSIZE;
     std::string background_type;
+    std::string probe_type;
     // std::vector<Ptr<overlayApplication>>* vec_app;
     //std::vector<int> src, dest;
     //std::map<std::pair<int, int>, int> edges;
