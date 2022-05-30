@@ -101,7 +101,7 @@ namespace ns3
         recv_socket = 0;
         // probe_interval = 0;
         m_sendEvent.resize(meta->n_nodes, EventId());
-        probe_event = EventId();
+        probe_event.resize(meta->n_nodes, EventId());
         SetLocalID(localId);
         is_overlay = meta->loc_overlay_nodes[localId];
     }
@@ -109,12 +109,15 @@ namespace ns3
     overlayApplication::~overlayApplication()
     {
         NS_LOG_FUNCTION(this);
+        std::cout << m_local_ID << ": start deleting." << std::endl;
         tab_socket.clear();
         // m_interval.clear();
         recv_socket = 0;
         meta = 0;
         m_sendEvent.clear();
+        probe_event.clear();
         map_neighbor_device.clear();
+        m_count.clear();
         // m_socket = 0;
     }
     void overlayApplication::DoDispose(void)
@@ -240,7 +243,9 @@ namespace ns3
             
             rand->SetAttribute("Mean", DoubleValue(meta->background_interval[edgeID]));
             Time pkt_inter_arrival = MicroSeconds( rand->GetInteger() );
-            if (meta->m_sent[m_local_ID][idx] < m_count[idx])
+            //std::cout << "Node ID: " << m_local_ID << " background at " << Simulator::Now().As(Time::US) << " to " << idx << " next time " << pkt_inter_arrival.As(Time::US) << std::endl; 
+            // ScheduleBackground(pkt_inter_arrival, idx);
+            if (is_run == true)
             {
                 ScheduleBackground(pkt_inter_arrival, idx);
             }
@@ -293,7 +298,7 @@ namespace ns3
     void overlayApplication::SendProbe(uint32_t idx)
     {
         NS_LOG_FUNCTION(this);
-        NS_ASSERT(m_sendEvent[idx].IsExpired());
+        NS_ASSERT(probe_event[idx].IsExpired());
         SDtag tagToSend;
         tagToSend.SetSourceID(m_local_ID);
         tagToSend.SetDestID(idx);
@@ -310,7 +315,11 @@ namespace ns3
             m_txTrace(p);
             p->AddPacketTag(tagToSend);
             tab_socket[routes[1]]->Send(p);
-            ScheduleProbing(probe_interval, idx);
+            if (is_run == true && meta->m_sent[m_local_ID][idx] < meta->_MAXPKTNUM)
+            {
+                ScheduleProbing(probe_interval, idx);
+            }
+            // ScheduleProbing(probe_interval, idx);
         }
         else
         {
@@ -320,7 +329,7 @@ namespace ns3
     }
     void overlayApplication::ScheduleProbing(Time dt, uint32_t idx)
     {
-        m_sendEvent[idx] = Simulator::Schedule(dt, &overlayApplication::SendProbe, this, idx);
+        probe_event[idx] = Simulator::Schedule(dt, &overlayApplication::SendProbe, this, idx);
     }
 
     void overlayApplication::SetRecvSocket(void)
@@ -344,7 +353,6 @@ namespace ns3
         Ptr<Packet> packet;
         Address from;
         Address localAddress;
-        double time_trans = 0;
         while ((packet = socket->RecvFrom(from)))
         {
             socket->GetSockName(localAddress);
@@ -367,7 +375,12 @@ namespace ns3
                 {
                     uint32_t idx_tunnel = meta->tunnel_hashmap[keys];
                     meta->cnt_queuing[idx_tunnel][tagPktRecv.GetPktID()] = tagPktRecv.GetIsQueued();
+                    // std::cout << m_local_ID << ": recv probe at " << Simulator::Now().As(Time::US) << " with " << keys << std::endl; 
                 }
+                /* if (tagPktRecv.GetIsProbe() == 0)
+                {
+                    std::cout << m_local_ID << ": recv background at " << Simulator::Now().As(Time::US) << " with " << keys << std::endl; 
+                } */
             }
             else
             {
@@ -378,7 +391,7 @@ namespace ns3
                     std::cout << "Node ID: " << m_local_ID << " forward at: " << Simulator::Now().ToDouble(Time::US) << std::endl;
                 } */
                 
-                if ( CheckCongestion(map_neighbor_device[routes[tagPktRecv.GetCurrentHop()]], (uint32_t)tagPktRecv.GetSourceID(), (uint32_t)tagPktRecv.GetDestID(), (uint16_t)tagPktRecv.GetPktID()) )
+                if ( CheckCongestion(map_neighbor_device[routes[tagPktRecv.GetCurrentHop()+1]], (uint32_t)tagPktRecv.GetSourceID(), (uint32_t)tagPktRecv.GetDestID(), (uint16_t)tagPktRecv.GetPktID()) )
                 {
                     tagPktRecv.SetIsQueued(1);
                 }
@@ -392,16 +405,18 @@ namespace ns3
     void overlayApplication::StopApplication()
     {
         NS_LOG_FUNCTION(this);
+        is_run = false;
         if (m_local_ID == 0)
         {
-            meta->write_average_delay("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/average_delay.txt");
-            meta->write_congestion_cnt("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/congestion_cnt.txt");
+            // meta->write_average_delay("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/average_delay.txt");
+            // meta->write_congestion_cnt("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/congestion_cnt.txt");
+            meta->write_queuing_cnt("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/queuing_cnt.txt");
         }
 
-        // std::cout << "Node ID: " << m_local_ID << " stop Application" << std::endl;
+        std::cout << "Node ID: " << m_local_ID << " stop Application" << std::endl;
         for (uint32_t i = 0; i < tab_socket.size(); i++)
         {
-            // std::cout << "iter Node ID: " << m_local_ID << " i" << i << std::endl;
+            std::cout << "iter Node ID: " << m_local_ID << " i" << i << std::endl;
             if (tab_socket[i] != 0)
             {
                 tab_socket[i]->Close();
@@ -410,11 +425,11 @@ namespace ns3
         }
         if (recv_socket != 0)
         {
-            // std::cout << "iter Node ID: " << m_local_ID << " recv_socket" << std::endl;
+            std::cout << "iter Node ID: " << m_local_ID << " recv_socket" << std::endl;
             recv_socket->Close();
             recv_socket->SetRecvCallback(MakeNullCallback<void, Ptr<Socket>>());
         }
-        // std::cout << "iter Node ID: " << m_local_ID << " complete" << std::endl;
+        std::cout << "iter Node ID: " << m_local_ID << " complete" << std::endl;
     }
 
     bool overlayApplication::CheckCongestion(uint32_t deviceID, uint32_t src, uint32_t dest, uint16_t PktID)

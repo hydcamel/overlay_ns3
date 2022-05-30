@@ -72,6 +72,7 @@ namespace ns3
         std::vector<uint32_t> m_count;
         Time probe_interval; // probe interval
         uint32_t m_size;
+        bool is_run = true;
 
         // std::vector<uint32_t> m_sent;
         std::vector<Ptr<Socket>> tab_socket;
@@ -81,7 +82,7 @@ namespace ns3
         uint16_t m_peerPort;
         uint16_t ListenPort;
         std::vector<EventId> m_sendEvent; // background traffic
-        EventId probe_event;
+        std::vector<EventId> probe_event;
         uint16_t m_local_ID;
         std::unordered_map<uint32_t, uint32_t> map_neighbor_device;
 

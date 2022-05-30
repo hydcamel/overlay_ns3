@@ -43,12 +43,13 @@ public:
     void read_demands(std::string filename);
     void write_average_delay(std::string filename);
     void write_congestion_cnt(std::string filename);
+    void write_queuing_cnt(std::string filename);
     // void register_vecApp(std::vector<Ptr<overlayApplication>>* input);
     void notify_pktLoss(uint32_t src, uint32_t dest, uint32_t valPktID);
     void set_background_type(std::string type_name);
 
     std::vector<int> w, bw, delay;
-    uint32_t _AppPktSize = 1024, _IPPktSize = 1052, _MACPktSize = 1054, _MAXPKTNUM = 100, _MAXBACKLOG = 1000;
+    uint32_t _AppPktSize = 1024, _IPPktSize = 1052, _MACPktSize = 1054, _MAXPKTNUM = 2000, _MAXBACKLOG = 200000;
     uint16_t protocol_number = 150;
     double avg_pktSize = PrLBPkt*LBPKTSIZE + PrUBPkt*UBPKTSIZE + PrMEDPkt*MEDPKTSIZE;
     std::string background_type;

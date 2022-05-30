@@ -27,7 +27,7 @@ NS_LOG_COMPONENT_DEFINE("p2pTestV1");
 
 void read_setup(std::string& name_underlay)
 {
-    std::ifstream infile("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/setup.txt");
+    std::ifstream infile("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/setup.txt");
     std::string line;
     std::string temp;
 
@@ -39,7 +39,7 @@ void read_setup(std::string& name_underlay)
 
 void read_setup(std::string& name_underlay, std::string& demands_file, std::string& file_overlay_nodes, std::string& route_name)
 {
-    std::ifstream infile("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/setup.txt");
+    std::ifstream infile("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/setup.txt");
     std::string line;
     std::string temp;
 
@@ -91,10 +91,9 @@ int main(int argc, char *argv[])
     std::string netw_filename, demands_file, file_overlay_nodes, route_name;
     read_setup(netw_filename, demands_file, file_overlay_nodes, route_name);
     netw netw_meta(netw_filename, demands_file, file_overlay_nodes, route_name);
-
     
 
-    
+    double stop_time = 100.0;
     InternetStackHelper internet;
     Ipv4AddressHelper address;
     address.SetBase("10.0.0.0", "255.255.255.0");
@@ -123,7 +122,7 @@ int main(int argc, char *argv[])
         vec_app[i] = fact.Create<overlayApplication>();
         vec_app[i]->InitApp(&netw_meta, i, netw_meta._MAXPKTNUM);
         vec_app[i]->SetStartTime(Seconds(0));
-        vec_app[i]->SetStopTime(Minutes(1000));
+        vec_app[i]->SetStopTime(MilliSeconds(stop_time));
         underlayNodes.Get(i)->AddApplication(vec_app[i]);
         vec_app[i]->SetRecvSocket();
     }
@@ -228,7 +227,7 @@ int main(int argc, char *argv[])
     // flow_monitor = flow_helper.InstallAll();
 
     // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/Rx", MakeCallback(&rxTraceIpv4) );
-    // Config::Connect( "/NodeList/0/$ns3::Ipv4L3Protocol/Tx", MakeCallback(&txTraceIpv4) );
+    // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/Tx", MakeCallback(&txTraceIpv4) );
     // // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/LocalDeliver", MakeCallback(&LocalDeliver) );
 
     // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTx", MakeCallback(&p2pDevMacTx) );
@@ -253,6 +252,8 @@ int main(int argc, char *argv[])
     // std::cout << "before run" << std::endl;
     Simulator::Run();
     // flow_monitor->SerializeToXmlFile("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/flow_monitor_res.xml", true, true);
+    Simulator::Stop(MilliSeconds(stop_time*1.2));
+    std::cout << "start Destroy." << std::endl;
     Simulator::Destroy();
     NS_LOG_INFO("Done.");
 }

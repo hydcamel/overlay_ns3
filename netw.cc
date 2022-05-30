@@ -14,8 +14,8 @@ namespace ns3
 netw::netw(std::string filename, std::string demands_file)
 {
 	read_underlay(filename);
-    read_overlay("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/overlay.txt");
-	read_routing_map("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/route_table.txt");
+    read_overlay("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/overlay.txt");
+	read_routing_map("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/route_table.txt");
 	read_demands(demands_file);
 }
 
@@ -201,6 +201,22 @@ void netw::write_congestion_cnt(std::string filename)
 		wrfile << key << " " << std::to_string( cnt_congestion[key] ) << std::endl;
 	}
 	
+}
+
+void netw::write_queuing_cnt(std::string filename)
+{
+	std::ofstream wrfile(filename);
+	std::string key;
+	for (uint16_t i = 0; i < tunnel_vec.size(); i++)
+	{
+		key = std::to_string(tunnel_vec[i].first) + ' ' + std::to_string(tunnel_vec[i].second);
+		wrfile << key;
+		for (auto val : cnt_queuing[tunnel_hashmap[key]])
+		{
+			wrfile << " " << std::to_string(val);
+		}
+		wrfile << std::endl;
+	}
 }
 
 // void netw::register_vecApp(std::vector<Ptr<overlayApplication>>* input)
