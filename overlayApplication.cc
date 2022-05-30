@@ -299,6 +299,7 @@ namespace ns3
         tagToSend.SetDestID(idx);
         tagToSend.SetCurrentHop(1);
         tagToSend.SetPktID(meta->m_sent[m_local_ID][idx]);
+        tagToSend.SetIsQueued(0);
         tagToSend.SetIsProbe(1);
         ++meta->m_sent[m_local_ID][idx];
         std::vector<int> &routes = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx)];
@@ -309,7 +310,6 @@ namespace ns3
             m_txTrace(p);
             p->AddPacketTag(tagToSend);
             tab_socket[routes[1]]->Send(p);
-            
             ScheduleProbing(probe_interval, idx);
         }
         else
