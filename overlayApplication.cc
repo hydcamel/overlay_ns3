@@ -413,10 +413,10 @@ namespace ns3
             meta->write_queuing_cnt("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/queuing_cnt.txt");
         }
 
-        std::cout << "Node ID: " << m_local_ID << " stop Application" << std::endl;
+        // std::cout << "Node ID: " << m_local_ID << " stop Application" << std::endl;
         for (uint32_t i = 0; i < tab_socket.size(); i++)
         {
-            std::cout << "iter Node ID: " << m_local_ID << " i" << i << std::endl;
+            // std::cout << "iter Node ID: " << m_local_ID << " i" << i << std::endl;
             if (tab_socket[i] != 0)
             {
                 tab_socket[i]->Close();
@@ -425,11 +425,11 @@ namespace ns3
         }
         if (recv_socket != 0)
         {
-            std::cout << "iter Node ID: " << m_local_ID << " recv_socket" << std::endl;
+            // std::cout << "iter Node ID: " << m_local_ID << " recv_socket" << std::endl;
             recv_socket->Close();
             recv_socket->SetRecvCallback(MakeNullCallback<void, Ptr<Socket>>());
         }
-        std::cout << "iter Node ID: " << m_local_ID << " complete" << std::endl;
+        // std::cout << "iter Node ID: " << m_local_ID << " complete" << std::endl;
     }
 
     bool overlayApplication::CheckCongestion(uint32_t deviceID, uint32_t src, uint32_t dest, uint16_t PktID)
