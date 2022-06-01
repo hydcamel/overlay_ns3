@@ -281,70 +281,118 @@ namespace ns3
         /**
          * Set up probing flows
          **/
-        if (meta->loc_overlay_nodes[GetLocalID()] == true) // only if self is overlay, it can schedule probing
-        {
-            for (uint32_t i = 0; i < meta->n_nodes; i++)
-            {
-                if (meta->loc_overlay_nodes[i] == true) // target i
-                {
-                    if (meta->tunnel_hashmap.count(std::to_string(m_local_ID) + ' ' + std::to_string(i)) == 0)
-                        continue; // no such tunnel
-                    ScheduleProbing(Time(Seconds(0)), i);
-                }
-            }
-        }
-    }
-    
-    void overlayApplication::SendProbe(uint32_t idx)
-    {
-        NS_LOG_FUNCTION(this);
-        NS_ASSERT(probe_event[idx].IsExpired());
-        std::vector<int> &routes = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx)];
         switch (meta->probe_type)
         {
             case ProbeType::naive:
             {
-                SDtag tagToSend;
-                tagToSend.SetSourceID(m_local_ID);
-                tagToSend.SetDestID(idx);
-                tagToSend.SetCurrentHop(1);
-                tagToSend.SetPktID(meta->m_sent[m_local_ID][idx]);
-                tagToSend.SetIsQueued(0);
-                tagToSend.SetSandWichID(0);
-                tagToSend.SetIsProbe(1);
-                ++meta->m_sent[m_local_ID][idx];
-                Ptr<Packet> p;
-                p = Create<Packet>(ProbeSizeNaive);
-                m_txTrace(p);
-                p->AddPacketTag(tagToSend);
-                tab_socket[routes[1]]->Send(p);
-                if (is_run == true && meta->m_sent[m_local_ID][idx] < meta->_MAXPKTNUM)
+                if (meta->loc_overlay_nodes[GetLocalID()] == true) // only if self is overlay, it can schedule probing
                 {
-                    ScheduleProbing(probe_interval, idx);
+                    for (uint32_t i = 0; i < meta->n_nodes; i++)
+                    {
+                        if (meta->loc_overlay_nodes[i] == true) // target i
+                        {
+                            if (meta->tunnel_hashmap.count(std::to_string(m_local_ID) + ' ' + std::to_string(i)) == 0)
+                                continue; // no such tunnel
+                            ScheduleProbing(Time(Seconds(0)), i);
+                        }
+                    }
                 }
+                break;
+            }
+            case ProbeType::sandwich_v1:
+            {
+
+            }
+            default:
+            {
+                std::cout << "wrong probe types at StartApplication" << std::endl;
+                break;
+            }
+        }
+        
+    }
+    
+    void overlayApplication::SendProbeNaive(uint32_t idx)
+    {
+        NS_LOG_FUNCTION(this);
+        NS_ASSERT(probe_event[idx].IsExpired());
+        std::vector<int> &routes = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx)];
+        SDtag tagToSend;
+        SetTag(tagToSend, m_local_ID, idx, 1, meta->m_sent[m_local_ID][idx], 1, 0, 0);
+        ++meta->m_sent[m_local_ID][idx];
+        Ptr<Packet> p;
+        p = Create<Packet>(ProbeSizeNaive);
+        m_txTrace(p);
+        p->AddPacketTag(tagToSend);
+        tab_socket[routes[1]]->Send(p);
+        if (is_run == true && meta->m_sent[m_local_ID][idx] < meta->_MAXPKTNUM)
+        {
+            ScheduleProbing(probe_interval, idx);
+        }
+    }
+    void overlayApplication::OrchestraSandWichV1(void)
+    {
+        for (uint32_t i = 0; i < meta->n_nodes; i++)
+        {
+            if (meta->loc_overlay_nodes[i] == true) // target i is an overlay node
+            {
+                for (uint32_t j = i+1; i < meta->n_nodes; i++)
+                {
+                    if (meta->loc_overlay_nodes[j] == true)
+                    {
+                        SendProbeSandWichV1(i, j);
+                    }
+                }
+            }
+        }
+        if (is_run == true)
+        {
+            /* code */
+        }
+        
+    }
+    void overlayApplication::SendProbeSandWichV1(uint32_t idx, uint32_t idx_large)
+    {
+        std::vector<Ptr<Packet>> p_sandwich (3);
+        p_sandwich[0] = Create<Packet>(ProbeSizeSWSmall);
+        p_sandwich[1] = Create<Packet>(ProbeSizeSWlarge);
+        p_sandwich[2] = Create<Packet>(ProbeSizeSWSmall);
+        std::vector<SDtag> tagSandWich (3);
+        for (uint32_t i = 0; i < 3; i++)
+        {
+            if (i == 0 || i == 2)
+            {
+                SetTag(tagSandWich[i], m_local_ID, idx, 1, meta->m_sent[m_local_ID][idx], 1, 0, i);
+                m_txTrace(p_sandwich[i]);
+                p_sandwich[i]->AddPacketTag(tagSandWich[i]);
+            }
+            else if (i == 1)
+            {
+                SetTag(tagSandWich[i], m_local_ID, idx_large, 1, meta->m_sent[m_local_ID][idx], 1, 0, i);
+                m_txTrace(p_sandwich[i]);
+                p_sandwich[i]->AddPacketTag(tagSandWich[i]);
+            }
+        }
+        ++meta->m_sent[m_local_ID][idx];
+        std::vector<int> &routes = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx)];
+        std::vector<int> &routes_large = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx_large)];
+        tab_socket[routes[1]]->Send(p_sandwich[0]);
+        tab_socket[routes_large[1]]->Send(p_sandwich[1]);
+        tab_socket[routes[1]]->Send(p_sandwich[2]);
+    }
+    void overlayApplication::ScheduleProbing(Time dt, uint32_t idx)
+    {
+        switch (meta->probe_type)
+        {
+            case ProbeType::naive:
+            {
+                probe_event[idx] = Simulator::Schedule(dt, &overlayApplication::SendProbeNaive, this, idx);
                 // ScheduleProbing(probe_interval, idx);
                 break;
             }
             case ProbeType::sandwich_v1:
             {
-                std::vector<Ptr<Packet>> p_sandwich (3);
-                p_sandwich[0] = Create<Packet>(ProbeSizeSWSmall);
-                p_sandwich[1] = Create<Packet>(ProbeSizeSWlarge);
-                p_sandwich[2] = Create<Packet>(ProbeSizeSWSmall);
-                std::vector<SDtag> tagSandWich (3);
-                for (uint32_t i = 0; i < 3; i++)
-                {
-                    tagSandWich[i].SetSourceID(m_local_ID);
-                    tagSandWich[i].SetDestID(idx);
-                    tagSandWich[i].SetCurrentHop(1);
-                    tagSandWich[i].SetPktID(meta->m_sent[m_local_ID][idx]);
-                    tagSandWich[i].SetIsQueued(0);
-                    tagSandWich[i].SetSandWichID(i);
-                    tagSandWich[i].SetIsProbe(1);
-                    m_txTrace(p_sandwich[i]);
-                    p_sandwich[i]->AddPacketTag(tagSandWich[i]);
-                }
-                ++meta->m_sent[m_local_ID][idx];
+                Simulator::Schedule(dt, &overlayApplication::OrchestraSandWichV1, this);
             }
             default:
             {
@@ -353,10 +401,7 @@ namespace ns3
                 break;
             }
         };
-    }
-    void overlayApplication::ScheduleProbing(Time dt, uint32_t idx)
-    {
-        probe_event[idx] = Simulator::Schedule(dt, &overlayApplication::SendProbe, this, idx);
+        
     }
 
     void overlayApplication::SetRecvSocket(void)
@@ -497,5 +542,15 @@ namespace ns3
             std::cout << "congestion at " << m_local_ID << "from " << src << " to " << dest << "with " << std::endl;
             meta->cnt_congestion[std::to_string(src) + ' ' + std::to_string(dest)]++;
         }
+    }
+    void overlayApplication::SetTag(SDtag& tagToUse, uint8_t SourceID, uint8_t DestID, uint8_t currentHop, uint32_t PktID, uint8_t IsProbe, uint8_t IsQueued, uint8_t SandWichID)
+    {
+        tagToUse.SetSourceID(SourceID);
+        tagToUse.SetDestID(DestID);
+        tagToUse.SetCurrentHop(currentHop);
+        tagToUse.SetPktID(PktID);
+        tagToUse.SetIsQueued(IsQueued);
+        tagToUse.SetSandWichID(SandWichID);
+        tagToUse.SetIsProbe(IsProbe);
     }
 }
