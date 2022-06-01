@@ -299,19 +299,20 @@ namespace ns3
     {
         NS_LOG_FUNCTION(this);
         NS_ASSERT(probe_event[idx].IsExpired());
-        SDtag tagToSend;
-        tagToSend.SetSourceID(m_local_ID);
-        tagToSend.SetDestID(idx);
-        tagToSend.SetCurrentHop(1);
-        tagToSend.SetPktID(meta->m_sent[m_local_ID][idx]);
-        tagToSend.SetIsQueued(0);
-        tagToSend.SetIsProbe(1);
-        ++meta->m_sent[m_local_ID][idx];
         std::vector<int> &routes = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx)];
         switch (meta->probe_type)
         {
             case ProbeType::naive:
             {
+                SDtag tagToSend;
+                tagToSend.SetSourceID(m_local_ID);
+                tagToSend.SetDestID(idx);
+                tagToSend.SetCurrentHop(1);
+                tagToSend.SetPktID(meta->m_sent[m_local_ID][idx]);
+                tagToSend.SetIsQueued(0);
+                tagToSend.SetSandWichID(0);
+                tagToSend.SetIsProbe(1);
+                ++meta->m_sent[m_local_ID][idx];
                 Ptr<Packet> p;
                 p = Create<Packet>(ProbeSizeNaive);
                 m_txTrace(p);
@@ -326,7 +327,24 @@ namespace ns3
             }
             case ProbeType::sandwich_v1:
             {
-                
+                std::vector<Ptr<Packet>> p_sandwich (3);
+                p_sandwich[0] = Create<Packet>(ProbeSizeSWSmall);
+                p_sandwich[1] = Create<Packet>(ProbeSizeSWlarge);
+                p_sandwich[2] = Create<Packet>(ProbeSizeSWSmall);
+                std::vector<SDtag> tagSandWich (3);
+                for (uint32_t i = 0; i < 3; i++)
+                {
+                    tagSandWich[i].SetSourceID(m_local_ID);
+                    tagSandWich[i].SetDestID(idx);
+                    tagSandWich[i].SetCurrentHop(1);
+                    tagSandWich[i].SetPktID(meta->m_sent[m_local_ID][idx]);
+                    tagSandWich[i].SetIsQueued(0);
+                    tagSandWich[i].SetSandWichID(i);
+                    tagSandWich[i].SetIsProbe(1);
+                    m_txTrace(p_sandwich[i]);
+                    p_sandwich[i]->AddPacketTag(tagSandWich[i]);
+                }
+                ++meta->m_sent[m_local_ID][idx];
             }
             default:
             {

@@ -43,7 +43,7 @@ TypeId SDtag::GetInstanceTypeId (void) const
 }
 uint32_t SDtag::GetSerializedSize (void) const
 {
-    return 9;
+    return 10;
 }
 void SDtag::Serialize (TagBuffer i) const
 {
@@ -52,6 +52,7 @@ void SDtag::Serialize (TagBuffer i) const
     i.WriteU8(currentHop);
     i.WriteU8(IsProbe);
     i.WriteU8(IsQueued);
+    i.WriteU8(SandWichID);
     i.WriteU32 (PktID);
 }
 void SDtag::Deserialize (TagBuffer i)
@@ -61,6 +62,7 @@ void SDtag::Deserialize (TagBuffer i)
     currentHop = i.ReadU8();
     IsProbe = i.ReadU8();
     IsQueued = i.ReadU8();
+    SandWichID = i.ReadU8();
     PktID = i.ReadU32();
 }
 void SDtag::Print (std::ostream &os) const
@@ -102,6 +104,14 @@ uint8_t SDtag::GetIsProbe (void) const
 void SDtag::SetIsProbe (uint8_t value)
 {
     IsProbe = value;
+}
+uint8_t SDtag::GetSandWichID (void) const
+{
+    return SandWichID;
+}
+void SDtag::SetSandWichID (uint8_t value)
+{
+    SandWichID = value;
 }
 uint8_t SDtag::GetIsQueued (void) const
 {

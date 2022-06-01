@@ -26,6 +26,8 @@
 #define PrUBPkt (0.4)
 #define PrMEDPkt (0.2)
 #define ProbeSizeNaive (50)
+#define ProbeSizeSWSmall (50)
+#define ProbeSizeSWlarge (1450)
 
 namespace ns3
 {

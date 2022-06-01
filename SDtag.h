@@ -28,6 +28,8 @@ public:
     uint8_t GetCurrentHop (void) const;
     uint8_t GetIsProbe (void) const;
     void SetIsProbe (uint8_t value);
+    uint8_t GetSandWichID (void) const;
+    void SetSandWichID (uint8_t value);
     uint8_t GetIsQueued (void) const;
     void SetIsQueued (uint8_t value);
     void SetPktID (uint32_t value);
@@ -38,6 +40,7 @@ private:
     uint8_t currentHop;
     uint8_t IsProbe;
     uint8_t IsQueued;
+    uint8_t SandWichID;
     uint32_t PktID;
 };
 
