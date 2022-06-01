@@ -21,12 +21,13 @@ netw::netw(std::string filename, std::string demands_file)
 
 netw::netw(std::string filename, std::string demands_file, std::string file_overlay_nodes, std::string route_name)
 {
+	set_background_type("PktPoisson");
+	// probe_type = "naive";
+	probe_type = ProbeType::sandwich_v1;
 	read_underlay(filename);
     read_overlay(file_overlay_nodes);
 	read_routing_map(route_name);
 	read_demands(demands_file);
-	set_background_type("PktPoisson");
-	probe_type = "naive";
 }
 
 void netw::read_underlay(std::string filename)
@@ -122,11 +123,28 @@ void netw::read_overlay(std::string file_overlay_nodes)
 		iss >> idx_node;
 		loc_overlay_nodes[idx_node] = true;
 	}
-	cnt_queuing.resize(n_overlay_nodes*(n_overlay_nodes-1));
 	tunnel_vec.resize(n_overlay_nodes*(n_overlay_nodes-1));
-	for (uint32_t i = 0; i < n_overlay_nodes*(n_overlay_nodes-1); i++)
+	switch (probe_type)
 	{
-		cnt_queuing[i].resize( _MAXPKTNUM, false );
+		case ProbeType::naive:
+		{
+			cnt_queuing.resize(n_overlay_nodes*(n_overlay_nodes-1));
+			for (uint32_t i = 0; i < n_overlay_nodes*(n_overlay_nodes-1); i++)
+			{
+				cnt_queuing[i].resize( _MAXPKTNUM, false );
+			}
+			break;
+		}
+		case ProbeType::sandwich_v1:
+		{
+			break;
+		}
+		default:
+		{
+			std::cout << "Wrong Probe Type Setting" << std::endl;
+			exit(-1);
+			break;
+		}
 	}
 	
 }

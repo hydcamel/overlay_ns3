@@ -308,24 +308,33 @@ namespace ns3
         tagToSend.SetIsProbe(1);
         ++meta->m_sent[m_local_ID][idx];
         std::vector<int> &routes = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx)];
-        if ( meta->probe_type.compare("naive") == 0 )
+        switch (meta->probe_type)
         {
-            Ptr<Packet> p;
-            p = Create<Packet>(ProbeSizeNaive);
-            m_txTrace(p);
-            p->AddPacketTag(tagToSend);
-            tab_socket[routes[1]]->Send(p);
-            if (is_run == true && meta->m_sent[m_local_ID][idx] < meta->_MAXPKTNUM)
+            case ProbeType::naive:
             {
-                ScheduleProbing(probe_interval, idx);
+                Ptr<Packet> p;
+                p = Create<Packet>(ProbeSizeNaive);
+                m_txTrace(p);
+                p->AddPacketTag(tagToSend);
+                tab_socket[routes[1]]->Send(p);
+                if (is_run == true && meta->m_sent[m_local_ID][idx] < meta->_MAXPKTNUM)
+                {
+                    ScheduleProbing(probe_interval, idx);
+                }
+                // ScheduleProbing(probe_interval, idx);
+                break;
             }
-            // ScheduleProbing(probe_interval, idx);
-        }
-        else
-        {
-            std::cout << "Wrong Background Type" << std::endl;
-            exit(-1);
-        }
+            case ProbeType::sandwich_v1:
+            {
+                
+            }
+            default:
+            {
+                std::cout << "Wrong Background Type" << std::endl;
+                exit(-1);
+                break;
+            }
+        };
     }
     void overlayApplication::ScheduleProbing(Time dt, uint32_t idx)
     {

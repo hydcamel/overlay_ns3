@@ -30,6 +30,11 @@
 namespace ns3
 {
 
+enum ProbeType
+{
+    naive = 1,
+    sandwich_v1 = 2
+};
 
 class netw
 {
@@ -53,7 +58,7 @@ public:
     uint16_t protocol_number = 150;
     double avg_pktSize = PrLBPkt*LBPKTSIZE + PrUBPkt*UBPKTSIZE + PrMEDPkt*MEDPKTSIZE;
     std::string background_type;
-    std::string probe_type;
+    ProbeType probe_type;
     // std::vector<Ptr<overlayApplication>>* vec_app;
     //std::vector<int> src, dest;
     //std::map<std::pair<int, int>, int> edges;
@@ -63,13 +68,15 @@ public:
     std::vector<std::pair<uint32_t, uint32_t>> tunnel_vec;
     std::vector<std::vector<bool>> adj_mat;
     std::vector<bool> loc_overlay_nodes;
-    std::vector<std::vector<bool>>  cnt_queuing;
     std::vector<std::vector<uint32_t>> m_sent;
     uint32_t n_nodes,n_edges, n_overlay_nodes;
     std::map<std::string, std::vector<int>> routing_map;
     std::map<std::string, uint32_t> tunnel_hashmap;
     std::unordered_map<std::string, int32_t> cnt_pkt;
     std::unordered_map<std::string, int32_t> cnt_congestion;
+
+    std::vector<std::vector<bool>>  cnt_queuing;
+    std::unordered_map<std::string, std::vector<double>> log_sandwich_v1;
 };
 
 //extern netw netw_meta;
