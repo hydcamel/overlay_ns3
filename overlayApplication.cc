@@ -345,9 +345,10 @@ namespace ns3
                 }
             }
         }
-        if (is_run == true)
+        m_sandwich_sent++;
+        if (is_run == true && m_sandwich_sent < meta->_MAXPKTNUM)
         {
-            /* code */
+            overlayApplication::ScheduleProbing(Seconds(0), 0);
         }
         
     }
@@ -362,13 +363,13 @@ namespace ns3
         {
             if (i == 0 || i == 2)
             {
-                SetTag(tagSandWich[i], m_local_ID, idx, 1, meta->m_sent[m_local_ID][idx], 1, 0, i);
+                SetTag(tagSandWich[i], m_local_ID, idx, 1, m_sandwich_sent, 1, 0, i, idx_large);
                 m_txTrace(p_sandwich[i]);
                 p_sandwich[i]->AddPacketTag(tagSandWich[i]);
             }
             else if (i == 1)
             {
-                SetTag(tagSandWich[i], m_local_ID, idx_large, 1, meta->m_sent[m_local_ID][idx], 1, 0, i);
+                SetTag(tagSandWich[i], m_local_ID, idx_large, 1, m_sandwich_sent, 1, 0, i, idx_large);
                 m_txTrace(p_sandwich[i]);
                 p_sandwich[i]->AddPacketTag(tagSandWich[i]);
             }
@@ -445,8 +446,23 @@ namespace ns3
             {
                 if (tagPktRecv.GetIsProbe() > 0)
                 {
-                    uint32_t idx_tunnel = meta->tunnel_hashmap[keys];
-                    meta->cnt_queuing[idx_tunnel][tagPktRecv.GetPktID()] = tagPktRecv.GetIsQueued();
+                    switch (meta->probe_type)
+                    {
+                        case ProbeType::naive:
+                        {
+                            uint32_t idx_tunnel = meta->tunnel_hashmap[keys];
+                            meta->cnt_queuing[idx_tunnel][tagPktRecv.GetPktID()] = tagPktRecv.GetIsQueued();
+                            break;
+                        }
+                        case ProbeType::sandwich_v1:
+                        {
+                            meta->update_log_sandwich_v1(tagPktRecv.GetSourceID(), tagPktRecv.GetDestID(), tagPktRecv.GetSandWichLargeID(), tagPktRecv.GetPktID());
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                    
                     // std::cout << m_local_ID << ": recv probe at " << Simulator::Now().As(Time::US) << " with " << keys << std::endl; 
                 }
                 /* if (tagPktRecv.GetIsProbe() == 0)
@@ -543,7 +559,7 @@ namespace ns3
             meta->cnt_congestion[std::to_string(src) + ' ' + std::to_string(dest)]++;
         }
     }
-    void overlayApplication::SetTag(SDtag& tagToUse, uint8_t SourceID, uint8_t DestID, uint8_t currentHop, uint32_t PktID, uint8_t IsProbe, uint8_t IsQueued, uint8_t SandWichID)
+    void overlayApplication::SetTag(SDtag& tagToUse, uint8_t SourceID, uint8_t DestID, uint8_t currentHop, uint32_t PktID, uint8_t IsProbe, uint8_t IsQueued, uint8_t SandWichID, uint8_t SandWichLargeID)
     {
         tagToUse.SetSourceID(SourceID);
         tagToUse.SetDestID(DestID);
@@ -552,5 +568,6 @@ namespace ns3
         tagToUse.SetIsQueued(IsQueued);
         tagToUse.SetSandWichID(SandWichID);
         tagToUse.SetIsProbe(IsProbe);
+        tagToUse.SetSandWichLargeID(SandWichLargeID);
     }
 }

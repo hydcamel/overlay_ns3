@@ -60,7 +60,7 @@ namespace ns3
         // void ScheduleTransmit(Time dt, uint16_t idx);
         // void Send(uint16_t idx);
 
-        void SetTag(SDtag& tagToUse, uint8_t SourceID, uint8_t DestID, uint8_t currentHop = 1, uint32_t PktID = 0, uint8_t IsProbe = 0, uint8_t IsQueued = 0, uint8_t SandWichID = 10);
+        void SetTag(SDtag& tagToUse, uint8_t SourceID, uint8_t DestID, uint8_t currentHop = 1, uint32_t PktID = 0, uint8_t IsProbe = 0, uint8_t IsQueued = 0, uint8_t SandWichID = 10, uint8_t SandWichLargeID=0);
 
         void ScheduleBackground(Time dt, uint32_t idx);
         void SendBackground(uint32_t idx);
@@ -88,6 +88,7 @@ namespace ns3
         std::vector<EventId> m_sendEvent; // background traffic
         std::vector<EventId> probe_event;
         uint16_t m_local_ID;
+        uint32_t m_sandwich_sent = 0;
         std::unordered_map<uint32_t, uint32_t> map_neighbor_device;
 
         TracedCallback<Ptr<const Packet>> m_txTrace;

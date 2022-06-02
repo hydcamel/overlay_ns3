@@ -5,6 +5,7 @@
 #include <map>
 #include <unordered_map>
 #include "ns3/ptr.h"
+#include "ns3/simulator.h"
 #include "ns3/nstime.h"
 // #include "overlayApplication.h"
 
@@ -54,9 +55,10 @@ public:
     // void register_vecApp(std::vector<Ptr<overlayApplication>>* input);
     void notify_pktLoss(uint32_t src, uint32_t dest, uint32_t valPktID);
     void set_background_type(std::string type_name);
+    void update_log_sandwich_v1(uint32_t SourceID, uint32_t DestID, uint32_t LargeID, uint32_t PktID);
 
     std::vector<int> w, bw, delay;
-    uint32_t _AppPktSize = 1024, _IPPktSize = 1052, _MACPktSize = 1054, _MAXPKTNUM = 2000, _MAXBACKLOG = 200000;
+    uint32_t _AppPktSize = 1024, _IPPktSize = 1052, _MACPktSize = 1054, _MAXPKTNUM = 30, _MAXBACKLOG = 200000;
     uint16_t protocol_number = 150;
     double avg_pktSize = PrLBPkt*LBPKTSIZE + PrUBPkt*UBPKTSIZE + PrMEDPkt*MEDPKTSIZE;
     std::string background_type;
@@ -78,7 +80,7 @@ public:
     std::unordered_map<std::string, int32_t> cnt_congestion;
 
     std::vector<std::vector<bool>>  cnt_queuing;
-    std::unordered_map<std::string, std::vector<double>> log_sandwich_v1;
+    std::unordered_map<std::string, std::vector<uint32_t>> log_sandwich_v1; // the length of the vector should be __MAXPKTNUM+1. for sandwithID.
 };
 
 //extern netw netw_meta;
