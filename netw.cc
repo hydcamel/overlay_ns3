@@ -269,12 +269,12 @@ void netw::update_log_sandwich_v1(uint32_t SourceID, uint32_t DestID, uint32_t L
 		if (log_sandwich_v1[key][0] == 1)
 		{
 			log_sandwich_v1[key][PktID+1] = Simulator::Now().GetMicroSeconds() - log_sandwich_v1[key][PktID+1];
-			log_sandwich_v1[key][0] == 0;
+			log_sandwich_v1[key][0] = 0;
 		}
 		else
 		{
 			log_sandwich_v1[key][PktID+1] = Simulator::Now().GetMicroSeconds();
-			log_sandwich_v1[key][0] == 1;
+			log_sandwich_v1[key][0] = 1;
 		}
 	}
 	

@@ -347,7 +347,7 @@ namespace ns3
                 {
                     if (meta->loc_overlay_nodes[j] == true)
                     {
-                        Simulator::Schedule(sandwich_interval, &overlayApplication::SendProbeSandWichV1, this);
+                        Simulator::Schedule(sandwich_interval, &overlayApplication::SendProbeSandWichV1, this, i, j);
                         // SendProbeSandWichV1(i, j);
                     }
                 }
