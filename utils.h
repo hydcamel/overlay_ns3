@@ -13,8 +13,8 @@
 namespace ns3
 {
 
-#define SRC 9
-#define DEST 14
+#define SRC 17
+#define DEST 3
 
 void receivePkt(Ptr<Socket> skt);
 void SendPacket (Ptr<Socket> socket, uint32_t pktSize,uint32_t pktCount, Time pktInterval, uint8_t SourceID, uint8_t DestID );

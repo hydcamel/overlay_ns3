@@ -34,6 +34,11 @@ namespace ns3
                                               TimeValue(MicroSeconds(100.0)),
                                               MakeTimeAccessor(&overlayApplication::probe_interval),
                                               MakeTimeChecker())
+                                .AddAttribute("sandwich_interval",
+                                              "The interval for sandwich probing",
+                                              TimeValue(MicroSeconds(10.0)),
+                                              MakeTimeAccessor(&overlayApplication::sandwich_interval),
+                                              MakeTimeChecker())
                                 /* .AddAttribute("RemoteAddress",
                                               "The destination Address of the outbound packets",
                                               AddressValue(),
@@ -301,7 +306,9 @@ namespace ns3
             }
             case ProbeType::sandwich_v1:
             {
-
+                Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable>();
+                Time random_offset = MicroSeconds(rand->GetValue(10, 50));
+                ScheduleProbing(random_offset, 0);
             }
             default:
             {
@@ -340,7 +347,8 @@ namespace ns3
                 {
                     if (meta->loc_overlay_nodes[j] == true)
                     {
-                        SendProbeSandWichV1(i, j);
+                        Simulator::Schedule(sandwich_interval, &overlayApplication::SendProbeSandWichV1, this);
+                        // SendProbeSandWichV1(i, j);
                     }
                 }
             }
@@ -348,7 +356,7 @@ namespace ns3
         m_sandwich_sent++;
         if (is_run == true && m_sandwich_sent < meta->_MAXPKTNUM)
         {
-            overlayApplication::ScheduleProbing(Seconds(0), 0);
+            overlayApplication::ScheduleProbing(probe_interval, 0);
         }
         
     }
@@ -364,17 +372,15 @@ namespace ns3
             if (i == 0 || i == 2)
             {
                 SetTag(tagSandWich[i], m_local_ID, idx, 1, m_sandwich_sent, 1, 0, i, idx_large);
-                m_txTrace(p_sandwich[i]);
-                p_sandwich[i]->AddPacketTag(tagSandWich[i]);
             }
             else if (i == 1)
             {
                 SetTag(tagSandWich[i], m_local_ID, idx_large, 1, m_sandwich_sent, 1, 0, i, idx_large);
-                m_txTrace(p_sandwich[i]);
-                p_sandwich[i]->AddPacketTag(tagSandWich[i]);
             }
+            m_txTrace(p_sandwich[i]);
+            p_sandwich[i]->AddPacketTag(tagSandWich[i]);
         }
-        ++meta->m_sent[m_local_ID][idx];
+        // ++meta->m_sent[m_local_ID][idx];
         std::vector<int> &routes = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx)];
         std::vector<int> &routes_large = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx_large)];
         tab_socket[routes[1]]->Send(p_sandwich[0]);
@@ -394,6 +400,7 @@ namespace ns3
             case ProbeType::sandwich_v1:
             {
                 Simulator::Schedule(dt, &overlayApplication::OrchestraSandWichV1, this);
+                break;
             }
             default:
             {
@@ -456,7 +463,8 @@ namespace ns3
                         }
                         case ProbeType::sandwich_v1:
                         {
-                            meta->update_log_sandwich_v1(tagPktRecv.GetSourceID(), tagPktRecv.GetDestID(), tagPktRecv.GetSandWichLargeID(), tagPktRecv.GetPktID());
+                            if (tagPktRecv.GetSandWichID() == 1){}
+                            else meta->update_log_sandwich_v1(tagPktRecv.GetSourceID(), tagPktRecv.GetDestID(), tagPktRecv.GetSandWichLargeID(), tagPktRecv.GetPktID());
                             break;
                         }
                         default:

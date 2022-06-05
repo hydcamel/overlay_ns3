@@ -11,6 +11,7 @@
 #include <vector>
 #include "utils.h"
 #include "netw.h"
+#include "SDtag.h"
 
 namespace ns3
 {
@@ -75,6 +76,7 @@ namespace ns3
 
         std::vector<uint32_t> m_count;
         Time probe_interval; // probe interval
+        Time sandwich_interval; // Interval for the sandwich probing
         uint32_t m_size;
         bool is_run = true;
 
