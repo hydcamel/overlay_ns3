@@ -1,4 +1,4 @@
-graph_name /vagrant/Documents/vagrant_shared_folder/Abvt.graph
-name_overlay_nodes /vagrant/Documents/vagrant_shared_folder/Abvt/overlay_LowDegree_0.txt
-name_demands /vagrant/Documents/vagrant_shared_folder/Abvt/tunnel_demands_LowDegree_constant_0_0.txt
-route_name /vagrant/Documents/vagrant_shared_folder/Abvt/route_table_LowDegree_constant_aware_0_0.txt
+graph_name /vagrant/Vagrant_shared_folder/Data/Abvt.graph
+name_overlay_nodes /vagrant/Vagrant_shared_folder/Data/Abvt/overlay_LowDegree_0.txt
+name_demands /vagrant/Vagrant_shared_folder/Data/Abvt/tunnel_demands_LowDegree_constant_0_0.txt
+route_name /vagrant/Vagrant_shared_folder/Data/Abvt/route_table_LowDegree_constant_aware_0_0.txt

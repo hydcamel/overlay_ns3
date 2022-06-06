@@ -23,7 +23,7 @@ using namespace ns3;
 // extern netw netw_meta;
 // netw netw_meta;
 
-NS_LOG_COMPONENT_DEFINE("p2pTestV1");
+NS_LOG_COMPONENT_DEFINE("CategoryQueue");
 
 void read_setup(std::string& name_underlay)
 {
@@ -69,8 +69,8 @@ void read_setup(std::string& name_underlay, std::string& demands_file, std::stri
 int main(int argc, char *argv[])
 {
     // Log information
-    LogComponentEnable("p2pTestV1", LOG_LEVEL_INFO);
-    LogComponentEnable("overlayApplication", LOG_LEVEL_INFO);
+    // LogComponentEnable("CategoryQueue", LOG_LEVEL_INFO);
+    // LogComponentEnable("overlayApplication", LOG_LEVEL_INFO);
 
     // std::string name_shared_folder {"/vagrant/Documents/vagrant_shared_folder/"};
     // std::string name_pwd {"/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/"};

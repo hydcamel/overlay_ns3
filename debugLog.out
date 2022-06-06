@@ -1,12 +1,8 @@
 Waf: Entering directory `/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/build'
+[963/968] Compiling netw.cc
 [964/968] Compiling overlayApplication.cc
-[968/968] Linking ../../build/scratch/CategoryQueue/CategoryQueue
+[965/968] Compiling utils.cc
+[966/968] Compiling SDtag.cc
+[967/968] Compiling CategoryQueue.cc
 Waf: Leaving directory `/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/build'
-Build commands will be stored in build/compile_commands.json
-'build' finished successfully (4.349s)
-underlay_file: /vagrant/Documents/vagrant_shared_folder/Abvt.graph
-overlay_file: /vagrant/Documents/vagrant_shared_folder/Abvt/overlay_LowDegree_0.txt
-route_table: /vagrant/Documents/vagrant_shared_folder/Abvt/route_table_LowDegree_constant_aware_0_0.txt
-read_demands: /vagrant/Documents/vagrant_shared_folder/Abvt/tunnel_demands_LowDegree_constant_0_0.txt
-Run Simulation.
-Command ['/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/build/scratch/CategoryQueue/CategoryQueue'] terminated with signal SIGSEGV. Run it under a debugger to get more information (./waf --run <program> --gdb").
+Interrupted 
