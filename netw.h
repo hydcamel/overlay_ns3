@@ -7,6 +7,7 @@
 #include "ns3/ptr.h"
 #include "ns3/simulator.h"
 #include "ns3/nstime.h"
+#include "utils.h"
 // #include "overlayApplication.h"
 
 // #define AppPktSize 1024
@@ -80,7 +81,7 @@ public:
     std::unordered_map<std::string, int32_t> cnt_congestion;
 
     std::vector<std::vector<bool>>  cnt_queuing;
-    std::unordered_map<std::string, std::vector<uint32_t>> log_sandwich_v1; // the length of the vector should be __MAXPKTNUM+1. for sandwithID.
+    std::unordered_map<std::string, std::vector<uint64_t>> log_sandwich_v1; // the length of the vector should be __MAXPKTNUM+1. for sandwithID.
 };
 
 //extern netw netw_meta;

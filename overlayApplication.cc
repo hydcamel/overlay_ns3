@@ -361,6 +361,36 @@ namespace ns3
         }
         
     }
+    void overlayApplication::SendSandWichFirstPatch(uint32_t idx, uint32_t idx_large, uint32_t PktID)
+    {
+        Ptr<Packet> p = Create<Packet>(ProbeSizeSWSmall);
+        SDtag tagSandWich;
+        SetTag(tagSandWich, m_local_ID, idx, 1, PktID, 1, 0, 0, idx_large);
+        m_txTrace(p);
+        p->AddPacketTag(tagSandWich);
+        std::vector<int> &routes = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx)];
+        tab_socket[routes[1]]->Send(p);
+        Simulator::Schedule(sandwich_interval, &overlayApplication::SendSandWichSecondPatch, this, idx, idx_large, PktID);
+    }
+    void overlayApplication::SendSandWichSecondPatch(uint32_t idx, uint32_t idx_large, uint32_t PktID)
+    {
+        Ptr<Packet> pLarge = Create<Packet>(ProbeSizeSWlarge);
+        Ptr<Packet> pSmall = Create<Packet>(ProbeSizeSWSmall);
+        SDtag tagSmall, tagLarge;
+        SetTag(tagSmall, m_local_ID, idx, 1, PktID, 1, 0, 2, idx_large);
+        SetTag(tagLarge, m_local_ID, idx_large, 1, PktID, 1, 0, 1, idx_large);
+        m_txTrace(pLarge);
+        m_txTrace(pSmall);
+        pSmall->AddPacketTag(tagSmall);
+        pLarge->AddPacketTag(tagLarge);
+        std::vector<int> &routes = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx)];
+        std::vector<int> &routes_large = meta->routing_map[std::to_string(m_local_ID) + " " + std::to_string(idx_large)];
+        tab_socket[routes[1]]->Send(pSmall);
+        tab_socket[routes_large[1]]->Send(pLarge);
+        Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable>();
+        Time random_offset = MicroSeconds(rand->GetValue(50, 200));
+        Simulator::Schedule(random_offset, &overlayApplication::SendSandWichFirstPatch, this, idx, idx_large, PktID+1);
+    }
     void overlayApplication::SendProbeSandWichV1(uint32_t idx, uint32_t idx_large)
     {
         std::vector<Ptr<Packet>> p_sandwich (3);
@@ -464,6 +494,10 @@ namespace ns3
                         }
                         case ProbeType::sandwich_v1:
                         {
+                            if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetSandWichLargeID() == 4)
+                            {
+                                std::cout << SRC << " - " << DEST << " with large: " << 4 << " -PktID=" << tagPktRecv.GetPktID() << " sandwithID = " << (uint32_t)tagPktRecv.GetSandWichID() << ": " << Simulator::Now().GetMicroSeconds() << std::endl;
+                            }
                             if (tagPktRecv.GetSandWichID() == 1){}
                             else meta->update_log_sandwich_v1(tagPktRecv.GetSourceID(), tagPktRecv.GetDestID(), tagPktRecv.GetSandWichLargeID(), tagPktRecv.GetPktID());
                             break;
@@ -503,12 +537,12 @@ namespace ns3
     {
         NS_LOG_FUNCTION(this);
         is_run = false;
-        if (m_local_ID == 0)
+        /* if (m_local_ID == 0)
         {
             // meta->write_average_delay("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/average_delay.txt");
             // meta->write_congestion_cnt("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/congestion_cnt.txt");
             meta->write_queuing_cnt("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/queuing_cnt.txt");
-        }
+        } */
 
         // std::cout << "Node ID: " << m_local_ID << " stop Application" << std::endl;
         for (uint32_t i = 0; i < tab_socket.size(); i++)

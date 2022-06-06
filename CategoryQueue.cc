@@ -114,8 +114,8 @@ int main(int argc, char *argv[])
     fact.SetTypeId("ns3::overlayApplication");
     fact.Set("RemotePort", UintegerValue(LISTENPORT));
     fact.Set("ListenPort", UintegerValue(LISTENPORT));
-    fact.Set("probe_interval", TimeValue(MicroSeconds(100.0)));
-    fact.Set("sandwich_interval", TimeValue(MicroSeconds(10.0)));
+    fact.Set("probe_interval", TimeValue(MicroSeconds(200.0)));
+    fact.Set("sandwich_interval", TimeValue(MicroSeconds(100.0))); // Interval between the first and second patch of the sandwich
     // fact.Set ("MaxPackets", UintegerValue (1));
     fact.Set("PacketSize", UintegerValue(netw_meta._AppPktSize));
     for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
@@ -231,11 +231,11 @@ int main(int argc, char *argv[])
     // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/Tx", MakeCallback(&txTraceIpv4) );
     // // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/LocalDeliver", MakeCallback(&LocalDeliver) );
 
-    Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTx", MakeCallback(&p2pDevMacTx) );
+    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTx", MakeCallback(&p2pDevMacTx) );
     // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacRx", MakeCallback(&p2pDevMacRx) );
     // // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTxDrop", MakeCallback(&p2pDevMacRx) );
 
-    Config::Connect( "/NodeList/0/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxBegin", MakeCallback(&trace_PhyTxBegin) );
+    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxBegin", MakeCallback(&trace_PhyTxBegin) );
     // Config::Connect( "/NodeList/0/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxEnd", MakeCallback(&trace_PhyTxEnd) );
     // // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyRxEnd", MakeCallback(&trace_PhyRxEnd) );
 

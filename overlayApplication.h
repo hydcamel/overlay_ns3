@@ -70,6 +70,8 @@ namespace ns3
         void ScheduleProbing(Time dt, uint32_t idx);
         void SendProbeNaive(uint32_t idx);
         void SendProbeSandWichV1(uint32_t idx, uint32_t idx_large);
+        void SendSandWichFirstPatch(uint32_t idx, uint32_t idx_large, uint32_t PktID);
+        void SendSandWichSecondPatch(uint32_t idx, uint32_t idx_large, uint32_t PktID);
         void OrchestraSandWichV1(void);
 
         void HandleRead(Ptr<Socket> socket);

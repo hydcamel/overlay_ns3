@@ -258,9 +258,14 @@ void netw::update_log_sandwich_v1(uint32_t SourceID, uint32_t DestID, uint32_t L
 	uint32_t tunnel1_ID = tunnel_hashmap[std::to_string(SourceID) + ' ' + std::to_string(DestID)];
 	uint32_t tunnel2_ID = tunnel_hashmap[std::to_string(SourceID) + ' ' + std::to_string(LargeID)];
 	std::string key {std::to_string(tunnel1_ID) + ' ' + std::to_string(tunnel2_ID)};
+	if (SourceID == SRC && DestID == DEST && LargeID == 4)
+	{
+		std::cout << SourceID << " - " << DestID << " with large: " << LargeID << " -PktID=" << PktID << Simulator::Now().GetMicroSeconds() << std::endl;
+	}
+	
 	if (log_sandwich_v1.count(key) == 0)
 	{
-		log_sandwich_v1.insert( std::pair<std::string, std::vector<uint32_t>>(key, std::vector<uint32_t>(_MAXPKTNUM+1, 0)) );
+		log_sandwich_v1.insert( std::pair<std::string, std::vector<uint64_t>>(key, std::vector<uint64_t>(_MAXPKTNUM+1, 0)) );
 		log_sandwich_v1[key][0] = 1;
 		log_sandwich_v1[key][PktID+1] = Simulator::Now().GetMicroSeconds();
 	}
