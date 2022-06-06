@@ -1,21 +1,12 @@
 Waf: Entering directory `/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/build'
-[963/968] Compiling netw.cc
 [964/968] Compiling overlayApplication.cc
-In file included from ./ns3/simulator.h:26:0,
-                 from ./ns3/ipv4-list-routing.h:24,
-                 from ./ns3/ipv4-routing-helper.h:27,
-                 from ./ns3/ipv4-global-routing-helper.h:24,
-                 from ../scratch/CategoryQueue/utils.h:7,
-                 from ../scratch/CategoryQueue/overlayApplication.h:12,
-                 from ../scratch/CategoryQueue/overlayApplication.cc:1:
-./ns3/make-event.h: In instantiation of ‘void ns3::MakeEvent(MEM, OBJ)::EventMemberImpl0::Notify() [with MEM = void (ns3::overlayApplication::*)(unsigned int, unsigned int); OBJ = ns3::overlayApplication*]’:
-./ns3/make-event.h:379:3:   required from ‘ns3::EventImpl* ns3::MakeEvent(MEM, OBJ) [with MEM = void (ns3::overlayApplication::*)(unsigned int, unsigned int); OBJ = ns3::overlayApplication*]’
-./ns3/simulator.h:559:39:   required from ‘static ns3::EventId ns3::Simulator::Schedule(const ns3::Time&, FUNC, Ts&& ...) [with FUNC = void (ns3::overlayApplication::*)(unsigned int, unsigned int); typename std::enable_if<(! std::is_convertible<FUNC, ns3::Ptr<ns3::EventImpl> >::value), int>::type <anonymous> = 0; typename std::enable_if<(! std::is_function<typename std::remove_pointer<_Tp>::type>::value), int>::type <anonymous> = 0; Ts = {ns3::overlayApplication*}]’
-../scratch/CategoryQueue/overlayApplication.cc:350:110:   required from here
-./ns3/make-event.h:375:72: error: too few arguments to function
-       (EventMemberImplObjTraits<OBJ>::GetReference (m_obj).*m_function)();
-       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
-
+[968/968] Linking ../../build/scratch/CategoryQueue/CategoryQueue
 Waf: Leaving directory `/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/build'
-Build failed
- -> task in 'CategoryQueue' failed with exit status 1 (run with -v to display more information)
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (4.349s)
+underlay_file: /vagrant/Documents/vagrant_shared_folder/Abvt.graph
+overlay_file: /vagrant/Documents/vagrant_shared_folder/Abvt/overlay_LowDegree_0.txt
+route_table: /vagrant/Documents/vagrant_shared_folder/Abvt/route_table_LowDegree_constant_aware_0_0.txt
+read_demands: /vagrant/Documents/vagrant_shared_folder/Abvt/tunnel_demands_LowDegree_constant_0_0.txt
+Run Simulation.
+Command ['/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/build/scratch/CategoryQueue/CategoryQueue'] terminated with signal SIGSEGV. Run it under a debugger to get more information (./waf --run <program> --gdb").

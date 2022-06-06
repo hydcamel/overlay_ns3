@@ -286,37 +286,37 @@ namespace ns3
         /**
          * Set up probing flows
          **/
-        switch (meta->probe_type)
+        if (meta->loc_overlay_nodes[GetLocalID()] == true) // only if self is overlay, it can schedule probing
         {
-            case ProbeType::naive:
+            switch (meta->probe_type)
             {
-                if (meta->loc_overlay_nodes[GetLocalID()] == true) // only if self is overlay, it can schedule probing
+                case ProbeType::naive:
                 {
-                    for (uint32_t i = 0; i < meta->n_nodes; i++)
-                    {
-                        if (meta->loc_overlay_nodes[i] == true) // target i
+                        for (uint32_t i = 0; i < meta->n_nodes; i++)
                         {
-                            if (meta->tunnel_hashmap.count(std::to_string(m_local_ID) + ' ' + std::to_string(i)) == 0)
-                                continue; // no such tunnel
-                            ScheduleProbing(Time(Seconds(0)), i);
+                            if (meta->loc_overlay_nodes[i] == true) // target i
+                            {
+                                if (meta->tunnel_hashmap.count(std::to_string(m_local_ID) + ' ' + std::to_string(i)) == 0)
+                                    continue; // no such tunnel
+                                ScheduleProbing(Time(Seconds(0)), i);
+                            }
                         }
-                    }
+                    break;
                 }
-                break;
-            }
-            case ProbeType::sandwich_v1:
-            {
-                Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable>();
-                Time random_offset = MicroSeconds(rand->GetValue(10, 50));
-                ScheduleProbing(random_offset, 0);
-            }
-            default:
-            {
-                std::cout << "wrong probe types at StartApplication" << std::endl;
-                break;
+                case ProbeType::sandwich_v1:
+                {
+                    Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable>();
+                    Time random_offset = MicroSeconds(rand->GetValue(10, 50));
+                    ScheduleProbing(random_offset, 0);
+                    break;
+                }
+                default:
+                {
+                    std::cout << "wrong probe types at StartApplication" << std::endl;
+                    break;
+                }
             }
         }
-        
     }
     
     void overlayApplication::SendProbeNaive(uint32_t idx)
@@ -341,12 +341,13 @@ namespace ns3
     {
         for (uint32_t i = 0; i < meta->n_nodes; i++)
         {
-            if (meta->loc_overlay_nodes[i] == true) // target i is an overlay node
+            if (meta->loc_overlay_nodes[i] == true && i != m_local_ID) // target i is an overlay node
             {
-                for (uint32_t j = i+1; i < meta->n_nodes; i++)
+                for (uint32_t j = i+1; j < meta->n_nodes; j++)
                 {
-                    if (meta->loc_overlay_nodes[j] == true)
+                    if (meta->loc_overlay_nodes[j] == true && j != m_local_ID)
                     {
+                        // std::cout << m_local_ID << ": " << i << " - " << j << ""
                         Simulator::Schedule(sandwich_interval, &overlayApplication::SendProbeSandWichV1, this, i, j);
                         // SendProbeSandWichV1(i, j);
                     }

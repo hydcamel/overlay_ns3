@@ -37,7 +37,7 @@ void p2pDevMacTx(std::string context, Ptr<const Packet> packet){
     } */
     if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetIsProbe()>0 && tagPktRecv.GetSandWichLargeID() == 4)
     {
-        std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << " sdID=" << tagPktRecv.GetSandWichID() << std::endl;
+        std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << " sdID=" << (uint32_t)tagPktRecv.GetSandWichID() << std::endl;
     }
     
     // std::cout << context << "\t" << Now() << ": packet sent from NetDev with size: " << packet->GetSize() << std::endl;
@@ -68,7 +68,7 @@ void trace_PhyTxBegin(std::string context, Ptr<const Packet> packet){
 
     if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetIsProbe()>0 && tagPktRecv.GetSandWichLargeID() == 4)
     {
-        std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << " sdID=" << tagPktRecv.GetSandWichID() << std::endl;
+        std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << " sdID=" << (uint32_t)tagPktRecv.GetSandWichID() << std::endl;
     }
 }
 void trace_PhyTxEnd(std::string context, Ptr<const Packet> packet){
