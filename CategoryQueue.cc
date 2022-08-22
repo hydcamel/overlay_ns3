@@ -69,7 +69,7 @@ void read_setup(std::string& name_underlay, std::string& demands_file, std::stri
 int main(int argc, char *argv[])
 {
     // Log information
-    // LogComponentEnable("CategoryQueue", LOG_LEVEL_INFO);
+    LogComponentEnable("CategoryQueue", LOG_LEVEL_INFO);
     // LogComponentEnable("overlayApplication", LOG_LEVEL_INFO);
 
     // std::string name_shared_folder {"/vagrant/Documents/vagrant_shared_folder/"};
