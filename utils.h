@@ -16,6 +16,15 @@ namespace ns3
 #define SRC 17
 #define DEST 3
 
+typedef struct name_files
+{
+    std::string netw_filename;
+    std::string demands_file;
+    std::string file_overlay_nodes;
+    std::string route_name;
+    std::string probe_setup_filename;
+}name_input_files;
+
 void receivePkt(Ptr<Socket> skt);
 void SendPacket (Ptr<Socket> socket, uint32_t pktSize,uint32_t pktCount, Time pktInterval, uint8_t SourceID, uint8_t DestID );
 void rxTraceIpv4(std::string context, Ptr<const Packet> packet, Ptr<Ipv4> ptr_ipv4, uint32_t dontknow);

@@ -37,9 +37,9 @@ void read_setup(std::string& name_underlay)
     name_underlay = temp;
 }
 
-void read_setup(std::string& name_underlay, std::string& demands_file, std::string& file_overlay_nodes, std::string& route_name)
+void read_setup(name_input_files &input_fd)
 {
-    std::ifstream infile("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/setup.txt");
+    std::ifstream infile("/export/home/Yudi_Huang/ns-allinone-3.36.1/ns-3.36.1/scratch/CategoryQueue/setup.txt");
     std::string line;
     std::string temp;
 
@@ -49,19 +49,23 @@ void read_setup(std::string& name_underlay, std::string& demands_file, std::stri
         iss >> temp ;
         if (temp.compare("graph_name") == 0)
         {
-            iss >> name_underlay;
+            iss >> input_fd->name_underlay;
         }
         else if (temp.compare("name_overlay_nodes") == 0)
         {
-            iss >> file_overlay_nodes;
+            iss >> input_fd->file_overlay_nodes;
         }
         else if (temp.compare("name_demands") == 0)
         {
-            iss >> demands_file;
+            iss >> input_fd->demands_file;
         }
         else if (temp.compare("route_name") == 0)
         {
-            iss >> route_name;
+            iss >> input_fd->route_name;
+        }
+        else if (temp.compare("probe_setup_filename") == 0)
+        {
+            iss >> input_fd->probe_setup_filename;
         }
     }
 }
@@ -69,7 +73,7 @@ void read_setup(std::string& name_underlay, std::string& demands_file, std::stri
 int main(int argc, char *argv[])
 {
     // Log information
-    LogComponentEnable("CategoryQueue", LOG_LEVEL_INFO);
+    // LogComponentEnable("CategoryQueue", LOG_LEVEL_INFO);
     // LogComponentEnable("overlayApplication", LOG_LEVEL_INFO);
 
     // std::string name_shared_folder {"/vagrant/Documents/vagrant_shared_folder/"};
@@ -88,8 +92,10 @@ int main(int argc, char *argv[])
     
     // netw netw_meta(netw_filename, demands_file);
 
-    std::string netw_filename, demands_file, file_overlay_nodes, route_name;
-    read_setup(netw_filename, demands_file, file_overlay_nodes, route_name);
+    name_input_files struct_filenames;
+
+    // std::string netw_filename, demands_file, file_overlay_nodes, route_name;
+    // read_setup(netw_filename, demands_file, file_overlay_nodes, route_name);
     netw netw_meta(netw_filename, demands_file, file_overlay_nodes, route_name);
     
 
