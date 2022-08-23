@@ -35,6 +35,8 @@ for idx_topo in idx_topology_list:
             # Proposed:
             name_demands = foldername+"tunnel_demands_"+ overlay_generation_method+ "_" + create_type+  "_"+ str(idx_overlay) + "_"+ str(idx_demand)+ ".txt"
             route_aware_name = foldername+"route_table_" + overlay_generation_method+"_" + create_type+ "_" + "aware_"+ str(idx_overlay) + "_"+ str(idx_demand)+ ".txt"
+            # probing
+            E_cur = 
             py_utils.write_setup("setup.txt", "graph_name " + graph_name, "name_overlay_nodes " + name_overlay_nodes, "name_demands " + name_demands, "route_name " + route_aware_name)
             # os.system("../.././waf --run MinCostFixRate")
             # delay_aware = py_utils.read_results(file_name="average_delay.txt", tunnel_list=tunnel_list)
