@@ -1,4 +1,4 @@
 #!/bin/bash
 git add .
 git commit -m "sync"
-git push origin CategoryQueue
+git push origin Category_inference
