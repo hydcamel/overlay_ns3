@@ -7,6 +7,21 @@
 namespace ns3
 {
 
+NS_LOG_COMPONENT_DEFINE("netw");
+NS_OBJECT_ENSURE_REGISTERED(netw);
+
+TypeId netw::GetTypeId (void)
+{
+	static TypeId tid = TypeId ("ns3::netw")
+		.SetParent<Object> ()
+		.AddConstructor<netw> ();
+	return tid;
+}
+TypeId netw::GetInstanceTypeId (void) const
+{
+  	return netw::GetTypeId ();
+}
+
 netw::netw(std::string filename, std::string demands_file, std::string file_overlay_nodes, std::string route_name)
 {
 	set_background_type(CrossType::PktPoisson);

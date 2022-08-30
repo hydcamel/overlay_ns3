@@ -12,4 +12,46 @@
 #include "utils.h"
 #include "netw.h"
 
+namespace ns3
+{
+
+class Socket;
+class Packet;
+
+class overlayApplication : public Application
+{
+public:
+    static TypeId GetTypeId(void);
+    virtual TypeId GetInstanceTypeId(void) const;
+
+    /** Init **/
+    overlayApplication();
+    virtual ~overlayApplication();
+    void InitApp(netw* meta, uint32_t localId, uint32_t MaxPktSize);
+    void SetLocalID(uint32_t localID);
+    uint32_t GetLocalID(void) const;
+
+    bool is_overlay;
+private:
+    /** probing **/
+    Time probe_interval; // probe interval
+    Time sandwich_interval; // Interval for the sandwich probing
+    std::vector<EventId> m_sendEvent; // background traffic
+    std::vector<EventId> probe_event;
+    /** connection **/
+    uint16_t m_peerPort;
+    uint16_t ListenPort;
+    std::vector<Ptr<Socket>> tab_socket;
+    Ptr<Socket> recv_socket;
+    std::unordered_map<uint32_t, uint32_t> map_neighbor_device; // <idx_neighbor, deviceID>
+    /** Basic Meta **/
+    netw* meta;
+    bool is_run = true;
+    uint16_t m_local_ID;
+    
+};
+
+
+}
+
 #endif

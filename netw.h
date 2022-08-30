@@ -42,6 +42,8 @@ enum CrossType
 class netw
 {
 public:
+    static TypeId GetTypeId(void);
+	virtual TypeId GetInstanceTypeId(void) const;
     netw(std::string filename, std::string demands_file, std::string file_overlay_nodes, std::string route_name);
     ~netw();
     void read_routing_map(std::string filename);
