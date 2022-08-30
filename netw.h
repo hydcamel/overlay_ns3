@@ -45,11 +45,13 @@ public:
     static TypeId GetTypeId(void);
 	virtual TypeId GetInstanceTypeId(void) const;
     netw(std::string filename, std::string demands_file, std::string file_overlay_nodes, std::string route_name);
+    netw(name_input_files &fd_setup);
     ~netw();
     void read_routing_map(std::string filename);
     void read_underlay(std::string filename);
     void read_overlay(std::string file_overlay_nodes);
-    void read_demands(std::string filename); // for probing, this will contain the probing rate profile
+    void read_demands(std::string filename); 
+    void read_probe_profile(std::string filename); // for probing, this will contain the probing rate profile: microsecond (us, 1e-6) 
 
     /**
      * underlay network
@@ -72,8 +74,9 @@ public:
     /**
      * probing 
      **/
-    uint32_t _AppPktSize = 1024, _IPPktSize = 1052, _MACPktSize = 1054, _MAXPKTNUM = 3, _MAXBACKLOG = 200000;
+    uint32_t _AppPktSize = 1024, _IPPktSize = 1052, _MACPktSize = 1054, _NormPktSize = 46, _MAXPKTNUM = 3, _MAXBACKLOG = 200000;
     uint16_t protocol_number = 150;
+    std::vector<double> probe_normal_interval;
     double avg_pktSize = PrLBPkt*LBPKTSIZE + PrUBPkt*UBPKTSIZE + PrMEDPkt*MEDPKTSIZE;
     std::vector<uint32_t> background_interval; // microseconds
     void set_background_type(CrossType);

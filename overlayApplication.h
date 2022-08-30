@@ -33,6 +33,10 @@ public:
 
     /** Connection **/
     void SetSocket(Address ip, uint32_t idx, uint32_t deviceID);
+    void SetRecvSocket(void);
+    
+    /** Functions **/
+    void HandleRead(Ptr<Socket> socket);
 
     bool is_overlay;
 protected:
@@ -40,7 +44,7 @@ protected:
 private:
     /** probing **/
     Time probe_interval; // probe interval
-    Time sandwich_interval; // Interval for the sandwich probing
+    Time sandwich_interval; // Interval for the sandwich probing -- microsecond (us, 1e-6) 
     std::vector<EventId> m_sendEvent; // background traffic
     std::vector<EventId> probe_event;
     /** connection **/

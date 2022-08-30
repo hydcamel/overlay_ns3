@@ -36,6 +36,7 @@ int main (int argc, char *argv[])
     // set simulation time and mobility
     double simTime = 1; // seconds
     double udpAppStartTime = 0.4; //seconds
+    double stop_time = 100.0; // seconds
 
     //RAN-related simulation parameters default values
     if (ran)
@@ -85,7 +86,7 @@ int main (int argc, char *argv[])
         vec_app[i] = fact.Create<overlayApplication>();
         vec_app[i]->InitApp(&netw_meta, i, netw_meta._MAXPKTNUM);
         vec_app[i]->SetStartTime(Seconds(0));
-        vec_app[i]->SetStopTime(MilliSeconds(stop_time));
+        vec_app[i]->SetStopTime(Seconds(stop_time));
         underlayNodes.Get(i)->AddApplication(vec_app[i]);
         vec_app[i]->SetRecvSocket();
     }

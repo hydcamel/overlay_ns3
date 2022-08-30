@@ -152,6 +152,93 @@ void overlayApplication::SetSocket(Address ip, uint32_t idx, uint32_t deviceID)
         std::cout << "create an existing socket" << std::endl;
     }
 }
+void overlayApplication::SetRecvSocket(void)
+{
+    /**
+     * Set up socket for forwarding
+     **/
+    TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
+    recv_socket = Socket::CreateSocket(GetNode(), tid);
+    InetSocketAddress local = InetSocketAddress(Ipv4Address::GetAny(), ListenPort);
+    if (recv_socket->Bind(local) == -1)
+    {
+        NS_FATAL_ERROR("Failed to bind socket");
+    }
+    recv_socket->SetRecvCallback(MakeCallback(&overlayApplication::HandleRead, this));
+}
+
+void overlayApplication::HandleRead(Ptr<Socket> socket)
+    {
+        NS_LOG_FUNCTION(this << socket);
+
+        Ptr<Packet> packet;
+        Address from;
+        Address localAddress;
+        while ((packet = socket->RecvFrom(from)))
+        {
+            socket->GetSockName(localAddress);
+            m_rxTrace(packet);
+            m_rxTraceWithAddresses(packet, from, localAddress);
+
+            // std::cout << "Node ID: " << m_local_ID << "; pkt received" << std::endl;
+            SDtag tagPktRecv;
+            packet->PeekPacketTag(tagPktRecv);
+            std::string keys{std::to_string(tagPktRecv.GetSourceID()) + ' ' + std::to_string(tagPktRecv.GetDestID())};
+
+            std::vector<int> &routes = meta->routing_map[keys];
+            
+            if (tagPktRecv.GetDestID() == GetLocalID())
+            {
+                if (tagPktRecv.GetIsProbe() > 0)
+                {
+                    switch (meta->probe_type)
+                    {
+                        case ProbeType::naive:
+                        {
+                            uint32_t idx_tunnel = meta->tunnel_hashmap[keys];
+                            meta->cnt_queuing[idx_tunnel][tagPktRecv.GetPktID()] = tagPktRecv.GetIsQueued();
+                            break;
+                        }
+                        case ProbeType::sandwich_v1:
+                        {
+                            if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetSandWichLargeID() == 4)
+                            {
+                                std::cout << SRC << " - " << DEST << " with large: " << 4 << " -PktID=" << tagPktRecv.GetPktID() << " sandwithID = " << (uint32_t)tagPktRecv.GetSandWichID() << ": " << Simulator::Now().GetMicroSeconds() << std::endl;
+                            }
+                            if (tagPktRecv.GetSandWichID() == 1){}
+                            else meta->update_log_sandwich_v1(tagPktRecv.GetSourceID(), tagPktRecv.GetDestID(), tagPktRecv.GetSandWichLargeID(), tagPktRecv.GetPktID());
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                    
+                    // std::cout << m_local_ID << ": recv probe at " << Simulator::Now().As(Time::US) << " with " << keys << std::endl; 
+                }
+                /* if (tagPktRecv.GetIsProbe() == 0)
+                {
+                    std::cout << m_local_ID << ": recv background at " << Simulator::Now().As(Time::US) << " with " << keys << std::endl; 
+                } */
+            }
+            else
+            {
+                // std::cout << "Source ID: " << (uint32_t)tagPktRecv.GetSourceID() << ", target ID: " << (uint32_t)tagPktRecv.GetDestID() << ", this hop" << m_local_ID << ", next hop" << routes[tagPktRecv.GetCurrentHop() + 1] << std::endl;
+                assert(routes[tagPktRecv.GetCurrentHop()] == m_local_ID);
+                /* if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
+                {
+                    std::cout << "Node ID: " << m_local_ID << " forward at: " << Simulator::Now().ToDouble(Time::US) << std::endl;
+                } */
+                
+                if ( CheckCongestion(map_neighbor_device[routes[tagPktRecv.GetCurrentHop()+1]], (uint32_t)tagPktRecv.GetSourceID(), (uint32_t)tagPktRecv.GetDestID(), (uint16_t)tagPktRecv.GetPktID()) )
+                {
+                    tagPktRecv.SetIsQueued(1);
+                }
+                tagPktRecv.AddCurrentHop();
+                packet->ReplacePacketTag(tagPktRecv);
+                tab_socket[routes[tagPktRecv.GetCurrentHop()]]->Send(packet);
+            }
+        }
+    }
 
 
 }

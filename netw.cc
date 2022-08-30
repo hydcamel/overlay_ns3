@@ -31,6 +31,16 @@ netw::netw(std::string filename, std::string demands_file, std::string file_over
 	read_routing_map(route_name);
 	read_demands(demands_file);
 }
+netw::netw(name_input_files &fd_setup)
+{
+	set_background_type(CrossType::PktPoisson);
+	probe_type = ProbeType::sandwich_v1;
+	read_underlay(fd_setup.netw_filename);
+    read_overlay(fd_setup.file_overlay_nodes);
+	read_routing_map(fd_setup.route_name);
+	read_demands(fd_setup.demands_file);
+	read_probe_profile(fd_setup.probe_setup_filename);
+}
 
 void netw::read_underlay(std::string filename)
 {
@@ -185,6 +195,7 @@ void netw::read_routing_map(std::string filename)
 
 			tunnel_hashmap.insert( std::pair<std::string, uint32_t>(key, idx_iter) );
 			tunnel_vec[idx_iter] = std::pair<int, int>(src, dest);
+			probe_normal_interval[idx_iter] = 0;
 			cnt_pkt.insert( std::pair<std::string, uint32_t>(key, 0) );
 			cnt_congestion.insert( std::pair<std::string, uint32_t>(key, 0) );
 			++idx_iter;
@@ -206,6 +217,23 @@ void netw::read_demands(std::string filename)
 		iss >> src >> dest >> demand_val;
 		cnt_pkt.insert( std::pair<std::string, uint32_t>(std::to_string(src) + " " + std::to_string(dest), 0) );
 		cnt_congestion.insert( std::pair<std::string, uint32_t>(std::to_string(src) + " " + std::to_string(dest), 0) );
+	}
+}
+void netw::read_probe_profile(std::string filename)
+{
+	std::ifstream infile(filename);
+    std::string line;
+	int src, dest;
+	double probe_interval; //microsecond (us, 1e-6) 
+	std::cout << "read_probe_interval: " << filename << std::endl;
+	uint32_t idx = 0;
+
+	while (getline(infile, line))
+	{
+		std::istringstream iss(line);
+		iss >> src >> dest >> probe_interval;
+		probe_normal_interval[idx] = probe_interval;
+		idx++;
 	}
 }
 
