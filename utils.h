@@ -13,6 +13,9 @@
 
 using namespace ns3;
 
+#define SRC 17
+#define DEST 3
+
 typedef struct name_files
 {
     std::string netw_filename;

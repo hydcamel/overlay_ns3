@@ -13,7 +13,7 @@
 #include "ns3/random-variable-stream.h"
 #include "ns3/trace-source-accessor.h"
 #include "ns3/point-to-point-module.h"
-// #include "SDtag.h"
+#include "SDtag.h"
 #include <assert.h>
 #include "netw.h"
 
@@ -177,13 +177,14 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
         while ((packet = socket->RecvFrom(from)))
         {
             socket->GetSockName(localAddress);
-            m_rxTrace(packet);
-            m_rxTraceWithAddresses(packet, from, localAddress);
+            // m_rxTrace(packet);
+            // m_rxTraceWithAddresses(packet, from, localAddress);
 
             // std::cout << "Node ID: " << m_local_ID << "; pkt received" << std::endl;
             SDtag tagPktRecv;
             packet->PeekPacketTag(tagPktRecv);
             std::string keys{std::to_string(tagPktRecv.GetSourceID()) + ' ' + std::to_string(tagPktRecv.GetDestID())};
+            // NS_LOG_INFO("Node ID: " << m_local_ID << "; pkt received -- " << keys);
 
             std::vector<int> &routes = meta->routing_map[keys];
             
@@ -201,19 +202,18 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                         }
                         case ProbeType::sandwich_v1:
                         {
-                            if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetSandWichLargeID() == 4)
-                            {
-                                std::cout << SRC << " - " << DEST << " with large: " << 4 << " -PktID=" << tagPktRecv.GetPktID() << " sandwithID = " << (uint32_t)tagPktRecv.GetSandWichID() << ": " << Simulator::Now().GetMicroSeconds() << std::endl;
-                            }
-                            if (tagPktRecv.GetSandWichID() == 1){}
-                            else meta->update_log_sandwich_v1(tagPktRecv.GetSourceID(), tagPktRecv.GetDestID(), tagPktRecv.GetSandWichLargeID(), tagPktRecv.GetPktID());
+                            // if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetSandWichLargeID() == 4)
+                            // {
+                            //     std::cout << SRC << " - " << DEST << " with large: " << 4 << " -PktID=" << tagPktRecv.GetPktID() << " sandwithID = " << (uint32_t)tagPktRecv.GetSandWichID() << ": " << Simulator::Now().GetMicroSeconds() << std::endl;
+                            // }
+                            // if (tagPktRecv.GetSandWichID() == 1){}
+                            // else meta->update_log_sandwich_v1(tagPktRecv.GetSourceID(), tagPktRecv.GetDestID(), tagPktRecv.GetSandWichLargeID(), tagPktRecv.GetPktID());
                             break;
                         }
                         default:
                             break;
                     }
-                    
-                    // std::cout << m_local_ID << ": recv probe at " << Simulator::Now().As(Time::US) << " with " << keys << std::endl; 
+                    // NS_LOG_INFO(m_local_ID << ": recv probe at " << Simulator::Now().As(Time::US) << " with " << keys);
                 }
                 /* if (tagPktRecv.GetIsProbe() == 0)
                 {

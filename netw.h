@@ -86,7 +86,8 @@ public:
      * data collection
      **/
     std::unordered_map<std::string, int32_t> cnt_pkt;
-    std::unordered_map<std::string, int32_t> cnt_congestion; // # of queued
+    std::unordered_map<std::string, int32_t> cnt_congestion; 
+    std::vector<std::vector<bool>>  cnt_queuing; // # of queued
 
     ProbeType probe_type;
     CrossType background_type;

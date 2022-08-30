@@ -25,7 +25,7 @@ TypeId netw::GetInstanceTypeId (void) const
 netw::netw(std::string filename, std::string demands_file, std::string file_overlay_nodes, std::string route_name)
 {
 	set_background_type(CrossType::PktPoisson);
-	probe_type = ProbeType::sandwich_v1;
+	probe_type = ProbeType::naive;
 	read_underlay(filename);
     read_overlay(file_overlay_nodes);
 	read_routing_map(route_name);
@@ -34,7 +34,7 @@ netw::netw(std::string filename, std::string demands_file, std::string file_over
 netw::netw(name_input_files &fd_setup)
 {
 	set_background_type(CrossType::PktPoisson);
-	probe_type = ProbeType::sandwich_v1;
+	probe_type = ProbeType::naive;
 	read_underlay(fd_setup.netw_filename);
     read_overlay(fd_setup.file_overlay_nodes);
 	read_routing_map(fd_setup.route_name);
@@ -199,6 +199,11 @@ void netw::read_routing_map(std::string filename)
 			cnt_pkt.insert( std::pair<std::string, uint32_t>(key, 0) );
 			cnt_congestion.insert( std::pair<std::string, uint32_t>(key, 0) );
 			++idx_iter;
+		}
+		cnt_queuing.resize(tunnel_vec.size());
+		for (uint32_t i = 0; i < tunnel_vec.size(); i++)
+		{
+			cnt_queuing[i].resize( _MAXPKTNUM, false );
 		}
 	}
 }
