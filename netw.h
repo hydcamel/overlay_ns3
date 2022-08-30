@@ -49,7 +49,7 @@ public:
     void read_routing_map(std::string filename);
     void read_underlay(std::string filename);
     void read_overlay(std::string file_overlay_nodes);
-    void read_demands(std::string filename);
+    void read_demands(std::string filename); // for probing, this will contain the probing rate profile
 
     /**
      * underlay network

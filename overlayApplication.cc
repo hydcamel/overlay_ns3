@@ -84,6 +84,11 @@ overlayApplication::~overlayApplication()
     // m_count.clear();
     // m_socket = 0;
 }
+void overlayApplication::DoDispose(void)
+{
+    NS_LOG_FUNCTION(this);
+    Application::DoDispose();
+}
 
 void overlayApplication::InitApp(netw *netw_meta, uint32_t localId, uint32_t MaxPktSize)
 {
@@ -109,6 +114,43 @@ uint32_t overlayApplication::GetLocalID(void) const
 {
     NS_LOG_FUNCTION(this);
     return m_local_ID;
+}
+
+void overlayApplication::SetSocket(Address ip, uint32_t idx, uint32_t deviceID)
+{
+    NS_LOG_FUNCTION(this);
+    if (tab_socket[idx] == 0)
+    {
+        TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
+        // std::cout << "Node ID:" << m_local_ID << "set skt for " << idx << ": " << ip << std::endl;
+        tab_socket[idx] = Socket::CreateSocket(GetNode(), tid);
+        if (Ipv4Address::IsMatchingType(ip) == true)
+        {
+            if (tab_socket[idx]->Bind() == -1)
+            {
+                NS_FATAL_ERROR("Failed to bind socket");
+            }
+            tab_socket[idx]->Connect(InetSocketAddress(Ipv4Address::ConvertFrom(ip), m_peerPort));
+        }
+        else if (InetSocketAddress::IsMatchingType(ip) == true)
+        {
+            if (tab_socket[idx]->Bind() == -1)
+            {
+                NS_FATAL_ERROR("Failed to bind socket");
+            }
+            tab_socket[idx]->Connect(ip);
+        }
+        else
+        {
+            NS_ASSERT_MSG(false, "Incompatible address type: " << ip);
+        }
+        tab_socket[idx]->SetAllowBroadcast(false);
+        map_neighbor_device.insert(std::pair<uint32_t, uint32_t>(idx, deviceID));
+    }
+    else
+    {
+        std::cout << "create an existing socket" << std::endl;
+    }
 }
 
 

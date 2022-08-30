@@ -31,7 +31,12 @@ public:
     void SetLocalID(uint32_t localID);
     uint32_t GetLocalID(void) const;
 
+    /** Connection **/
+    void SetSocket(Address ip, uint32_t idx, uint32_t deviceID);
+
     bool is_overlay;
+protected:
+    virtual void DoDispose(void);
 private:
     /** probing **/
     Time probe_interval; // probe interval
