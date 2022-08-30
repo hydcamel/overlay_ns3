@@ -36,7 +36,7 @@ namespace ns3
         void SetSocket(Address ip, uint32_t idx, uint32_t deviceID);
         
         void SetLocalID(uint32_t localID);
-        uint16_t GetLocalID(void) const;
+        uint32_t GetLocalID(void) const;
         void SetCount(uint32_t MaxPackets);
         // void SetInterval(uint32_t idx, float Interval);
         void SetProbeInterval(float Interval);

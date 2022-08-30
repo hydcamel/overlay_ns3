@@ -49,23 +49,23 @@ void read_setup(name_input_files &input_fd)
         iss >> temp ;
         if (temp.compare("graph_name") == 0)
         {
-            iss >> input_fd->name_underlay;
+            iss >> input_fd.netw_filename;
         }
         else if (temp.compare("name_overlay_nodes") == 0)
         {
-            iss >> input_fd->file_overlay_nodes;
+            iss >> input_fd.file_overlay_nodes;
         }
         else if (temp.compare("name_demands") == 0)
         {
-            iss >> input_fd->demands_file;
+            iss >> input_fd.demands_file;
         }
         else if (temp.compare("route_name") == 0)
         {
-            iss >> input_fd->route_name;
+            iss >> input_fd.route_name;
         }
         else if (temp.compare("probe_setup_filename") == 0)
         {
-            iss >> input_fd->probe_setup_filename;
+            iss >> input_fd.probe_setup_filename;
         }
     }
 }
@@ -93,10 +93,11 @@ int main(int argc, char *argv[])
     // netw netw_meta(netw_filename, demands_file);
 
     name_input_files struct_filenames;
+    read_setup(struct_filenames);
 
     // std::string netw_filename, demands_file, file_overlay_nodes, route_name;
     // read_setup(netw_filename, demands_file, file_overlay_nodes, route_name);
-    netw netw_meta(netw_filename, demands_file, file_overlay_nodes, route_name);
+    netw netw_meta(struct_filenames.netw_filename, struct_filenames.demands_file, struct_filenames.file_overlay_nodes, struct_filenames.route_name);
     
 
     double stop_time = 100.0;

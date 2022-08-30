@@ -145,7 +145,7 @@ namespace ns3
         NS_LOG_FUNCTION(this);
         m_local_ID = localID;
     }
-    uint16_t overlayApplication::GetLocalID(void) const
+    uint32_t overlayApplication::GetLocalID(void) const
     {
         NS_LOG_FUNCTION(this);
         return m_local_ID;
