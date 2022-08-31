@@ -128,10 +128,7 @@ int main (int argc, char *argv[])
             n_devices_perNode[k] = NetDevices[i].Get(k)->GetNode()->GetNDevices();
             linkIpv4Addr[k] = linkIpv4[k]->GetAddress( n_devices_perNode[k]-1, 0 );
             std::cout << "Address = " << linkIpv4Addr[k].GetLocal() << std::endl;
-            for (uint32_t l = 0; l < n_devices_perNode[k]; l++)
-            {
-                std::cout << "device ID: " << l << " with address: " << linkIpv4[k]->GetAddress( l, 0 ).GetLocal() << std::endl;
-            }
+            for (uint32_t l = 0; l < n_devices_perNode[k]; l++) NS_LOG_INFO( "device ID: " << l << " with address: " << linkIpv4[k]->GetAddress( l, 0 ).GetLocal() );
         } */
     }
 }
