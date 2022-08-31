@@ -36,7 +36,7 @@ int main (int argc, char *argv[])
     // set simulation time and mobility
     double simTime = 1; // seconds
     double udpAppStartTime = 0.4; //seconds
-    double stop_time = 100.0; // seconds
+    double stop_time = 10.0; // seconds
 
     //RAN-related simulation parameters default values
     if (ran)
@@ -100,6 +100,7 @@ int main (int argc, char *argv[])
 
     for (uint32_t i = 0; i < links.size(); i++)
     {
+        links[i].DisableFlowControl();
         links[i].SetChannelAttribute("Delay", StringValue(std::to_string(netw_meta.delay[i]) + "us"));
         links[i].SetDeviceAttribute("DataRate", StringValue(std::to_string(netw_meta.bw[i]) + "kbps"));
         links[i].SetQueue("ns3::DropTailQueue", "MaxSize", QueueSizeValue(QueueSize(QueueSizeUnit::PACKETS, netw_meta._MAXBACKLOG)));
@@ -131,4 +132,14 @@ int main (int argc, char *argv[])
             for (uint32_t l = 0; l < n_devices_perNode[k]; l++) NS_LOG_INFO( "device ID: " << l << " with address: " << linkIpv4[k]->GetAddress( l, 0 ).GetLocal() );
         } */
     }
+    Ipv4GlobalRoutingHelper::PopulateRoutingTables();
+
+    NS_LOG_INFO("Run Simulation.");
+    // std::cout << "before run" << std::endl;
+    Simulator::Run();
+    // flow_monitor->SerializeToXmlFile("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/flow_monitor_res.xml", true, true);
+    Simulator::Stop(MilliSeconds(stop_time*1.2));
+    std::cout << "start Destroy." << std::endl;
+    Simulator::Destroy();
+    NS_LOG_INFO("Done.");
 }
