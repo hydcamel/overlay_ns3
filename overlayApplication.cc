@@ -168,77 +168,100 @@ void overlayApplication::SetRecvSocket(void)
 }
 
 void overlayApplication::HandleRead(Ptr<Socket> socket)
+{
+    NS_LOG_FUNCTION(this << socket);
+
+    Ptr<Packet> packet;
+    Address from;
+    Address localAddress;
+    while ((packet = socket->RecvFrom(from)))
     {
-        NS_LOG_FUNCTION(this << socket);
+        socket->GetSockName(localAddress);
+        // m_rxTrace(packet);
+        // m_rxTraceWithAddresses(packet, from, localAddress);
 
-        Ptr<Packet> packet;
-        Address from;
-        Address localAddress;
-        while ((packet = socket->RecvFrom(from)))
+        // std::cout << "Node ID: " << m_local_ID << "; pkt received" << std::endl;
+        SDtag tagPktRecv;
+        packet->PeekPacketTag(tagPktRecv);
+        std::string keys{std::to_string(tagPktRecv.GetSourceID()) + ' ' + std::to_string(tagPktRecv.GetDestID())};
+        // NS_LOG_INFO("Node ID: " << m_local_ID << "; pkt received -- " << keys);
+
+        std::vector<int> &routes = meta->routing_map[keys];
+        
+        if (tagPktRecv.GetDestID() == GetLocalID())
         {
-            socket->GetSockName(localAddress);
-            // m_rxTrace(packet);
-            // m_rxTraceWithAddresses(packet, from, localAddress);
-
-            // std::cout << "Node ID: " << m_local_ID << "; pkt received" << std::endl;
-            SDtag tagPktRecv;
-            packet->PeekPacketTag(tagPktRecv);
-            std::string keys{std::to_string(tagPktRecv.GetSourceID()) + ' ' + std::to_string(tagPktRecv.GetDestID())};
-            // NS_LOG_INFO("Node ID: " << m_local_ID << "; pkt received -- " << keys);
-
-            std::vector<int> &routes = meta->routing_map[keys];
-            
-            if (tagPktRecv.GetDestID() == GetLocalID())
+            if (tagPktRecv.GetIsProbe() > 0)
             {
-                if (tagPktRecv.GetIsProbe() > 0)
+                switch (meta->probe_type)
                 {
-                    switch (meta->probe_type)
+                    case ProbeType::naive:
                     {
-                        case ProbeType::naive:
-                        {
-                            uint32_t idx_tunnel = meta->tunnel_hashmap[keys];
-                            meta->cnt_queuing[idx_tunnel][tagPktRecv.GetPktID()] = tagPktRecv.GetIsQueued();
-                            break;
-                        }
-                        case ProbeType::sandwich_v1:
-                        {
-                            // if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetSandWichLargeID() == 4)
-                            // {
-                            //     std::cout << SRC << " - " << DEST << " with large: " << 4 << " -PktID=" << tagPktRecv.GetPktID() << " sandwithID = " << (uint32_t)tagPktRecv.GetSandWichID() << ": " << Simulator::Now().GetMicroSeconds() << std::endl;
-                            // }
-                            // if (tagPktRecv.GetSandWichID() == 1){}
-                            // else meta->update_log_sandwich_v1(tagPktRecv.GetSourceID(), tagPktRecv.GetDestID(), tagPktRecv.GetSandWichLargeID(), tagPktRecv.GetPktID());
-                            break;
-                        }
-                        default:
-                            break;
+                        uint32_t idx_tunnel = meta->tunnel_hashmap[keys];
+                        meta->cnt_queuing[idx_tunnel][tagPktRecv.GetPktID()] = tagPktRecv.GetIsQueued();
+                        break;
                     }
-                    // NS_LOG_INFO(m_local_ID << ": recv probe at " << Simulator::Now().As(Time::US) << " with " << keys);
+                    case ProbeType::sandwich_v1:
+                    {
+                        // if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetSandWichLargeID() == 4)
+                        // {
+                        //     std::cout << SRC << " - " << DEST << " with large: " << 4 << " -PktID=" << tagPktRecv.GetPktID() << " sandwithID = " << (uint32_t)tagPktRecv.GetSandWichID() << ": " << Simulator::Now().GetMicroSeconds() << std::endl;
+                        // }
+                        // if (tagPktRecv.GetSandWichID() == 1){}
+                        // else meta->update_log_sandwich_v1(tagPktRecv.GetSourceID(), tagPktRecv.GetDestID(), tagPktRecv.GetSandWichLargeID(), tagPktRecv.GetPktID());
+                        break;
+                    }
+                    default:
+                        break;
                 }
-                /* if (tagPktRecv.GetIsProbe() == 0)
-                {
-                    std::cout << m_local_ID << ": recv background at " << Simulator::Now().As(Time::US) << " with " << keys << std::endl; 
-                } */
+                // NS_LOG_INFO(m_local_ID << ": recv probe at " << Simulator::Now().As(Time::US) << " with " << keys);
             }
-            else
+            /* if (tagPktRecv.GetIsProbe() == 0)
             {
-                // std::cout << "Source ID: " << (uint32_t)tagPktRecv.GetSourceID() << ", target ID: " << (uint32_t)tagPktRecv.GetDestID() << ", this hop" << m_local_ID << ", next hop" << routes[tagPktRecv.GetCurrentHop() + 1] << std::endl;
-                assert(routes[tagPktRecv.GetCurrentHop()] == m_local_ID);
-                /* if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
-                {
-                    std::cout << "Node ID: " << m_local_ID << " forward at: " << Simulator::Now().ToDouble(Time::US) << std::endl;
-                } */
-                
-                if ( CheckCongestion(map_neighbor_device[routes[tagPktRecv.GetCurrentHop()+1]], (uint32_t)tagPktRecv.GetSourceID(), (uint32_t)tagPktRecv.GetDestID(), (uint16_t)tagPktRecv.GetPktID()) )
-                {
-                    tagPktRecv.SetIsQueued(1);
-                }
-                tagPktRecv.AddCurrentHop();
-                packet->ReplacePacketTag(tagPktRecv);
-                tab_socket[routes[tagPktRecv.GetCurrentHop()]]->Send(packet);
+                std::cout << m_local_ID << ": recv background at " << Simulator::Now().As(Time::US) << " with " << keys << std::endl; 
+            } */
+        }
+        else
+        {
+            // std::cout << "Source ID: " << (uint32_t)tagPktRecv.GetSourceID() << ", target ID: " << (uint32_t)tagPktRecv.GetDestID() << ", this hop" << m_local_ID << ", next hop" << routes[tagPktRecv.GetCurrentHop() + 1] << std::endl;
+            assert(routes[tagPktRecv.GetCurrentHop()] == m_local_ID);
+            /* if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
+            {
+                std::cout << "Node ID: " << m_local_ID << " forward at: " << Simulator::Now().ToDouble(Time::US) << std::endl;
+            } */
+            
+            if ( CheckCongestion(map_neighbor_device[routes[tagPktRecv.GetCurrentHop()+1]], (uint32_t)tagPktRecv.GetSourceID(), (uint32_t)tagPktRecv.GetDestID(), (uint16_t)tagPktRecv.GetPktID()) )
+            {
+                tagPktRecv.SetIsQueued(1);
             }
+            tagPktRecv.AddCurrentHop();
+            packet->ReplacePacketTag(tagPktRecv);
+            tab_socket[routes[tagPktRecv.GetCurrentHop()]]->Send(packet);
         }
     }
+}
+bool overlayApplication::CheckCongestion(uint32_t deviceID, uint32_t src, uint32_t dest, uint16_t PktID)
+{
+    NS_LOG_FUNCTION(this);
+    // Ptr<PointToPointNetDevice> net_device = StaticCast<PointToPointNetDevice>(GetNode()->GetDevice(deviceID));
+    Ptr<NetDevice> net_raw = GetNode()->GetDevice(deviceID);
+    Ptr<PointToPointNetDevice> net_device = DynamicCast<PointToPointNetDevice, NetDevice>(GetNode()->GetDevice(deviceID));
+    Ptr<Queue<Packet>> net_queue = net_device->GetQueue();
+    // std::cout << "src: " << src << " -dest: " << dest << " queue backlog: " << net_queue->GetNPackets() << std::endl;
+    /* if (src == SRC && dest == DEST && net_queue->GetNPackets() > 0)
+    {
+        std::cout << "Node ID: " << m_local_ID << "PktID: " << PktID << "src: " << src << " -dest: " << dest << " queue backlog: " << net_queue->GetNPackets() << " limit = " << net_queue->GetMaxSize() << std::endl;
+    } */
 
+    if (net_queue->GetNPackets() > 0)
+    {
+        // std::cout << "congestion at " << m_local_ID << "from " << src << " to " << dest << "with " << net_queue->GetNPackets() << " " << net_queue->GetNBytes() << std::endl;
+        meta->cnt_congestion[std::to_string(src) + ' ' + std::to_string(dest)] += net_queue->GetNPackets();
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
 }
