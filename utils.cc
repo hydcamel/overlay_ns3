@@ -7,7 +7,8 @@ void read_setup(name_input_files &input_fd)
 {
     char *cwd = get_current_dir_name();
     std::string pwd_tmp(cwd, cwd+strlen(cwd));
-    std::ifstream infile( pwd_tmp + "/scratch/overlay_ns3/setup.txt");
+    std::cout << pwd_tmp << std::endl;
+    std::ifstream infile( pwd_tmp + "/scratch//Category_inference/setup.txt");
     // std::ifstream infile("/export/home/Yudi_Huang/ns-allinone-3.36.1/ns-3.36.1/scratch/CategoryQueue/setup.txt");
     std::string line;
     std::string temp;

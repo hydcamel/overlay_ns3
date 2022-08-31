@@ -27,7 +27,8 @@
 #define ProbeSizeSWSmall (50)
 #define ProbeSizeSWlarge (1450)
 
-using namespace ns3;
+namespace ns3
+{
 
 enum ProbeType
 {
@@ -93,5 +94,7 @@ public:
     CrossType background_type;
 private:
 };
+
+}
 
 #endif

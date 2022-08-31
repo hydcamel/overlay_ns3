@@ -61,9 +61,9 @@ TypeId overlayApplication::GetTypeId(void)
                                             MakeUintegerChecker<uint16_t>());
     return tid;
 }
-TypeId netw::GetInstanceTypeId (void) const
+TypeId overlayApplication::GetInstanceTypeId (void) const
 {
-  	return netw::GetTypeId ();
+  	return overlayApplication::GetTypeId ();
 }
 
 overlayApplication::overlayApplication()

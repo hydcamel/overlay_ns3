@@ -13,8 +13,8 @@ NS_OBJECT_ENSURE_REGISTERED(netw);
 TypeId netw::GetTypeId (void)
 {
 	static TypeId tid = TypeId ("ns3::netw")
-		.SetParent<Object> ()
-		.AddConstructor<netw> ();
+		.SetParent<Object> ();
+		// .AddConstructor<netw> (name_input_files);
 	return tid;
 }
 TypeId netw::GetInstanceTypeId (void) const
