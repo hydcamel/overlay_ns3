@@ -33,7 +33,8 @@ namespace ns3
 enum ProbeType
 {
     naive = 1,
-    sandwich_v1 = 2
+    sandwich_v1 = 2,
+    calibration = 3
 };
 enum CrossType
 {
@@ -78,6 +79,9 @@ public:
     uint32_t _AppPktSize = 1024, _IPPktSize = 1052, _MACPktSize = 1054, _NormPktSize = 46, _MAXPKTNUM = 3, _MAXBACKLOG = 200000;
     uint16_t protocol_number = 150;
     std::vector<double> probe_normal_interval;
+    std::vector<bool> old_E;
+    uint32_t new_e;
+    uint32_t len_long_train;
     double avg_pktSize = PrLBPkt*LBPKTSIZE + PrUBPkt*UBPKTSIZE + PrMEDPkt*MEDPKTSIZE;
     std::vector<uint32_t> background_interval; // microseconds
     void set_background_type(CrossType);

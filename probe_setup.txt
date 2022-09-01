@@ -1,4 +1,4 @@
-E_cur_idxlist 0 1 2 3 4 5 6
+E_cur_idxlist 7 0 1 2 3 4 5 6
 e_new_idx 8
-probing_rate 28571428.57142857
+probe_type naive
 len_long_train 100

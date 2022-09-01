@@ -195,12 +195,14 @@ void netw::read_routing_map(std::string filename)
 
 			tunnel_hashmap.insert( std::pair<std::string, uint32_t>(key, idx_iter) );
 			tunnel_vec[idx_iter] = std::pair<int, int>(src, dest);
-			probe_normal_interval[idx_iter] = 0;
-			cnt_pkt.insert( std::pair<std::string, uint32_t>(key, 0) );
-			cnt_congestion.insert( std::pair<std::string, uint32_t>(key, 0) );
+			// probe_normal_interval[idx_iter] = 0;
+			// cnt_pkt.insert( std::pair<std::string, uint32_t>(key, 0) );
+			// cnt_congestion.insert( std::pair<std::string, uint32_t>(key, 0) );
 			++idx_iter;
 		}
+		probe_normal_interval.resize(tunnel_hashmap.size());
 		cnt_queuing.resize(tunnel_vec.size());
+		old_E.resize(tunnel_hashmap.size(), false);
 		for (uint32_t i = 0; i < tunnel_vec.size(); i++)
 		{
 			cnt_queuing[i].resize( _MAXPKTNUM, false );
@@ -230,12 +232,27 @@ void netw::read_probe_profile(std::string filename)
     std::string line;
 	int src, dest;
 	double probe_interval; //microsecond (us, 1e-6) 
-	std::cout << "read_probe_interval: " << filename << std::endl;
-	uint32_t idx = 0;
+	std::string temp;
+	std::cout << "read_probe_setup: " << filename << std::endl;
+	uint32_t idx = 0, n_old_E, e_idx;
 
 	while (getline(infile, line))
 	{
 		std::istringstream iss(line);
+		if (line.substr(0, 13).compare("E_cur_idxlist") == 0)
+		{
+			iss >> temp >> n_old_E;
+			for (uint32_t i = 0; i < n_old_E; i++)
+			{
+				iss >> temp >> e_idx;
+				old_E[e_idx] = true;
+			}
+		}
+		else if (line.substr(0, 9).compare("e_new_idx") == 0)
+		{
+			iss >> temp >> e_idx;
+			new_e = e_idx;
+		}
 		iss >> src >> dest >> probe_interval;
 		probe_normal_interval[idx] = probe_interval;
 		idx++;
