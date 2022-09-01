@@ -23,6 +23,7 @@ typedef struct name_files
     std::string file_overlay_nodes;
     std::string route_name;
     std::string probe_setup_filename;
+    std::string probe_interval_files;
 }name_input_files;
 
 /**

@@ -54,6 +54,7 @@ public:
     void read_overlay(std::string file_overlay_nodes);
     void read_demands(std::string filename); 
     void read_probe_profile(std::string filename); // for probing, this will contain the probing rate profile: microsecond (us, 1e-6) 
+    void read_probe_intervals(std::string filename); // for probing, this will contain the probing rate profile: microsecond (us, 1e-6) 
 
     /**
      * underlay network

@@ -25,7 +25,7 @@ TypeId netw::GetInstanceTypeId (void) const
 netw::netw(std::string filename, std::string demands_file, std::string file_overlay_nodes, std::string route_name)
 {
 	set_background_type(CrossType::PktPoisson);
-	probe_type = ProbeType::naive;
+	// probe_type = ProbeType::naive;
 	read_underlay(filename);
     read_overlay(file_overlay_nodes);
 	read_routing_map(route_name);
@@ -34,12 +34,13 @@ netw::netw(std::string filename, std::string demands_file, std::string file_over
 netw::netw(name_input_files &fd_setup)
 {
 	set_background_type(CrossType::PktPoisson);
-	probe_type = ProbeType::naive;
+	// probe_type = ProbeType::naive;
 	read_underlay(fd_setup.netw_filename);
     read_overlay(fd_setup.file_overlay_nodes);
 	read_routing_map(fd_setup.route_name);
 	read_demands(fd_setup.demands_file);
 	read_probe_profile(fd_setup.probe_setup_filename);
+	read_probe_intervals(fd_setup.probe_interval_files);
 }
 
 void netw::read_underlay(std::string filename)
@@ -253,9 +254,35 @@ void netw::read_probe_profile(std::string filename)
 			iss >> temp >> e_idx;
 			new_e = e_idx;
 		}
-		iss >> src >> dest >> probe_interval;
-		probe_normal_interval[idx] = probe_interval;
-		idx++;
+		else if (line.substr(0, 10).compare("probe_type") == 0)
+		{
+			std::string str_probe_type;
+			iss >> temp >> str_probe_type;
+			if( str_probe_type.substr(0,5).compare("naive") == 0 ) probe_type = ProbeType::naive;
+			else if ( str_probe_type.substr(0,11).compare("sandwich_v1") == 0 ) probe_type = ProbeType::sandwich_v1;
+			else if ( str_probe_type.substr(0,11).compare("calibration") == 0 ) probe_type = ProbeType::calibration;
+		}
+		else if (line.substr(0, 14).compare("len_long_train") == 0)
+		{
+			iss >> temp >> len_long_train;
+		}
+	}
+}
+
+void netw::read_probe_intervals(std::string filename)
+{
+	std::ifstream infile(filename);
+    std::string line;
+	int src, dest;
+	double interval_val;
+	std::cout << "read_probe_intervals: " << filename << std::endl;
+
+	while (getline(infile, line))
+	{
+		std::istringstream iss(line);
+		iss >> src >> dest >> interval_val;
+		uint32_t idx_tunnel = tunnel_hashmap[std::to_string(src) + " " + std::to_string(dest)];
+		probe_normal_interval[idx_tunnel] = interval_val;
 	}
 }
 

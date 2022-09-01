@@ -37,5 +37,9 @@ void read_setup(name_input_files &input_fd)
         {
             iss >> input_fd.probe_setup_filename;
         }
+        else if (temp.compare("probe_interval_filename") == 0)
+        {
+            iss >> input_fd.probe_interval_files;
+        }
     }
 }
