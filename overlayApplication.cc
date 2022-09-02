@@ -354,7 +354,7 @@ void overlayApplication::StartApplication(void)
                             std::string keys_ = std::to_string(m_local_ID) + ' ' + std::to_string(i);
                             if (meta->tunnel_hashmap.count(keys_) == 0 || meta->old_E[meta->tunnel_hashmap[keys_]] == false)
                                 continue; // no such tunnel or not currently probed
-                            ScheduleProbing(Time(Seconds(0)), i);
+                            ScheduleProbing(Time(MicroSeconds(meta->probe_normal_interval[meta->tunnel_hashmap[keys_]])), i);
                         }
                     }
                 break;
