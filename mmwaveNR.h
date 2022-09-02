@@ -39,7 +39,17 @@ public:
     bool singleUeTopology = true;
 
     /** NR **/
+    NodeContainer gNbNodes;
+    NodeContainer ueNodes;
+    MobilityHelper mobility;
     Ptr<NrHelper> nrHelper;
+    CcBwpCreator ccBwpCreator;
+    BandwidthPartInfo::Scenario scenario;
+    OperationBandInfo band;
+    BandwidthPartInfoPtrVector allBwps;
+    Ptr<NrPointToPointEpcHelper> epcHelper;
+    Ptr<ListPositionAllocator> bsPositionAlloc;
+    Ptr<ListPositionAllocator> utPositionAlloc;
 
     /**
      * functions
