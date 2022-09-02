@@ -86,7 +86,7 @@ public:
     double avg_pktSize = PrLBPkt*LBPKTSIZE + PrUBPkt*UBPKTSIZE + PrMEDPkt*MEDPKTSIZE;
     std::vector<uint32_t> background_interval; // microseconds
     void set_background_type(CrossType);
-    // std::vector<std::vector<uint32_t>> m_sent;
+    std::vector<std::vector<uint32_t>> m_sent;
 
     /**
      * data collection

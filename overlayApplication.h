@@ -50,7 +50,7 @@ private:
     // void Send(uint16_t idx);
 
     void SetTag(SDtag& tagToUse, uint8_t SourceID, uint8_t DestID, uint8_t currentHop = 1, uint32_t PktID = 0, uint8_t IsProbe = 0, uint8_t IsQueued = 0, uint8_t SandWichID = 10, uint8_t SandWichLargeID=0);
-    void SetTag(SDtag& tagToUse, uint8_t SourceID, uint8_t DestID, uint8_t currentHop = 1, uint32_t PktID = 0, uint8_t IsProbe = 0, uint8_t IsQueued = 0);
+    // void SetTag(SDtag& tagToUse, uint8_t SourceID, uint8_t DestID, uint8_t currentHop = 1, uint32_t PktID = 0, uint8_t IsProbe = 0, uint8_t IsQueued = 0);
 
     void ScheduleBackground(Time dt, uint32_t idx);
     void SendBackground(uint32_t idx);

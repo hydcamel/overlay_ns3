@@ -65,11 +65,11 @@ void netw::read_underlay(std::string filename)
 				{
 					iss >> temp >> n_nodes;
 					adj_mat.resize(n_nodes);
-					// m_sent.resize(n_nodes);
+					m_sent.resize(n_nodes);
 					for (uint32_t i = 0; i < n_nodes; i++)
 					{
 						adj_mat[i].resize(n_nodes, false);
-						// m_sent[i].resize(n_nodes, 0);
+						m_sent[i].resize(n_nodes, 0);
 					}
 				}
 				else if (line.substr(0, 5).compare("EDGES") == 0)

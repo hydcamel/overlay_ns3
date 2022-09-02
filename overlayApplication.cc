@@ -202,12 +202,17 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                     }
                     case ProbeType::sandwich_v1:
                     {
-                        // if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetSandWichLargeID() == 4)
-                        // {
-                        //     std::cout << SRC << " - " << DEST << " with large: " << 4 << " -PktID=" << tagPktRecv.GetPktID() << " sandwithID = " << (uint32_t)tagPktRecv.GetSandWichID() << ": " << Simulator::Now().GetMicroSeconds() << std::endl;
-                        // }
+                        if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
+                        {
+                            std::cout << SRC << " - " << DEST << " -PktID=" << tagPktRecv.GetPktID() << " received at: " << Simulator::Now().GetMicroSeconds() << std::endl;
+                            // std::cout << SRC << " - " << DEST << " with large: " << 4 << " -PktID=" << tagPktRecv.GetPktID() << " sandwithID = " << (uint32_t)tagPktRecv.GetSandWichID() << ": " << Simulator::Now().GetMicroSeconds() << std::endl;
+                        }
                         // if (tagPktRecv.GetSandWichID() == 1){}
                         // else meta->update_log_sandwich_v1(tagPktRecv.GetSourceID(), tagPktRecv.GetDestID(), tagPktRecv.GetSandWichLargeID(), tagPktRecv.GetPktID());
+                        break;
+                    }
+                    case ProbeType::calibration:
+                    {
                         break;
                     }
                     default:
@@ -224,10 +229,10 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
         {
             // std::cout << "Source ID: " << (uint32_t)tagPktRecv.GetSourceID() << ", target ID: " << (uint32_t)tagPktRecv.GetDestID() << ", this hop" << m_local_ID << ", next hop" << routes[tagPktRecv.GetCurrentHop() + 1] << std::endl;
             assert(routes[tagPktRecv.GetCurrentHop()] == m_local_ID);
-            /* if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
+            if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
             {
                 std::cout << "Node ID: " << m_local_ID << " forward at: " << Simulator::Now().ToDouble(Time::US) << std::endl;
-            } */
+            }
             
             if ( CheckCongestion(map_neighbor_device[routes[tagPktRecv.GetCurrentHop()+1]], (uint32_t)tagPktRecv.GetSourceID(), (uint32_t)tagPktRecv.GetDestID(), (uint16_t)tagPktRecv.GetPktID()) )
             {
@@ -262,6 +267,15 @@ bool overlayApplication::CheckCongestion(uint32_t deviceID, uint32_t src, uint32
     {
         return false;
     }
+}
+
+uint32_t overlayApplication::GMM_Pkt_Size(void)
+{
+    Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable>();
+    double rng_val = rand->GetValue(0.0, 1.0);
+    if (rng_val <= PrLBPkt) return LBPKTSIZE;
+    else if (rng_val <= (PrLBPkt + PrUBPkt)) return UBPKTSIZE;
+    else return MEDPKTSIZE;
 }
 
 void overlayApplication::ScheduleBackground(Time dt, uint32_t idx)
@@ -366,6 +380,10 @@ void overlayApplication::StartApplication(void)
                 ScheduleProbing(random_offset, 0);
                 break;
             }
+            case ProbeType::calibration:
+            {
+                break;
+            }
             default:
             {
                 std::cout << "wrong probe types at StartApplication" << std::endl;
@@ -401,7 +419,67 @@ void overlayApplication::ScheduleProbing(Time dt, uint32_t idx)
             break;
         }
     };
-    
+}
+void overlayApplication::SendProbeNaive(uint32_t idx)
+{
+    NS_LOG_FUNCTION(this);
+    NS_ASSERT(probe_event[idx].IsExpired());
+    std::string keys_ {std::to_string(m_local_ID) + " " + std::to_string(idx)};
+    std::vector<int> &routes = meta->routing_map[keys_];
+    SDtag tagToSend;
+    SetTag(tagToSend, m_local_ID, idx, 1, meta->m_sent[m_local_ID][idx], 1);
+    ++meta->m_sent[m_local_ID][idx];
+    Ptr<Packet> p;
+    p = Create<Packet>(ProbeSizeNaive);
+    // m_txTrace(p);
+    p->AddPacketTag(tagToSend);
+    tab_socket[routes[1]]->Send(p);
+    if (is_run == true && meta->m_sent[m_local_ID][idx] < meta->_MAXPKTNUM)
+    {
+        ScheduleProbing(Time(MicroSeconds(meta->probe_normal_interval[meta->tunnel_hashmap[keys_]])), idx);
+    }
+}
+
+void overlayApplication::StopApplication()
+{
+    NS_LOG_FUNCTION(this);
+    is_run = false;
+    /* if (m_local_ID == 0)
+    {
+        // meta->write_average_delay("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/average_delay.txt");
+        // meta->write_congestion_cnt("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/congestion_cnt.txt");
+        meta->write_queuing_cnt("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/queuing_cnt.txt");
+    } */
+
+    // std::cout << "Node ID: " << m_local_ID << " stop Application" << std::endl;
+    for (uint32_t i = 0; i < tab_socket.size(); i++)
+    {
+        // std::cout << "iter Node ID: " << m_local_ID << " i" << i << std::endl;
+        if (tab_socket[i] != 0)
+        {
+            tab_socket[i]->Close();
+            tab_socket[i]->SetRecvCallback(MakeNullCallback<void, Ptr<Socket>>());
+        }
+    }
+    if (recv_socket != 0)
+    {
+        // std::cout << "iter Node ID: " << m_local_ID << " recv_socket" << std::endl;
+        recv_socket->Close();
+        recv_socket->SetRecvCallback(MakeNullCallback<void, Ptr<Socket>>());
+    }
+    // std::cout << "iter Node ID: " << m_local_ID << " complete" << std::endl;
+}
+
+void overlayApplication::SetTag(SDtag& tagToUse, uint8_t SourceID, uint8_t DestID, uint8_t currentHop, uint32_t PktID, uint8_t IsProbe, uint8_t IsQueued, uint8_t SandWichID, uint8_t SandWichLargeID)
+{
+    tagToUse.SetSourceID(SourceID);
+    tagToUse.SetDestID(DestID);
+    tagToUse.SetCurrentHop(currentHop);
+    tagToUse.SetPktID(PktID);
+    tagToUse.SetIsQueued(IsQueued);
+    // tagToUse.SetSandWichID(SandWichID);
+    tagToUse.SetIsProbe(IsProbe);
+    // tagToUse.SetSandWichLargeID(SandWichLargeID);
 }
 
 }
