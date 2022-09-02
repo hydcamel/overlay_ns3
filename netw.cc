@@ -136,8 +136,8 @@ void netw::read_overlay(std::string file_overlay_nodes)
 		iss >> idx_node;
 		loc_overlay_nodes[idx_node] = true;
 	}
-	tunnel_vec.resize(n_overlay_nodes*(n_overlay_nodes-1));
-	switch (probe_type)
+	tunnel_vec.reserve(n_overlay_nodes*(n_overlay_nodes-1));
+	/* switch (probe_type)
 	{
 		case ProbeType::naive:
 		{
@@ -158,7 +158,7 @@ void netw::read_overlay(std::string file_overlay_nodes)
 			exit(-1);
 			break;
 		}
-	}
+	} */
 	
 }
 	
@@ -195,7 +195,7 @@ void netw::read_routing_map(std::string filename)
 			routing_map.insert( std::pair<std::string, std::vector<int>>(key, val) );
 
 			tunnel_hashmap.insert( std::pair<std::string, uint32_t>(key, idx_iter) );
-			tunnel_vec[idx_iter] = std::pair<int, int>(src, dest);
+			tunnel_vec.emplace_back( std::pair<int, int>(src, dest) );
 			// probe_normal_interval[idx_iter] = 0;
 			// cnt_pkt.insert( std::pair<std::string, uint32_t>(key, 0) );
 			// cnt_congestion.insert( std::pair<std::string, uint32_t>(key, 0) );
@@ -231,11 +231,11 @@ void netw::read_probe_profile(std::string filename)
 {
 	std::ifstream infile(filename);
     std::string line;
-	int src, dest;
-	double probe_interval; //microsecond (us, 1e-6) 
+	// int src, dest;
+	// double probe_interval; //microsecond (us, 1e-6) 
 	std::string temp;
 	std::cout << "read_probe_setup: " << filename << std::endl;
-	uint32_t idx = 0, n_old_E, e_idx;
+	uint32_t n_old_E, e_idx;
 
 	while (getline(infile, line))
 	{
@@ -246,7 +246,7 @@ void netw::read_probe_profile(std::string filename)
 			for (uint32_t i = 0; i < n_old_E; i++)
 			{
 				iss >> temp >> e_idx;
-				old_E[e_idx] = true;
+				old_E[i] = true;
 			}
 		}
 		else if (line.substr(0, 9).compare("e_new_idx") == 0)
@@ -282,7 +282,7 @@ void netw::read_probe_intervals(std::string filename)
 		std::istringstream iss(line);
 		iss >> src >> dest >> interval_val;
 		uint32_t idx_tunnel = tunnel_hashmap[std::to_string(src) + " " + std::to_string(dest)];
-		probe_normal_interval[idx_tunnel] = interval_val;
+		probe_normal_interval[idx_tunnel] = round(interval_val);
 	}
 }
 

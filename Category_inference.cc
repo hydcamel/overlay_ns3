@@ -31,7 +31,8 @@ int main (int argc, char *argv[])
     name_input_files fd_setup_wrap;
     read_setup (fd_setup_wrap);
 
-    netw netw_meta (fd_setup_wrap.netw_filename, fd_setup_wrap.demands_file, fd_setup_wrap.file_overlay_nodes, fd_setup_wrap.route_name);
+    // netw netw_meta (fd_setup_wrap.netw_filename, fd_setup_wrap.demands_file, fd_setup_wrap.file_overlay_nodes, fd_setup_wrap.route_name);
+    netw netw_meta (fd_setup_wrap);
 
     // set simulation time and mobility
     double simTime = 1; // seconds

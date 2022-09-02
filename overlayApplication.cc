@@ -264,4 +264,144 @@ bool overlayApplication::CheckCongestion(uint32_t deviceID, uint32_t src, uint32
     }
 }
 
+void overlayApplication::ScheduleBackground(Time dt, uint32_t idx)
+{
+    m_sendEvent[idx] = Simulator::Schedule(dt, &overlayApplication::SendBackground, this, idx);
+}
+void overlayApplication::SendBackground(uint32_t idx)
+{
+    NS_LOG_FUNCTION(this);
+    NS_ASSERT(m_sendEvent[idx].IsExpired());
+    SDtag tagToSend;
+    tagToSend.SetSourceID(m_local_ID);
+    tagToSend.SetDestID(idx);
+    tagToSend.SetCurrentHop(1);
+    tagToSend.SetPktID(0);
+    tagToSend.SetIsProbe(0);
+    tagToSend.SetIsQueued(0);
+    if ( meta->background_type == CrossType::PktPoisson )
+    {
+        // pkt size
+        uint32_t pkt_size = GMM_Pkt_Size();
+        Ptr<Packet> p;
+        p = Create<Packet>(pkt_size);
+        // m_txTrace(p);
+        p->AddPacketTag(tagToSend);
+        tab_socket[idx]->Send(p);
+        // inter-arrival time
+        Ptr<ExponentialRandomVariable> rand = CreateObject<ExponentialRandomVariable> ();
+        int edgeID = 0;
+        if (meta->edges.count( std::to_string(m_local_ID) + ' ' + std::to_string(idx) ))
+        {
+            edgeID = meta->edges[std::to_string(m_local_ID) + ' ' + std::to_string(idx)];
+        }
+        else if (meta->edges.count( std::to_string(idx) + ' ' + std::to_string(m_local_ID) ))
+        {
+            edgeID = meta->edges[std::to_string(idx) + ' ' + std::to_string(m_local_ID)];
+        }
+        else
+        {
+            std::cout << "non-existing underlay edges" << std::endl;
+            exit(-1);
+        }
+        
+        rand->SetAttribute("Mean", DoubleValue(meta->background_interval[edgeID]));
+        Time pkt_inter_arrival = MicroSeconds( rand->GetInteger() );
+        //std::cout << "Node ID: " << m_local_ID << " background at " << Simulator::Now().As(Time::US) << " to " << idx << " next time " << pkt_inter_arrival.As(Time::US) << std::endl; 
+        // ScheduleBackground(pkt_inter_arrival, idx);
+        if (is_run == true)
+        {
+            ScheduleBackground(pkt_inter_arrival, idx);
+        }
+    }
+    else
+    {
+        std::cout << "Wrong Background Type" << std::endl;
+        exit(-1);
+    }
+}
+
+void overlayApplication::StartApplication(void)
+{
+    NS_LOG_FUNCTION(this);
+    /**
+     * Set up background traffic
+     **/
+    if (meta->background_type == CrossType::PktPoisson)
+    {
+        for (uint32_t j = 0; j < meta->n_nodes; j++)
+        {
+            if (meta->adj_mat[m_local_ID][j] == false) continue;
+            Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable>();
+            Time random_offset = MicroSeconds(rand->GetValue(0, 50));
+            ScheduleBackground(random_offset, j);
+        }
+    }
+
+    /**
+     * Set up probing flows
+     **/
+    if (meta->loc_overlay_nodes[GetLocalID()] == true) // only if self is overlay, it can schedule probing
+    {
+        switch (meta->probe_type)
+        {
+            case ProbeType::naive:
+            {
+                    for (uint32_t i = 0; i < meta->n_nodes; i++)
+                    {
+                        if (meta->loc_overlay_nodes[i] == true) // target i
+                        {
+                            std::string keys_ = std::to_string(m_local_ID) + ' ' + std::to_string(i);
+                            if (meta->tunnel_hashmap.count(keys_) == 0 || meta->old_E[meta->tunnel_hashmap[keys_]] == false)
+                                continue; // no such tunnel or not currently probed
+                            ScheduleProbing(Time(Seconds(0)), i);
+                        }
+                    }
+                break;
+            }
+            case ProbeType::sandwich_v1:
+            {
+                Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable>();
+                Time random_offset = MicroSeconds(rand->GetValue(10, 50));
+                ScheduleProbing(random_offset, 0);
+                break;
+            }
+            default:
+            {
+                std::cout << "wrong probe types at StartApplication" << std::endl;
+                break;
+            }
+        }
+    }
+}
+
+void overlayApplication::ScheduleProbing(Time dt, uint32_t idx)
+{
+    switch (meta->probe_type)
+    {
+        case ProbeType::naive:
+        {
+            probe_event[idx] = Simulator::Schedule(dt, &overlayApplication::SendProbeNaive, this, idx);
+            // ScheduleProbing(probe_interval, idx);
+            break;
+        }
+        case ProbeType::sandwich_v1:
+        {
+            // Simulator::Schedule(dt, &overlayApplication::OrchestraSandWichV1, this);
+            break;
+        }
+        case ProbeType::calibration:
+        {
+            break;
+        }
+        default:
+        {
+            std::cout << "Wrong Background Type" << std::endl;
+            exit(-1);
+            break;
+        }
+    };
+    
+}
+
 }
