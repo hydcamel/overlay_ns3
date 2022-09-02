@@ -26,6 +26,12 @@ typedef struct name_files
     std::string probe_interval_files;
 }name_input_files;
 
+typedef struct coordinate
+{
+    double x_val;
+    double y_val;
+}coordinate;
+
 /**
  * read and write utils
  **/

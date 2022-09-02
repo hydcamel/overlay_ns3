@@ -13,6 +13,7 @@
 #include "ns3/nr-module.h"
 #include "ns3/config-store-module.h"
 #include "ns3/antenna-module.h"
+#include "utils.h"
 
 namespace ns3
 {
@@ -50,11 +51,15 @@ public:
     Ptr<NrPointToPointEpcHelper> epcHelper;
     Ptr<ListPositionAllocator> bsPositionAlloc;
     Ptr<ListPositionAllocator> utPositionAlloc;
+    coordinate gnb_coordinate;
+    coordinate ue_coordinate;
+    NetDeviceContainer gNbNetDev;
+    NetDeviceContainer ueNetDev;
 
     /**
      * functions
      **/
-    myNR();
+    myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate);
     ~myNR();
 };
 

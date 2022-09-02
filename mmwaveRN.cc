@@ -3,7 +3,7 @@
 namespace ns3
 {
 
-myNR::myNR()
+myNR::myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate)
 {
     // setup the nr simulation
     nrHelper = CreateObject<NrHelper> ();
@@ -103,6 +103,66 @@ myNR::myNR()
 
     const double gNbHeight = 10;
     const double ueHeight = 1.5;
+
+    if (singleUeTopology)
+    {
+      gNbNodes.Create (1);
+      ueNodes.Create (1);
+      gNbNum = 1;
+      ueNumPergNb = 1;
+
+      mobility.Install (gNbNodes);
+      mobility.Install (ueNodes);
+      bsPositionAlloc->Add (Vector (gnb_coordinate.x_val, gnb_coordinate.y_val, gNbHeight));
+      utPositionAlloc->Add (Vector (ue_coordinate.x_val, ue_coordinate.y_val, ueHeight));
+    }
+    else
+    {
+        gNbNodes.Create (gNbNum);
+        ueNodes.Create (ueNumPergNb * gNbNum);
+
+        int32_t yValue = 0.0;
+        for (uint32_t i = 1; i <= gNbNodes.GetN (); ++i)
+        {
+        // 2.0, -2.0, 6.0, -6.0, 10.0, -10.0, ....
+        if (i % 2 != 0) yValue = static_cast<int> (i) * 30;
+        else yValue = -yValue;
+
+        bsPositionAlloc->Add (Vector (0.0, yValue, gNbHeight));
+
+        // 1.0, -1.0, 3.0, -3.0, 5.0, -5.0, ...
+        double xValue = 0.0;
+        for (uint16_t j = 1; j <= ueNumPergNb; ++j)
+            {
+            if (j % 2 != 0) xValue = j;
+            else xValue = -xValue;
+
+            if (yValue > 0) utPositionAlloc->Add (Vector (xValue, 1, ueHeight));
+            else utPositionAlloc->Add (Vector (xValue, -1, ueHeight));
+            }
+        }
+        }
+    mobility.SetPositionAllocator (bsPositionAlloc);
+    mobility.Install (gNbNodes);
+
+    mobility.SetPositionAllocator (utPositionAlloc);
+    mobility.Install (ueNodes);
+
+    // Install nr net devices
+    gNbNetDev = nrHelper->InstallGnbDevice (gNbNodes, allBwps);
+
+    ueNetDev = nrHelper->InstallUeDevice (ueNodes, allBwps);
+
+    int64_t randomStream = 1;
+    randomStream += nrHelper->AssignStreams (gNbNetDev, randomStream);
+    randomStream += nrHelper->AssignStreams (ueNetDev, randomStream);
+
+
+    // When all the configuration is done, explicitly call UpdateConfig ()
+
+    for (auto it = gNbNetDev.Begin (); it != gNbNetDev.End (); ++it) DynamicCast<NrGnbNetDevice> (*it)->UpdateConfig ();
+
+    for (auto it = ueNetDev.Begin (); it != ueNetDev.End (); ++it) DynamicCast<NrUeNetDevice> (*it)->UpdateConfig ();
 }
 myNR::~myNR()
 {
