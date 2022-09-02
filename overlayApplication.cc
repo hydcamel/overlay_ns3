@@ -192,6 +192,11 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
         {
             if (tagPktRecv.GetIsProbe() > 0)
             {
+                if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
+                {
+                    std::cout << SRC << " - " << DEST << " -PktID=" << tagPktRecv.GetPktID() << " received at: " << Simulator::Now().GetMicroSeconds() << std::endl;
+                    // std::cout << SRC << " - " << DEST << " with large: " << 4 << " -PktID=" << tagPktRecv.GetPktID() << " sandwithID = " << (uint32_t)tagPktRecv.GetSandWichID() << ": " << Simulator::Now().GetMicroSeconds() << std::endl;
+                }
                 switch (meta->probe_type)
                 {
                     case ProbeType::naive:
@@ -202,11 +207,7 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                     }
                     case ProbeType::sandwich_v1:
                     {
-                        if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
-                        {
-                            std::cout << SRC << " - " << DEST << " -PktID=" << tagPktRecv.GetPktID() << " received at: " << Simulator::Now().GetMicroSeconds() << std::endl;
-                            // std::cout << SRC << " - " << DEST << " with large: " << 4 << " -PktID=" << tagPktRecv.GetPktID() << " sandwithID = " << (uint32_t)tagPktRecv.GetSandWichID() << ": " << Simulator::Now().GetMicroSeconds() << std::endl;
-                        }
+                        
                         // if (tagPktRecv.GetSandWichID() == 1){}
                         // else meta->update_log_sandwich_v1(tagPktRecv.GetSourceID(), tagPktRecv.GetDestID(), tagPktRecv.GetSandWichLargeID(), tagPktRecv.GetPktID());
                         break;

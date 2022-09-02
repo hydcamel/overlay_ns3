@@ -23,7 +23,7 @@
 #define PrLBPkt (0.4)
 #define PrUBPkt (0.4)
 #define PrMEDPkt (0.2)
-#define ProbeSizeNaive (50)
+#define ProbeSizeNaive (46)
 #define ProbeSizeSWSmall (50)
 #define ProbeSizeSWlarge (1450)
 

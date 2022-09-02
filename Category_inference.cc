@@ -37,7 +37,7 @@ int main (int argc, char *argv[])
     // set simulation time and mobility
     double simTime = 1; // seconds
     double udpAppStartTime = 0.4; //seconds
-    double stop_time = 10.0; // seconds
+    double stop_time = 100.0; // seconds
 
     //RAN-related simulation parameters default values
     if (ran)
@@ -81,13 +81,13 @@ int main (int argc, char *argv[])
     fact.Set("probe_interval", TimeValue(MicroSeconds(200.0)));
     fact.Set("sandwich_interval", TimeValue(MicroSeconds(100.0))); // Interval between the first and second patch of the sandwich
     // fact.Set ("MaxPackets", UintegerValue (1));
-    fact.Set("PacketSize", UintegerValue(netw_meta._AppPktSize));
+    // fact.Set("PacketSize", UintegerValue(netw_meta._AppPktSize));
     for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
     {
         vec_app[i] = fact.Create<overlayApplication>();
         vec_app[i]->InitApp(&netw_meta, i, netw_meta._MAXPKTNUM);
         vec_app[i]->SetStartTime(Seconds(0));
-        vec_app[i]->SetStopTime(Seconds(stop_time));
+        vec_app[i]->SetStopTime(MilliSeconds(stop_time));
         underlayNodes.Get(i)->AddApplication(vec_app[i]);
         vec_app[i]->SetRecvSocket();
     }
@@ -136,7 +136,7 @@ int main (int argc, char *argv[])
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
 
     NS_LOG_INFO("Run Simulation.");
-    // std::cout << "before run" << std::endl;
+    std::cout << "before run" << std::endl;
     Simulator::Run();
     // flow_monitor->SerializeToXmlFile("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/flow_monitor_res.xml", true, true);
     Simulator::Stop(MilliSeconds(stop_time*1.2));
