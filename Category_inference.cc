@@ -23,7 +23,7 @@ NS_LOG_COMPONENT_DEFINE ("Category_inference");
 int main (int argc, char *argv[])
 {
     bool logging = false;
-    bool ran = false;
+    bool ran = true;
     if (logging)
     {
         LogComponentEnable ("netw", LOG_LEVEL_INFO);
