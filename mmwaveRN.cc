@@ -3,7 +3,7 @@
 namespace ns3
 {
 
-myNR::myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate)
+myNR::myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, Ptr<Node> remoteHost, InternetStackHelper &internet)
 {
     // setup the nr simulation
     nrHelper = CreateObject<NrHelper> ();
@@ -82,7 +82,8 @@ myNR::myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate)
 
 
     // Create EPC helper
-    epcHelper = CreateObject<NrPointToPointEpcHelper> ();
+    const std::string Addr_IPv4_Network_gNB {std::to_string(netw_base) + ".0.0.0"};
+    epcHelper = CreateObject<NrPointToPointEpcHelper> (Addr_IPv4_Network_gNB);
     nrHelper->SetEpcHelper (epcHelper);
     // Core latency
     epcHelper->SetAttribute ("S1uLinkDelay", TimeValue (MilliSeconds (0)));
@@ -163,6 +164,37 @@ myNR::myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate)
     for (auto it = gNbNetDev.Begin (); it != gNbNetDev.End (); ++it) DynamicCast<NrGnbNetDevice> (*it)->UpdateConfig ();
 
     for (auto it = ueNetDev.Begin (); it != ueNetDev.End (); ++it) DynamicCast<NrUeNetDevice> (*it)->UpdateConfig ();
+
+    // create the internet and install the IP stack on the UEs
+    // get SGW/PGW and create a single RemoteHost 
+    pgw = epcHelper->GetPgwNode ();
+    // connect a remoteHost to pgw. Setup routing too
+    PointToPointHelper p2ph;
+    p2ph.SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("500Gb/s")));
+    p2ph.SetDeviceAttribute ("Mtu", UintegerValue (2500));
+    p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (0.000)));
+    NetDeviceContainer internetDevices = p2ph.Install (pgw, remoteHost);
+    Ipv4AddressHelper ipv4h;
+    // ipv4h.SetBase ( "1.0.0.0", "255.0.0.0");
+    const std::string p2pPgwEpc{std::to_string(netw_base-1) + ".0.0.0"};
+    ipv4h.SetBase (Ipv4Address(p2pPgwEpc.data()), "255.0.0.0");
+    Ipv4InterfaceContainer internetIpIfaces = ipv4h.Assign (internetDevices);
+
+    Ipv4StaticRoutingHelper ipv4RoutingHelper;
+    Ptr<Ipv4StaticRouting> remoteHostStaticRouting = ipv4RoutingHelper.GetStaticRouting (remoteHost->GetObject<Ipv4> ());
+    // remoteHostStaticRouting->AddNetworkRouteTo (Ipv4Address ("7.0.0.0"), Ipv4Mask ("255.0.0.0"), 1);
+    remoteHostStaticRouting->AddNetworkRouteTo (Ipv4Address (Addr_IPv4_Network_gNB.data()), Ipv4Mask ("255.0.0.0"), remoteHost->GetNDevices()-1);
+    internet.Install (ueNodes);
+
+    Ipv4InterfaceContainer ueIpIface = epcHelper->AssignUeIpv4Address (NetDeviceContainer (ueNetDev));
+
+    // Set the default gateway for the UEs
+    for (uint32_t j = 0; j < ueNodes.GetN (); ++j)
+    {
+        Ptr<Ipv4StaticRouting> ueStaticRouting = ipv4RoutingHelper.GetStaticRouting (ueNodes.Get (j)->GetObject<Ipv4> ());
+        ueStaticRouting->SetDefaultRoute (epcHelper->GetUeDefaultGatewayAddress (), 1);
+    }
+    
 }
 myNR::~myNR()
 {

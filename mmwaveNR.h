@@ -55,11 +55,12 @@ public:
     coordinate ue_coordinate;
     NetDeviceContainer gNbNetDev;
     NetDeviceContainer ueNetDev;
+    Ptr<Node> pgw;
 
     /**
      * functions
      **/
-    myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate);
+    myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, Ptr<Node> remoteHost, InternetStackHelper &internet);
     ~myNR();
 };
 
