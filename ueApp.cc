@@ -3,21 +3,9 @@
 namespace ns3
 {
 
-uint32_t ueTag::GetSerializedSize (void) const
+ueApp::ueApp(uint32_t ID_associated)
 {
-    return 8;
-}
-void ueTag::Serialize (TagBuffer i) const
-{
-    i.WriteU64(StartTime);
-}
-void ueTag::Deserialize (TagBuffer i)
-{
-    StartTime = i.ReadU64();
-}
-
-ueApp::ueApp()
-{
+    local_ID_ = ID_associated;
     NS_LOG_FUNCTION(this);
 }
 ueApp::~ueApp()
@@ -37,9 +25,9 @@ void ueApp::HandleRead(Ptr<Socket> socket)
         // m_rxTrace(packet);
         // m_rxTraceWithAddresses(packet, from, localAddress);
 
-        // std::cout << "Node ID: " << m_local_ID << "; pkt received" << std::endl;
         ueTag tagPktRecv;
         packet->PeekPacketTag(tagPktRecv);
+        std::cout << "Node ID: " << local_ID_ << "; pkt received with start-time: " << (uint64_t)(tagPktRecv.GetStartTime()) << std::endl;
     }
 }
 

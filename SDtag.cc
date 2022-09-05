@@ -123,4 +123,66 @@ uint32_t SDtag::GetPktID (void) const
     return PktID;
 }
 
+/** ueTag **/
+uint32_t ueTag::GetSerializedSize (void) const
+{
+    return 8;
+}
+void ueTag::Serialize (TagBuffer i) const
+{
+    i.WriteU64(StartTime);
+}
+void ueTag::Deserialize (TagBuffer i)
+{
+    StartTime = i.ReadU64();
+}
+
+TypeId ueTag::GetTypeId (void)
+{
+  static TypeId tid = TypeId ("ns3::ueTag")
+    .SetParent<Tag> ()
+    .AddConstructor<SDtag> ()
+    .AddAttribute ("StartTime",
+                   "Start time of the Packet",
+                   EmptyAttributeValue (),
+                   MakeUintegerAccessor (&SDtag::GetSourceID),
+                   MakeUintegerChecker<uint8_t> ())
+    .AddAttribute ("DestID",
+                   "ID of the Destiny",
+                   EmptyAttributeValue (),
+                   MakeUintegerAccessor (&SDtag::GetDestID),
+                   MakeUintegerChecker<uint8_t> ())
+    .AddAttribute ("CurrentHop",
+                   "Current hop index",
+                   EmptyAttributeValue (),
+                   MakeUintegerAccessor (&SDtag::GetCurrentHop),
+                   MakeUintegerChecker<uint8_t> ())
+    .AddAttribute ("PktID",
+                   "ID of the Packet",
+                   EmptyAttributeValue (),
+                   MakeUintegerAccessor (&SDtag::GetPktID),
+                   MakeUintegerChecker<uint32_t> ())
+  ;
+  return tid;
+}
+
+TypeId ueTag::GetInstanceTypeId (void) const
+{
+    return GetTypeId ();
+}
+
+uint64_t ueTag::GetStartTime (void) const
+{
+    return StartTime;
+}
+void ueTag::SetStartTime (uint64_t value)
+{
+    StartTime = value;
+}
+
+void ueTag::Print (std::ostream &os) const
+{
+    os << "source=" << (uint64_t)StartTime << std::endl;
+}
+
 }

@@ -11,6 +11,22 @@
 namespace ns3
 {
 
+class ueTag : public Tag
+{
+public:
+    virtual void Serialize (TagBuffer i) const;
+    virtual void Deserialize (TagBuffer i);
+    static TypeId GetTypeId (void);
+    virtual TypeId GetInstanceTypeId (void) const;
+    virtual uint32_t GetSerializedSize (void) const;
+
+    uint64_t GetStartTime (void) const;
+    void SetStartTime (uint64_t value);
+    void ueTag::Print (std::ostream &os) const;
+private:
+    uint64_t StartTime;
+};
+
 class SDtag : public Tag{
 public:
     static TypeId GetTypeId (void);
