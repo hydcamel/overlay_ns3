@@ -12,9 +12,13 @@
 namespace ns3
 {
 
+#define NRPORT 1234
+
 class ueApp : public Application
 {
 public:
+    static TypeId GetTypeId(void);
+    virtual TypeId GetInstanceTypeId(void) const;
     ueApp(uint32_t ID_associated);
     virtual ~ueApp();
 
@@ -22,6 +26,7 @@ public:
     void HandleRead(Ptr<Socket> socket);
 private:
     uint32_t local_ID_;
+    Ptr<Socket> recv_socket;
     virtual void StartApplication(void);
     virtual void StopApplication(void);
 };

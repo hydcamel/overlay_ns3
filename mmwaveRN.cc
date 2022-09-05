@@ -3,7 +3,7 @@
 namespace ns3
 {
 
-myNR::myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, Ptr<Node> remoteHost, InternetStackHelper &internet)
+myNR::myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, overlayApplication &app_interface, InternetStackHelper &internet)
 {
     // setup the nr simulation
     nrHelper = CreateObject<NrHelper> ();
@@ -168,6 +168,7 @@ myNR::myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_
     // create the internet and install the IP stack on the UEs
     // get SGW/PGW and create a single RemoteHost 
     pgw = epcHelper->GetPgwNode ();
+    Ptr<Node> remoteHost = app_interface.GetNode();
     // connect a remoteHost to pgw. Setup routing too
     PointToPointHelper p2ph;
     p2ph.SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("500Gb/s")));
@@ -194,6 +195,98 @@ myNR::myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_
         Ptr<Ipv4StaticRouting> ueStaticRouting = ipv4RoutingHelper.GetStaticRouting (ueNodes.Get (j)->GetObject<Ipv4> ());
         ueStaticRouting->SetDefaultRoute (epcHelper->GetUeDefaultGatewayAddress (), 1);
     }
+
+    // attach UEs to the closest eNB
+    nrHelper->AttachToClosestEnb (ueNetDev, gNbNetDev);
+
+    // The bearer that will carry low latency traffic
+    uint16_t dlPort = NRPORT;
+    EpsBearer bearer (EpsBearer::GBR_CONV_VOICE);
+
+    Ptr<EpcTft> tft = Create<EpcTft> ();
+    EpcTft::PacketFilter dlpf;
+    dlpf.localPortStart = dlPort;
+    dlpf.localPortEnd = dlPort;
+    tft->Add (dlpf);
+
+    /** set the Recv Listen Socket for UE **/
+    ObjectFactory fact;
+    fact.SetTypeId("ns3::ueApp");
+
+    /** Set Connection between RemoteHost and UEs **/
+    app_interface.nr_socket.resize(ueNodes.GetN ());
+    vec_ue_app.resize(ueNodes.GetN ());
+    for (uint32_t i = 0; i < ueNodes.GetN (); ++i)
+    {
+        Ptr<Node> ue = ueNodes.Get (i);
+        Ptr<NetDevice> ueDevice = ueNetDev.Get (i);
+        Address ueAddress = ueIpIface.GetAddress (i);
+        vec_ue_app[i] = fact.Create<ueApp>();
+
+        // The client, who is transmitting, is installed in the remote host,
+        // with destination address set to the address of the UE
+        /* dlClient.SetAttribute ("RemoteAddress", AddressValue (ueAddress));
+        clientApps.Add (dlClient.Install (remoteHost)); */
+        TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
+        app_interface.nr_socket[i] = Socket::CreateSocket(app_interface.GetNode(), tid);
+        if (app_interface.nr_socket[i]->Bind() == -1)
+        {
+            NS_FATAL_ERROR("Failed to bind socket");
+        }
+        app_interface.nr_socket[i]->Connect(InetSocketAddress(Ipv4Address::ConvertFrom(ueAddress), dlPort));
+
+        // Activate a dedicated bearer for the traffic type
+        nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer, tft);
+    }
+    
+    
+
+    
+    
+
+    // assign IP address to UEs, and install UDP downlink applications
+    
+
+    /* ApplicationContainer serverApps;
+
+    // The sink will always listen to the specified ports
+    UdpServerHelper dlPacketSinkHelper (dlPort);
+    serverApps.Add (dlPacketSinkHelper.Install (ueNodes.Get (0)));
+
+    UdpClientHelper dlClient;
+    dlClient.SetAttribute ("RemotePort", UintegerValue (dlPort));
+    dlClient.SetAttribute ("PacketSize", UintegerValue (udpPacketSize));
+    dlClient.SetAttribute ("MaxPackets", UintegerValue (0xFFFFFFFF));
+    if (udpFullBuffer)
+        {
+        double bitRate =
+            75000000; // 75 Mbps will saturate the NR system of 20 MHz with the NrEesmIrT1 error model
+        bitRate /= ueNumPergNb; // Divide the cell capacity among UEs
+        if (bandwidth > 20e6)
+            {
+            bitRate *= bandwidth / 20e6;
+            }
+        lambda = bitRate / static_cast<double> (udpPacketSize * 8);
+        }
+    dlClient.SetAttribute ("Interval", TimeValue (Seconds (1.0 / lambda))); */
+
+    
+    
+
+    /*
+    * Let's install the applications! Socket connection between UEs and remote host
+    */
+    
+
+    /* ApplicationContainer clientApps;
+
+    
+
+    // start server and client apps
+    serverApps.Start (Seconds (udpAppStartTime));
+    clientApps.Start (Seconds (udpAppStartTime));
+    serverApps.Stop (Seconds (simTime));
+    clientApps.Stop (Seconds (simTime)); */
     
 }
 myNR::~myNR()

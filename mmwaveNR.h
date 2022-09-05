@@ -14,6 +14,8 @@
 #include "ns3/config-store-module.h"
 #include "ns3/antenna-module.h"
 #include "utils.h"
+#include "overlayApplication.h"
+#include "ueApp.h"
 
 namespace ns3
 {
@@ -56,11 +58,12 @@ public:
     NetDeviceContainer gNbNetDev;
     NetDeviceContainer ueNetDev;
     Ptr<Node> pgw;
+    std::vector<Ptr<ueApp>> vec_ue_app;
 
     /**
      * functions
      **/
-    myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, Ptr<Node> remoteHost, InternetStackHelper &internet);
+    myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, overlayApplication &app_interface, InternetStackHelper &internet);
     ~myNR();
 };
 

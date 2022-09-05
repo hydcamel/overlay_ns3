@@ -40,6 +40,7 @@ public:
     bool CheckCongestion(uint32_t deviceID, uint32_t src, uint32_t dest, uint16_t PktID);
 
     bool is_overlay;
+    std::vector<Ptr<Socket>> nr_socket;
 protected:
     virtual void DoDispose(void);
 private:
