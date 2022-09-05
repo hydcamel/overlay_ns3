@@ -225,6 +225,15 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
             {
                 std::cout << m_local_ID << ": recv background at " << Simulator::Now().As(Time::US) << " with " << keys << std::endl; 
             } */
+            ueTag tag_ue_forward;
+            tag_ue_forward.SetStartTime( (uint64_t)(Simulator::Now().GetMicroSeconds()) );
+            packet->RemovePacketTag(tagPktRecv);
+            packet->AddPacketTag(tag_ue_forward);
+            for (uint32_t i = 0; i < nr_socket.size(); i++)
+            {
+                nr_socket[i]->Send(packet);
+            }
+            
         }
         else
         {
