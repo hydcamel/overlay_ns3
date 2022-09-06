@@ -3,7 +3,8 @@
 namespace ns3
 {
 
-myNR::myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, overlayApplication &app_interface, InternetStackHelper &internet)
+myNR::myNR(){}
+void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, overlayApplication &app_interface, InternetStackHelper &internet)
 {
     // setup the nr simulation
     nrHelper = CreateObject<NrHelper> ();
@@ -222,6 +223,8 @@ myNR::myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_
         Ptr<NetDevice> ueDevice = ueNetDev.Get (i);
         Address ueAddress = ueIpIface.GetAddress (i);
         vec_ue_app[i] = fact.Create<ueApp>();
+        ue->AddApplication(vec_ue_app[i]);
+        vec_ue_app[i]->initUeApp(app_interface);
 
         // The client, who is transmitting, is installed in the remote host,
         // with destination address set to the address of the UE

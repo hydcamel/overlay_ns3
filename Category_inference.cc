@@ -13,6 +13,7 @@
 #include "utils.h"
 #include "netw.h"
 #include "overlayApplication.h"
+#include "mmwaveNR.h"
 #include <vector>
 #include <string>
 
@@ -23,7 +24,6 @@ NS_LOG_COMPONENT_DEFINE ("Category_inference");
 int main (int argc, char *argv[])
 {
     bool logging = false;
-    bool ran = true;
     if (logging)
     {
         LogComponentEnable ("netw", LOG_LEVEL_INFO);
@@ -35,31 +35,9 @@ int main (int argc, char *argv[])
     netw netw_meta (fd_setup_wrap);
 
     // set simulation time and mobility
-    double simTime = 1; // seconds
-    double udpAppStartTime = 0.4; //seconds
+    // double simTime = 1; // seconds
+    // double udpAppStartTime = 0.4; //seconds
     double stop_time = 100.0; // seconds
-
-    //RAN-related simulation parameters default values
-    if (ran)
-    {
-        uint16_t numerology = 0;
-
-        uint16_t gNbNum = 1;
-        uint16_t ueNumPergNb = 1;
-
-        double centralFrequency = 7e9;
-        double bandwidth = 100e6;
-        double txPower = 14;
-        double lambda = 1000;
-        uint32_t udpPacketSize = 1000;
-        bool udpFullBuffer = true;
-        uint8_t fixedMcs = 28;
-        bool useFixedMcs = true;
-        bool singleUeTopology = true;
-        // Where we will store the output files.
-        std::string simTag = "default";
-        std::string outputDir = "./";
-    }
     /**
      * Underlay Network
      *
@@ -133,6 +111,24 @@ int main (int argc, char *argv[])
             for (uint32_t l = 0; l < n_devices_perNode[k]; l++) NS_LOG_INFO( "device ID: " << l << " with address: " << linkIpv4[k]->GetAddress( l, 0 ).GetLocal() );
         } */
     }
+    uint32_t network_base_number = 20;
+    // std::vector<Ptr<myNR>> vec_nr_app( vec_app.size() );
+    std::vector<myNR> vec_nr_app(vec_app.size());
+    std::vector<coordinate> vec_gnb_coordinate( vec_app.size() );
+    std::vector<coordinate> vec_ue_coordinate( vec_app.size() );
+    // myNR testNR(vec_gnb_coordinate[2], vec_ue_coordinate[2], network_base_number, *(vec_app[2]), internet);
+    for (uint32_t i = 0; i < vec_app.size(); i++)
+    {
+        vec_gnb_coordinate[i].x_val = i*100;
+        vec_gnb_coordinate[i].y_val = i*10;
+        vec_ue_coordinate[i].x_val = vec_gnb_coordinate[i].x_val + 20;
+        vec_ue_coordinate[i].y_val = vec_gnb_coordinate[i].y_val;
+        // myNR tmpNR(vec_gnb_coordinate[i], vec_ue_coordinate[i], network_base_number, *(vec_app[i]), internet);
+        // vec_nr_app.push_back( tmpNR );
+        vec_nr_app[i].init_myNR(vec_gnb_coordinate[i], vec_ue_coordinate[i], network_base_number, *(vec_app[i]), internet);
+        network_base_number += 2;
+    }
+
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
 
     NS_LOG_INFO("Run Simulation.");

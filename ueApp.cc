@@ -3,10 +3,27 @@
 namespace ns3
 {
 
-ueApp::ueApp(uint32_t ID_associated)
+
+NS_LOG_COMPONENT_DEFINE("ueApp");
+NS_OBJECT_ENSURE_REGISTERED(ueApp);
+
+ueApp::ueApp()
 {
-    local_ID_ = ID_associated;
     NS_LOG_FUNCTION(this);
+}
+void ueApp::initUeApp(overlayApplication &app_interface)
+{
+    local_ID_ = app_interface.GetLocalID();
+    TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
+    recv_socket = Socket::CreateSocket(GetNode(), tid);
+    InetSocketAddress local = InetSocketAddress(Ipv4Address::GetAny(), NRPORT);
+    if (recv_socket->Bind(local) == -1)
+    {
+        // std::cout << "Failed to bind socket" << std::endl;
+        NS_FATAL_ERROR("Failed to bind socket");
+    }
+    // else std::cout << "UE bind socket" << std::endl;
+    recv_socket->SetRecvCallback(MakeCallback(&ueApp::HandleRead, this));
 }
 ueApp::~ueApp()
 {
@@ -33,18 +50,12 @@ void ueApp::HandleRead(Ptr<Socket> socket)
 
 void ueApp::StartApplication(void)
 {
-    TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
-    recv_socket = Socket::CreateSocket(GetNode(), tid);
-    InetSocketAddress local = InetSocketAddress(Ipv4Address::GetAny(), NRPORT);
-    if (recv_socket->Bind(local) == -1)
-    {
-        NS_FATAL_ERROR("Failed to bind socket");
-    }
-    recv_socket->SetRecvCallback(MakeCallback(&ueApp::HandleRead, this));
     NS_LOG_FUNCTION(this);
 }
 void ueApp::StopApplication(void)
 {
+    recv_socket->Close();
+    recv_socket->SetRecvCallback(MakeNullCallback<void, Ptr<Socket>>());
     NS_LOG_FUNCTION(this);
 }
 

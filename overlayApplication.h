@@ -74,6 +74,7 @@ private:
     /** Basic Meta **/
     netw* meta;
     bool is_run = true;
+    bool is_NR = true;
     uint16_t m_local_ID;
     
 };

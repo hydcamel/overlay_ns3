@@ -7,6 +7,8 @@
 #include "ns3/ipv4-address.h"
 #include "ns3/traced-callback.h"
 #include "ns3/udp-socket.h"
+#include "ns3/log.h"
+#include "overlayApplication.h"
 #include "SDtag.h"
 
 namespace ns3
@@ -19,7 +21,8 @@ class ueApp : public Application
 public:
     static TypeId GetTypeId(void);
     virtual TypeId GetInstanceTypeId(void) const;
-    ueApp(uint32_t ID_associated);
+    ueApp();
+    void initUeApp(overlayApplication &app_interface);
     virtual ~ueApp();
 
     /** Functions **/

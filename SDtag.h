@@ -22,7 +22,7 @@ public:
 
     uint64_t GetStartTime (void) const;
     void SetStartTime (uint64_t value);
-    void ueTag::Print (std::ostream &os) const;
+    void Print (std::ostream &os) const;
 private:
     uint64_t StartTime;
 };

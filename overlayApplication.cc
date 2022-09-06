@@ -219,21 +219,25 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                     default:
                         break;
                 }
+                if (is_NR)
+                {
+                    ueTag tag_ue_forward;
+                    tag_ue_forward.SetStartTime( (uint64_t)(Simulator::Now().GetMicroSeconds()) );
+                    packet->RemovePacketTag(tagPktRecv);
+                    packet->AddPacketTag(tag_ue_forward);
+                    std::cout << "Forwarding to UE, nr_socket.size()=" << nr_socket.size() << std::endl;
+                    for (uint32_t i = 0; i < nr_socket.size(); i++)
+                    {
+                        nr_socket[i]->Send(packet);
+                    }
+                }
                 // NS_LOG_INFO(m_local_ID << ": recv probe at " << Simulator::Now().As(Time::US) << " with " << keys);
             }
             /* if (tagPktRecv.GetIsProbe() == 0)
             {
                 std::cout << m_local_ID << ": recv background at " << Simulator::Now().As(Time::US) << " with " << keys << std::endl; 
             } */
-            ueTag tag_ue_forward;
-            tag_ue_forward.SetStartTime( (uint64_t)(Simulator::Now().GetMicroSeconds()) );
-            packet->RemovePacketTag(tagPktRecv);
-            packet->AddPacketTag(tag_ue_forward);
-            for (uint32_t i = 0; i < nr_socket.size(); i++)
-            {
-                nr_socket[i]->Send(packet);
-            }
-            
+
         }
         else
         {

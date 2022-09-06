@@ -63,7 +63,8 @@ public:
     /**
      * functions
      **/
-    myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, overlayApplication &app_interface, InternetStackHelper &internet);
+    myNR();
+    void init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, overlayApplication &app_interface, InternetStackHelper &internet);
     ~myNR();
 };
 
