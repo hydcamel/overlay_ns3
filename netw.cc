@@ -41,6 +41,7 @@ netw::netw(name_input_files &fd_setup)
 	read_demands(fd_setup.demands_file);
 	read_probe_profile(fd_setup.probe_setup_filename);
 	read_probe_intervals(fd_setup.probe_interval_files);
+	read_gnb_coordinate(fd_setup.gnb_coordinate_files);
 }
 
 void netw::read_underlay(std::string filename)
@@ -161,6 +162,37 @@ void netw::read_overlay(std::string file_overlay_nodes)
 	} */
 	
 }
+
+void netw::read_gnb_coordinate(std::string filename)
+{
+	vec_gnb_coordinate_.resize(n_overlay_nodes);
+	std::ifstream infile(filename);
+    std::string line;
+	if (infile.is_open())
+	{
+		std::cout << "coordinate_file: " << filename << std::endl;
+		for (uint32_t j = 0; j < 2; j++)
+		{
+			getline(infile, line);
+			if (!line.empty() && j == 0)
+			{
+				std::istringstream iss(line);
+				for (uint32_t i = 0; i < n_overlay_nodes; i++)
+				{
+					iss >> vec_gnb_coordinate_[i].x_val;
+				}
+			}
+			if (!line.empty() && j == 1)
+			{
+				std::istringstream iss(line);
+				for (uint32_t i = 0; i < n_overlay_nodes; i++)
+				{
+					iss >> vec_gnb_coordinate_[i].y_val;
+				}
+			}
+		}
+	}
+}
 	
 
 netw::~netw()
@@ -245,8 +277,9 @@ void netw::read_probe_profile(std::string filename)
 			iss >> temp >> n_old_E;
 			for (uint32_t i = 0; i < n_old_E; i++)
 			{
-				iss >> temp >> e_idx;
-				old_E[i] = true;
+				iss >> e_idx;
+				old_E[e_idx] = true;
+				// std::cout << "n_old_E: " << n_old_E << "-" << temp << e_idx << std::endl;
 			}
 		}
 		else if (line.substr(0, 9).compare("e_new_idx") == 0)

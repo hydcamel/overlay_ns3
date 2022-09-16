@@ -42,29 +42,29 @@ public:
     bool singleUeTopology = true;
 
     /** NR **/
-    NodeContainer gNbNodes;
-    NodeContainer ueNodes;
-    MobilityHelper mobility;
-    Ptr<NrHelper> nrHelper;
-    CcBwpCreator ccBwpCreator;
-    BandwidthPartInfo::Scenario scenario;
-    OperationBandInfo band;
-    BandwidthPartInfoPtrVector allBwps;
-    Ptr<NrPointToPointEpcHelper> epcHelper;
-    Ptr<ListPositionAllocator> bsPositionAlloc;
-    Ptr<ListPositionAllocator> utPositionAlloc;
+    // NodeContainer gNbNodes;
+    // NodeContainer ueNodes;
+    // MobilityHelper mobility;
+    // Ptr<NrHelper> nrHelper;
+    // CcBwpCreator ccBwpCreator;
+    // BandwidthPartInfo::Scenario scenario;
+    // OperationBandInfo band;
+    // BandwidthPartInfoPtrVector allBwps;
+    // Ptr<NrPointToPointEpcHelper> epcHelper;
+    // Ptr<ListPositionAllocator> bsPositionAlloc;
+    // Ptr<ListPositionAllocator> utPositionAlloc;
     coordinate gnb_coordinate;
     coordinate ue_coordinate;
-    NetDeviceContainer gNbNetDev;
-    NetDeviceContainer ueNetDev;
-    Ptr<Node> pgw;
+    // NetDeviceContainer gNbNetDev;
+    // NetDeviceContainer ueNetDev;
+    // Ptr<Node> pgw;
     std::vector<Ptr<ueApp>> vec_ue_app;
 
     /**
      * functions
      **/
     myNR();
-    void init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, overlayApplication &app_interface, InternetStackHelper &internet);
+    void init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, overlayApplication &app_interface, InternetStackHelper &internet, Ptr<NrHelper> &nrHelper, Ptr<NrPointToPointEpcHelper> &epcHelper);
     ~myNR();
 };
 

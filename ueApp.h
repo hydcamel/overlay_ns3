@@ -29,7 +29,10 @@ public:
     void HandleRead(Ptr<Socket> socket);
 private:
     uint32_t local_ID_;
+    uint32_t cnt_probes = 0;
+    uint32_t max_probes;
     Ptr<Socket> recv_socket;
+    // overlayApplication &app_interface_;
     virtual void StartApplication(void);
     virtual void StopApplication(void);
 };

@@ -11,7 +11,8 @@
 #include "ns3/log.h"
 #include <unistd.h>
 
-using namespace ns3;
+namespace ns3
+{
 
 #define SRC 17
 #define DEST 3
@@ -25,6 +26,7 @@ typedef struct name_files
     std::string route_name;
     std::string probe_setup_filename;
     std::string probe_interval_files;
+    std::string gnb_coordinate_files;
 }name_input_files;
 
 typedef struct coordinate
@@ -37,6 +39,18 @@ typedef struct coordinate
  * read and write utils
  **/
 void read_setup(name_input_files &input_fd);
+
+void txTraceIpv4(std::string context, Ptr<const Packet> packet, Ptr<Ipv4> ptr_ipv4, uint32_t dontknow);
+void p2pDevMacTx(std::string context, Ptr<const Packet> packet);
+void p2pDevMacRx(std::string context, Ptr<const Packet> packet);
+// void trace_udpClient(std::string context, Ptr<const Packet> packet);
+void trace_PhyTxBegin(std::string context, Ptr<const Packet> packet);
+void trace_PhyTxEnd(std::string context, Ptr<const Packet> packet);
+// void trace_PhyRxBegin(std::string context, Ptr<const Packet> packet);
+void trace_PhyRxEnd(std::string context, Ptr<const Packet> packet);
+
+}
+
 
 
 #endif

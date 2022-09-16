@@ -41,6 +41,7 @@ public:
 
     bool is_overlay;
     std::vector<Ptr<Socket>> nr_socket;
+    netw* meta;
 protected:
     virtual void DoDispose(void);
 private:
@@ -72,7 +73,7 @@ private:
     Ptr<Socket> recv_socket;
     std::unordered_map<uint32_t, uint32_t> map_neighbor_device; // <idx_neighbor, deviceID>
     /** Basic Meta **/
-    netw* meta;
+    
     bool is_run = true;
     bool is_NR = true;
     uint16_t m_local_ID;

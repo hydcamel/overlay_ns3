@@ -42,7 +42,8 @@ TypeId SDtag::GetInstanceTypeId (void) const
 }
 uint32_t SDtag::GetSerializedSize (void) const
 {
-    return 9;
+    // return 9;
+    return 17;
 }
 void SDtag::Serialize (TagBuffer i) const
 {
@@ -54,6 +55,7 @@ void SDtag::Serialize (TagBuffer i) const
     // i.WriteU8(SandWichID);
     // i.WriteU8(SandWichLargeID);
     i.WriteU32 (PktID);
+    i.WriteU64(StartTime);
 }
 void SDtag::Deserialize (TagBuffer i)
 {
@@ -65,6 +67,7 @@ void SDtag::Deserialize (TagBuffer i)
     // SandWichID = i.ReadU8();
     // SandWichLargeID = i.ReadU8();
     PktID = i.ReadU32();
+    StartTime = i.ReadU64();
 }
 void SDtag::Print (std::ostream &os) const
 {
@@ -121,6 +124,14 @@ void SDtag::SetPktID (uint32_t value)
 uint32_t SDtag::GetPktID (void) const
 {
     return PktID;
+}
+void SDtag::SetStartTime (uint64_t value)
+{
+    StartTime = value;
+}
+uint64_t SDtag::GetStartTime (void) const
+{
+    return StartTime;
 }
 
 /** ueTag **/

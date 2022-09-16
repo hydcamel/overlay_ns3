@@ -55,6 +55,7 @@ public:
     void read_demands(std::string filename); 
     void read_probe_profile(std::string filename); // for probing, this will contain the probing rate profile: microsecond (us, 1e-6) 
     void read_probe_intervals(std::string filename); // for probing, this will contain the probing rate profile: microsecond (us, 1e-6) 
+    void read_gnb_coordinate(std::string filename);
 
     /**
      * underlay network
@@ -63,6 +64,7 @@ public:
     std::map<std::string, int> edges; // hash_map for links
     std::vector<std::pair<int, int>> edges_vec; // vector  for links
     uint32_t n_nodes,n_edges;
+    std::vector<coordinate> vec_gnb_coordinate_;
 
     /**
      * overlay network

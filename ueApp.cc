@@ -19,11 +19,19 @@ void ueApp::initUeApp(overlayApplication &app_interface)
     InetSocketAddress local = InetSocketAddress(Ipv4Address::GetAny(), NRPORT);
     if (recv_socket->Bind(local) == -1)
     {
-        // std::cout << "Failed to bind socket" << std::endl;
-        NS_FATAL_ERROR("Failed to bind socket");
+        std::cout << "Failed to bind socket" << std::endl;
+        // NS_FATAL_ERROR("Failed to bind socket");
     }
     // else std::cout << "UE bind socket" << std::endl;
     recv_socket->SetRecvCallback(MakeCallback(&ueApp::HandleRead, this));
+    /* if (local_ID_ == 3 || local_ID_ == 4 || local_ID_ == 6)
+    {
+        Address tmpAddr;
+        recv_socket->GetSockName(tmpAddr);
+        std::cout << "UE ID: " << local_ID_ << " - "  << tmpAddr << std::endl;
+    } */
+    max_probes = app_interface.meta->_MAXPKTNUM;
+    // std::cout << "UE node Init: " << local_ID_ << std::endl;
 }
 ueApp::~ueApp()
 {
@@ -42,18 +50,23 @@ void ueApp::HandleRead(Ptr<Socket> socket)
         // m_rxTrace(packet);
         // m_rxTraceWithAddresses(packet, from, localAddress);
 
-        ueTag tagPktRecv;
+        // ueTag tagPktRecv;
+        SDtag tagPktRecv;
         packet->PeekPacketTag(tagPktRecv);
         std::cout << "UE ID: " << local_ID_ << "; pkt received with start-time: " << (uint64_t)(tagPktRecv.GetStartTime()) << std::endl;
+        cnt_probes ++;
+        // if(cnt_probes >= max_probes) StopApplication();
     }
 }
 
 void ueApp::StartApplication(void)
 {
+    // std::cout << "UE_App Start at: " << local_ID_ << " " << std::endl;
     NS_LOG_FUNCTION(this);
 }
 void ueApp::StopApplication(void)
 {
+    // std::cout << "UE ID: " << local_ID_ << "; Stopped" << std::endl;
     recv_socket->Close();
     recv_socket->SetRecvCallback(MakeNullCallback<void, Ptr<Socket>>());
     NS_LOG_FUNCTION(this);

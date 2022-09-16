@@ -192,11 +192,11 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
         {
             if (tagPktRecv.GetIsProbe() > 0)
             {
-                if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
+                /* if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
                 {
                     std::cout << SRC << " - " << DEST << " -PktID=" << tagPktRecv.GetPktID() << " received at: " << Simulator::Now().GetMicroSeconds() << std::endl;
                     // std::cout << SRC << " - " << DEST << " with large: " << 4 << " -PktID=" << tagPktRecv.GetPktID() << " sandwithID = " << (uint32_t)tagPktRecv.GetSandWichID() << ": " << Simulator::Now().GetMicroSeconds() << std::endl;
-                }
+                } */
                 switch (meta->probe_type)
                 {
                     case ProbeType::naive:
@@ -221,14 +221,15 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                 }
                 if (is_NR)
                 {
-                    ueTag tag_ue_forward;
-                    tag_ue_forward.SetStartTime( (uint64_t)(Simulator::Now().GetMicroSeconds()) );
-                    packet->RemovePacketTag(tagPktRecv);
-                    packet->AddPacketTag(tag_ue_forward);
-                    std::cout << "Forwarding to UE, nr_socket.size()=" << nr_socket.size() << std::endl;
+                    // ueTag tag_ue_forward;
+                    // tag_ue_forward.SetStartTime( (uint64_t)(Simulator::Now().GetMicroSeconds()) );
+                    // // packet->RemovePacketTag(tagPktRecv);
+                    // packet->AddPacketTag(tag_ue_forward);
+                    std::cout << "Node ID: " << m_local_ID << "-Forwarding to UE, nr_socket.size()=" << nr_socket.size() << std::endl;
                     for (uint32_t i = 0; i < nr_socket.size(); i++)
                     {
-                        nr_socket[i]->Send(packet);
+                        int nBytes = nr_socket[i]->Send(packet);
+                        // std::cout << "nBytes = " << nBytes << std::endl;
                     }
                 }
                 // NS_LOG_INFO(m_local_ID << ": recv probe at " << Simulator::Now().As(Time::US) << " with " << keys);
@@ -243,10 +244,10 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
         {
             // std::cout << "Source ID: " << (uint32_t)tagPktRecv.GetSourceID() << ", target ID: " << (uint32_t)tagPktRecv.GetDestID() << ", this hop" << m_local_ID << ", next hop" << routes[tagPktRecv.GetCurrentHop() + 1] << std::endl;
             assert(routes[tagPktRecv.GetCurrentHop()] == m_local_ID);
-            if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
+            /* if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST)
             {
                 std::cout << "Node ID: " << m_local_ID << " forward at: " << Simulator::Now().ToDouble(Time::US) << std::endl;
-            }
+            } */
             
             if ( CheckCongestion(map_neighbor_device[routes[tagPktRecv.GetCurrentHop()+1]], (uint32_t)tagPktRecv.GetSourceID(), (uint32_t)tagPktRecv.GetDestID(), (uint16_t)tagPktRecv.GetPktID()) )
             {
@@ -307,6 +308,7 @@ void overlayApplication::SendBackground(uint32_t idx)
     tagToSend.SetPktID(0);
     tagToSend.SetIsProbe(0);
     tagToSend.SetIsQueued(0);
+    tagToSend.SetStartTime( Simulator::Now().GetMicroSeconds() );
     if ( meta->background_type == CrossType::PktPoisson )
     {
         // pkt size
@@ -382,6 +384,7 @@ void overlayApplication::StartApplication(void)
                             std::string keys_ = std::to_string(m_local_ID) + ' ' + std::to_string(i);
                             if (meta->tunnel_hashmap.count(keys_) == 0 || meta->old_E[meta->tunnel_hashmap[keys_]] == false)
                                 continue; // no such tunnel or not currently probed
+                            std::cout << "Start Sending at: " << keys_ << std::endl;
                             ScheduleProbing(Time(MicroSeconds(meta->probe_normal_interval[meta->tunnel_hashmap[keys_]])), i);
                         }
                     }
@@ -494,6 +497,7 @@ void overlayApplication::SetTag(SDtag& tagToUse, uint8_t SourceID, uint8_t DestI
     // tagToUse.SetSandWichID(SandWichID);
     tagToUse.SetIsProbe(IsProbe);
     // tagToUse.SetSandWichLargeID(SandWichLargeID);
+    tagToUse.SetStartTime(Simulator::Now().GetMicroSeconds());
 }
 
 }

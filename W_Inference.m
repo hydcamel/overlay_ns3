@@ -1,0 +1,1 @@
+function [ W ] = W_Inference()

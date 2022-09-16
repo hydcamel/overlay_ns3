@@ -1,4 +1,4 @@
-E_cur_idxlist 7 0 1 2 3 4 5 6
-e_new_idx 8
+E_cur_idxlist 3 0 1 15
+e_new_idx 0
 probe_type naive
-len_long_train 100
+len_long_train 1000.0

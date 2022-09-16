@@ -49,6 +49,8 @@ public:
     void SetIsQueued (uint8_t value);
     void SetPktID (uint32_t value);
     uint32_t GetPktID (void) const;
+    void SetStartTime (uint64_t value);
+    uint64_t GetStartTime (void) const;
 private:
     uint8_t SourceID;
     uint8_t DestID;
@@ -56,6 +58,7 @@ private:
     uint8_t IsProbe;
     uint8_t IsQueued;
     uint32_t PktID;
+    uint64_t StartTime;
 };
 
 }

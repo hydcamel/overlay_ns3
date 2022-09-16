@@ -21,6 +21,16 @@ using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE ("Category_inference");
 
+void stop_NR(std::vector<Ptr<NrHelper>> &vec_nr)
+{
+    std::cout << "NR dispose" << std::endl;
+    for (uint32_t i = 0; i < vec_nr.size(); i++)
+    {
+        vec_nr[i]->Dispose();
+    }
+    
+};
+
 int main (int argc, char *argv[])
 {
     bool logging = false;
@@ -37,7 +47,7 @@ int main (int argc, char *argv[])
     // set simulation time and mobility
     // double simTime = 1; // seconds
     // double udpAppStartTime = 0.4; //seconds
-    double stop_time = 100.0; // seconds
+    double stop_time = 200.0; // microseconds
     /**
      * Underlay Network
      *
@@ -60,11 +70,12 @@ int main (int argc, char *argv[])
     fact.Set("sandwich_interval", TimeValue(MicroSeconds(100.0))); // Interval between the first and second patch of the sandwich
     // fact.Set ("MaxPackets", UintegerValue (1));
     // fact.Set("PacketSize", UintegerValue(netw_meta._AppPktSize));
+    double AppStartTime = 21200;
     for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
     {
         vec_app[i] = fact.Create<overlayApplication>();
         vec_app[i]->InitApp(&netw_meta, i, netw_meta._MAXPKTNUM);
-        vec_app[i]->SetStartTime(Seconds(0));
+        vec_app[i]->SetStartTime(MicroSeconds(AppStartTime));
         vec_app[i]->SetStopTime(MilliSeconds(stop_time));
         underlayNodes.Get(i)->AddApplication(vec_app[i]);
         vec_app[i]->SetRecvSocket();
@@ -111,31 +122,94 @@ int main (int argc, char *argv[])
             for (uint32_t l = 0; l < n_devices_perNode[k]; l++) NS_LOG_INFO( "device ID: " << l << " with address: " << linkIpv4[k]->GetAddress( l, 0 ).GetLocal() );
         } */
     }
+    
+    Ipv4GlobalRoutingHelper::PopulateRoutingTables();
+
     uint32_t network_base_number = 20;
     // std::vector<Ptr<myNR>> vec_nr_app( vec_app.size() );
+    std::vector<Ptr<NrHelper>> vec_NrHelper(vec_app.size());
+    std::vector<Ptr<NrPointToPointEpcHelper>> vec_EpcHelper(vec_app.size());
+    for (uint32_t i = 0; i < vec_NrHelper.size(); i++)
+    {
+        vec_NrHelper[i] = CreateObject<NrHelper> ();
+    }
+    
     std::vector<myNR> vec_nr_app(vec_app.size());
-    std::vector<coordinate> vec_gnb_coordinate( vec_app.size() );
+    // std::vector<coordinate> vec_gnb_coordinate( vec_app.size() );
     std::vector<coordinate> vec_ue_coordinate( vec_app.size() );
     // myNR testNR(vec_gnb_coordinate[2], vec_ue_coordinate[2], network_base_number, *(vec_app[2]), internet);
     for (uint32_t i = 0; i < vec_app.size(); i++)
     {
-        vec_gnb_coordinate[i].x_val = i*100;
-        vec_gnb_coordinate[i].y_val = i*10;
-        vec_ue_coordinate[i].x_val = vec_gnb_coordinate[i].x_val + 20;
-        vec_ue_coordinate[i].y_val = vec_gnb_coordinate[i].y_val;
+        // netw_meta.vec_gnb_coordinate_[i].x_val = i*100;
+        // netw_meta.vec_gnb_coordinate_[i].y_val = i*10;
+        vec_ue_coordinate[i].x_val = netw_meta.vec_gnb_coordinate_[i].x_val + 20;
+        vec_ue_coordinate[i].y_val = netw_meta.vec_gnb_coordinate_[i].y_val;
         // myNR tmpNR(vec_gnb_coordinate[i], vec_ue_coordinate[i], network_base_number, *(vec_app[i]), internet);
         // vec_nr_app.push_back( tmpNR );
-        vec_nr_app[i].init_myNR(vec_gnb_coordinate[i], vec_ue_coordinate[i], network_base_number, *(vec_app[i]), internet);
-        network_base_number += 2;
+        vec_nr_app[i].init_myNR(netw_meta.vec_gnb_coordinate_[i], vec_ue_coordinate[i], network_base_number, *(vec_app[i]), internet, vec_NrHelper[i], vec_EpcHelper[i]);
+        network_base_number += 7;
+        vec_nr_app[i].vec_ue_app[0]->SetStopTime(MilliSeconds(stop_time*5));
     }
+    // uint32_t NR_ID = 3;
+    // std::cout << "NR ID: " << NR_ID << "-PGW ID: " << vec_nr_app[NR_ID].pgw->GetId() << std::endl;
+    // NR_ID = 4;
+    // std::cout << "NR ID: " << NR_ID << "-PGW ID: " << vec_nr_app[NR_ID].pgw->GetId() << std::endl;
+    // Ptr<OutputStreamWrapper> routingStream = Create<OutputStreamWrapper> (&std::cout);
+    // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), underlayNodes.Get(0), routingStream, Time::Unit::NS);
+    /* uint32_t node_idx = 3;
+    Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), underlayNodes.Get(node_idx), routingStream, Time::Unit::NS);
+    for (uint32_t i = 0; i < underlayNodes.Get(node_idx)->GetNDevices(); i++)
+    {
+        std::cout << "device ID: " << i << " with address: " << underlayNodes.Get(node_idx)->GetObject<Ipv4> ()->GetAddress( i, 0 ).GetLocal() << std::endl;
+    }
+    Ptr<Node> tmpUE =  vec_nr_app[node_idx].ueNodes.Get(0);
+    for (uint32_t i = 0; i < tmpUE->GetNDevices(); i++)
+    {
+        std::cout << "device ID: " << i << " with address: " << tmpUE->GetObject<Ipv4> ()->GetAddress( i, 0 ).GetLocal() << std::endl;
+    }
+    
+    node_idx = 4;
+    Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), underlayNodes.Get(node_idx), routingStream, Time::Unit::NS);
+    for (uint32_t i = 0; i < underlayNodes.Get(node_idx)->GetNDevices(); i++)
+    {
+        std::cout << "device ID: " << i << " with address: " << underlayNodes.Get(node_idx)->GetObject<Ipv4> ()->GetAddress( i, 0 ).GetLocal() << std::endl;
+    }
+    tmpUE =  vec_nr_app[node_idx].ueNodes.Get(0);
+    for (uint32_t i = 0; i < tmpUE->GetNDevices(); i++)
+    {
+        std::cout << "device ID: " << i << " with address: " << tmpUE->GetObject<Ipv4> ()->GetAddress( i, 0 ).GetLocal() << std::endl;
+    } */
 
-    Ipv4GlobalRoutingHelper::PopulateRoutingTables();
+    // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), vec_nr_app[3].pgw, routingStream, Time::Unit::NS);
+    // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), vec_nr_app[3].gNbNodes.Get(0), routingStream, Time::Unit::NS);
+    // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), vec_nr_app[3].epcHelper->GetSgwNode(), routingStream, Time::Unit::NS);
+    // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), vec_nr_app[4].pgw, routingStream, Time::Unit::NS);
+    // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), vec_nr_app[4].gNbNodes.Get(0), routingStream, Time::Unit::NS);
+    // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), vec_nr_app[4].epcHelper->GetSgwNode(), routingStream, Time::Unit::NS);
+    // Ipv4RoutingHelper::PrintRoutingTableAllAt (Seconds (0.5), routingStream, Time::Unit::S);
+
+    
+
+    Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/Tx", MakeCallback(&txTraceIpv4) );
+    Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTx", MakeCallback(&p2pDevMacTx) );
+    Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacRx", MakeCallback(&p2pDevMacRx) );
+    // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTxDrop", MakeCallback(&p2pDevMacRx) );
+
+    Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxBegin", MakeCallback(&trace_PhyTxBegin) );
+    Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxEnd", MakeCallback(&trace_PhyTxEnd) );
+    Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyRxEnd", MakeCallback(&trace_PhyRxEnd) );
+
 
     NS_LOG_INFO("Run Simulation.");
     std::cout << "before run" << std::endl;
+    Time time_stop_simulation = MilliSeconds(stop_time*1.2);
+    Simulator::Schedule(time_stop_simulation, stop_NR, vec_NrHelper);
+    Simulator::Stop(time_stop_simulation);
     Simulator::Run();
     // flow_monitor->SerializeToXmlFile("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/flow_monitor_res.xml", true, true);
-    Simulator::Stop(MilliSeconds(stop_time*1.2));
+    
+    
+    // Simulator::Stop(MilliSeconds(stop_time*3));
     std::cout << "start Destroy." << std::endl;
     Simulator::Destroy();
     NS_LOG_INFO("Done.");

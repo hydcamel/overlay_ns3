@@ -4,10 +4,11 @@ namespace ns3
 {
 
 myNR::myNR(){}
-void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, overlayApplication &app_interface, InternetStackHelper &internet)
+void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, overlayApplication &app_interface, InternetStackHelper &internet, Ptr<NrHelper> &nrHelper, Ptr<NrPointToPointEpcHelper> &epcHelper)
 {
     // setup the nr simulation
-    nrHelper = CreateObject<NrHelper> ();
+    // nrHelper = CreateObject<NrHelper> ();
+    nrHelper->set_cell_ID( app_interface.GetLocalID() );
     /*
     * Spectrum division. We create one operation band with one component carrier
     * (CC) which occupies the whole operation band bandwidth. The CC contains a
@@ -15,14 +16,15 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     * Both operational bands will use the StreetCanyon channel modeling.
     */
     const uint8_t numCcPerBand = 1;  // in this example, both bands have a single CC
-    scenario = BandwidthPartInfo::RMa_LoS;
+    BandwidthPartInfo::Scenario scenario = BandwidthPartInfo::RMa_LoS;
     if (ueNumPergNb  > 1) scenario = BandwidthPartInfo::InH_OfficeOpen;
     // Create the configuration for the CcBwpHelper. SimpleOperationBandConf creates
     // a single BWP per CC
     CcBwpCreator::SimpleOperationBandConf bandConf (centralFrequency, bandwidth, numCcPerBand, scenario);
 
     // By using the configuration created, it is time to make the operation bands
-    band = ccBwpCreator.CreateOperationBandContiguousCc (bandConf);
+    CcBwpCreator ccBwpCreator;
+    OperationBandInfo band = ccBwpCreator.CreateOperationBandContiguousCc (bandConf);
 
     /*
     * Initialize channel and pathloss, plus other things inside band1. If needed,
@@ -32,7 +34,7 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     */
     nrHelper->InitializeOperationBand (&band);
 
-    allBwps = CcBwpCreator::GetAllBwps ({band});
+    BandwidthPartInfoPtrVector allBwps = CcBwpCreator::GetAllBwps ({band});
 
     /*
     * Continue setting the parameters which are common to all the nodes, like the
@@ -84,7 +86,8 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
 
     // Create EPC helper
     const std::string Addr_IPv4_Network_gNB {std::to_string(netw_base) + ".0.0.0"};
-    epcHelper = CreateObject<NrPointToPointEpcHelper> (Addr_IPv4_Network_gNB);
+    // const std::string Addr_IPv4_Network_gNB {netw_base};
+    epcHelper = CreateObject<NrPointToPointEpcHelper> (netw_base);
     nrHelper->SetEpcHelper (epcHelper);
     // Core latency
     epcHelper->SetAttribute ("S1uLinkDelay", TimeValue (MilliSeconds (0)));
@@ -99,12 +102,15 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     /*
    *  Create the gNB and UE nodes according to the network topology
    */
+    MobilityHelper mobility;
     mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
-    bsPositionAlloc = CreateObject<ListPositionAllocator> ();
-    utPositionAlloc = CreateObject<ListPositionAllocator> ();
+    Ptr<ListPositionAllocator> bsPositionAlloc = CreateObject<ListPositionAllocator> ();
+    Ptr<ListPositionAllocator> utPositionAlloc = CreateObject<ListPositionAllocator> ();
 
     const double gNbHeight = 10;
     const double ueHeight = 1.5;
+    NodeContainer gNbNodes;
+    NodeContainer ueNodes;
 
     if (singleUeTopology)
     {
@@ -151,9 +157,9 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     mobility.Install (ueNodes);
 
     // Install nr net devices
-    gNbNetDev = nrHelper->InstallGnbDevice (gNbNodes, allBwps);
+    NetDeviceContainer gNbNetDev = nrHelper->InstallGnbDevice (gNbNodes, allBwps);
 
-    ueNetDev = nrHelper->InstallUeDevice (ueNodes, allBwps);
+    NetDeviceContainer ueNetDev = nrHelper->InstallUeDevice (ueNodes, allBwps);
 
     int64_t randomStream = 1;
     randomStream += nrHelper->AssignStreams (gNbNetDev, randomStream);
@@ -168,7 +174,7 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
 
     // create the internet and install the IP stack on the UEs
     // get SGW/PGW and create a single RemoteHost 
-    pgw = epcHelper->GetPgwNode ();
+    Ptr<Node> pgw = epcHelper->GetPgwNode ();
     Ptr<Node> remoteHost = app_interface.GetNode();
     // connect a remoteHost to pgw. Setup routing too
     PointToPointHelper p2ph;
@@ -178,17 +184,20 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     NetDeviceContainer internetDevices = p2ph.Install (pgw, remoteHost);
     Ipv4AddressHelper ipv4h;
     // ipv4h.SetBase ( "1.0.0.0", "255.0.0.0");
-    const std::string p2pPgwEpc{std::to_string(netw_base-1) + ".0.0.0"};
+    const std::string p2pPgwEpc{std::to_string(netw_base+1) + ".0.0.0"};
     ipv4h.SetBase (Ipv4Address(p2pPgwEpc.data()), "255.0.0.0");
     Ipv4InterfaceContainer internetIpIfaces = ipv4h.Assign (internetDevices);
+
+    internet.Install (ueNodes);
 
     Ipv4StaticRoutingHelper ipv4RoutingHelper;
     Ptr<Ipv4StaticRouting> remoteHostStaticRouting = ipv4RoutingHelper.GetStaticRouting (remoteHost->GetObject<Ipv4> ());
     // remoteHostStaticRouting->AddNetworkRouteTo (Ipv4Address ("7.0.0.0"), Ipv4Mask ("255.0.0.0"), 1);
     remoteHostStaticRouting->AddNetworkRouteTo (Ipv4Address (Addr_IPv4_Network_gNB.data()), Ipv4Mask ("255.0.0.0"), remoteHost->GetNDevices()-1);
-    internet.Install (ueNodes);
+    
 
     Ipv4InterfaceContainer ueIpIface = epcHelper->AssignUeIpv4Address (NetDeviceContainer (ueNetDev));
+    // std::cout << "NR ID: " << app_interface.GetLocalID() << "-ueIpIface.size()=" << ueIpIface.GetN() << std::endl;
 
     // Set the default gateway for the UEs
     for (uint32_t j = 0; j < ueNodes.GetN (); ++j)
@@ -209,6 +218,8 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     dlpf.localPortStart = dlPort;
     dlpf.localPortEnd = dlPort;
     tft->Add (dlpf);
+    // uint32_t re_tftadd = tft->Add (dlpf);
+    // std::cout << "NR ID: " << app_interface.GetLocalID() << " re_tftadd = " << re_tftadd << std::endl;
 
     /** set the Recv Listen Socket for UE **/
     ObjectFactory fact;
@@ -221,7 +232,7 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     {
         Ptr<Node> ue = ueNodes.Get (i);
         Ptr<NetDevice> ueDevice = ueNetDev.Get (i);
-        Address ueAddress = ueIpIface.GetAddress (i);
+        // Address ueAddress = ueIpIface.GetAddress (i);
         vec_ue_app[i] = fact.Create<ueApp>();
         ue->AddApplication(vec_ue_app[i]);
         vec_ue_app[i]->initUeApp(app_interface);
@@ -236,12 +247,20 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
         {
             NS_FATAL_ERROR("Failed to bind socket");
         }
-        app_interface.nr_socket[i]->Connect(InetSocketAddress(Ipv4Address::ConvertFrom(ueAddress), dlPort));
-
+        // app_interface.nr_socket[i]->Connect(InetSocketAddress(Ipv4Address::ConvertFrom(ueAddress), dlPort));
+        // if (app_interface.GetLocalID() == 3)
+        //     std::cout << app_interface.GetLocalID() << "-ue->GetObject<Ipv4> (): " << ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal() << std::endl;
+        app_interface.nr_socket[i]->Connect(InetSocketAddress(ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal(), dlPort));
+        /* if (app_interface.GetLocalID() == 3 || app_interface.GetLocalID() == 4 || app_interface.GetLocalID() == 6)
+        {
+            std::cout << "NR ID: " << app_interface.GetLocalID() << " - " << ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal() << std::endl;
+        } */
         // Activate a dedicated bearer for the traffic type
-        nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer, tft);
+        // uint32_t res_activateBearer = nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer, tft);
+        // std::cout << "NR ID: " << app_interface.GetLocalID() << " ActivateDedicatedEpsBearer = " << res_activateBearer << std::endl;
     }
     
+
     
 
     
@@ -294,7 +313,8 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
 }
 myNR::~myNR()
 {
-    nrHelper = nullptr;
+    vec_ue_app.clear();
+    // nrHelper = nullptr;
 }
 
 } // namespace ns3
