@@ -234,12 +234,12 @@ void netw::read_routing_map(std::string filename)
 			++idx_iter;
 		}
 		probe_normal_interval.resize(tunnel_hashmap.size());
-		cnt_queuing.resize(tunnel_vec.size());
+		// cnt_queuing.resize(tunnel_vec.size());
 		old_E.resize(tunnel_hashmap.size(), false);
-		for (uint32_t i = 0; i < tunnel_vec.size(); i++)
-		{
-			cnt_queuing[i].resize( _MAXPKTNUM, false );
-		}
+		// for (uint32_t i = 0; i < tunnel_vec.size(); i++)
+		// {
+		// 	cnt_queuing[i].resize( _MAXPKTNUM, false );
+		// }
 	}
 }
 
@@ -280,6 +280,8 @@ void netw::read_probe_profile(std::string filename)
 				iss >> e_idx;
 				old_E[e_idx] = true;
 				// std::cout << "n_old_E: " << n_old_E << "-" << temp << e_idx << std::endl;
+				std::string keys_ = std::to_string(tunnel_vec[e_idx].first) + " " + std::to_string(tunnel_vec[e_idx].second);
+				cnt_queuing.insert( std::pair<std::string, std::vector<bool>>(keys_, std::vector<bool>(_MAXPKTNUM)) );
 			}
 		}
 		else if (line.substr(0, 9).compare("e_new_idx") == 0)
@@ -299,7 +301,20 @@ void netw::read_probe_profile(std::string filename)
 		{
 			iss >> temp >> len_long_train;
 		}
+		else if (line.substr(0, 10).compare("n_uePerGnb") == 0)
+		{
+			iss >> temp >> n_uePerGnb;
+		}
+		else if (line.substr(0, 8).compare("n_probes") == 0)
+		{
+			iss >> temp >> _MAXPKTNUM;
+		}
 	}
+	for (uint32_t i = 0; i < n_old_E; i++)
+	{
+		/* code */
+	}
+	
 }
 
 void netw::read_probe_intervals(std::string filename)

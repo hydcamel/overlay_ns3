@@ -65,6 +65,7 @@ public:
     std::vector<std::pair<int, int>> edges_vec; // vector  for links
     uint32_t n_nodes,n_edges;
     std::vector<coordinate> vec_gnb_coordinate_;
+    uint32_t n_uePerGnb;
 
     /**
      * overlay network
@@ -95,7 +96,8 @@ public:
      **/
     std::unordered_map<std::string, int32_t> cnt_pkt;
     std::unordered_map<std::string, int32_t> cnt_congestion; 
-    std::vector<std::vector<bool>>  cnt_queuing; // # of queued
+    std::unordered_map<std::string, std::vector<bool>>  cnt_queuing; // # of queued
+    // std::vector<std::vector<bool>>  cnt_queuing; // # of queued
 
     ProbeType probe_type;
     CrossType background_type;

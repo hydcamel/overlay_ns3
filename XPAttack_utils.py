@@ -43,12 +43,14 @@ def write_tunnel_demands(tunnel_demands:list, tunnel_list:list, filename="tunnel
         for i in range(len(tunnel_list)):
             fw.write( str(tunnel_list[i][0]) + ' ' + str(tunnel_list[i][1]) + ' ' + str(tunnel_demands[i]) + '\n' )
 
-def wr_probe_setup(E_cur_idxlist: list, e_new_idx, probe_type:str, len_long_train, file_name = "probe_setup.txt"):
+def wr_probe_setup(E_cur_idxlist: list, e_new_idx, probe_type:str, len_long_train, n_uePerGnb, n_probes, file_name = "probe_setup.txt"):
     with open(file_name, "w") as stf:
+        stf.write("n_probes " + str(n_probes) + '\n')
         stf.write("E_cur_idxlist " + str(len(E_cur_idxlist)))
         for e in E_cur_idxlist:
             stf.write(" " + str(e))
         stf.write('\n' + "e_new_idx " + str(e_new_idx) + '\n' + "probe_type " + probe_type + '\n' + "len_long_train " + str(len_long_train) + '\n')
+        stf.write("n_uePerGnb " + str(n_uePerGnb) + '\n')
 
 def wr_probe_intervals(probe_intervals:list, tunnel_list:list, filename="probe_intervals.txt"):
     with open(filename, "w") as fw:
@@ -96,12 +98,14 @@ def init_setup(para_from_matlab):
     
     adj2underlay(Adj=Adj, D=D, bw=bw, delay=delay, filename=graph_name)
     SPR2routeTable(SPR=SPR, filename=route_name)
-    E_cur_idxlist, e_new_idx, n_calibrate_pkt = para_from_matlab['E_cur_idxlist'], para_from_matlab['e_new_idx'], para_from_matlab['n_calibrate_pkt']
+    E_cur_idxlist, e_new_idx, n_calibrate_pkt, n_uePerGnb, n_probes = para_from_matlab['E_cur_idxlist'], para_from_matlab['e_new_idx'], para_from_matlab['n_calibrate_pkt'], para_from_matlab['n_uePerGnb'], para_from_matlab['n_probes']
     '''Index Transformation'''
     E_cur_idxlist = [int(e-1) for e in E_cur_idxlist]
-    e_new_idx = int(e_new_idx - 1);
+    e_new_idx = int(e_new_idx - 1)
+    n_calibrate_pkt = int(n_calibrate_pkt)
+    n_uePerGnb, n_probes = int(n_uePerGnb), int(n_probes)
     
-    wr_probe_setup(E_cur_idxlist=E_cur_idxlist, e_new_idx = e_new_idx, probe_type="naive", len_long_train=n_calibrate_pkt, file_name = probe_setup_name)
+    wr_probe_setup(E_cur_idxlist=E_cur_idxlist, e_new_idx = e_new_idx, probe_type="naive", len_long_train=n_calibrate_pkt, n_uePerGnb=n_uePerGnb, n_probes=n_probes, file_name = probe_setup_name)
     wr_overlayNodes(overlay_node_list=[*range(len(Adj[0]))], filename=name_overlay_nodes)
     write_tunnel_demands(tunnel_demands=tunnel_demands, tunnel_list=tunnel_list, filename=name_demands)
     wr_probe_intervals(probe_intervals=probe_intervals, tunnel_list=tunnel_list, filename=probe_interval_files)

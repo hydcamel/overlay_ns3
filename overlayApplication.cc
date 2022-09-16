@@ -201,8 +201,9 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                 {
                     case ProbeType::naive:
                     {
-                        uint32_t idx_tunnel = meta->tunnel_hashmap[keys];
-                        meta->cnt_queuing[idx_tunnel][tagPktRecv.GetPktID()] = tagPktRecv.GetIsQueued();
+                        meta->cnt_queuing[keys][tagPktRecv.GetPktID()] = tagPktRecv.GetIsQueued();
+                        /* uint32_t idx_tunnel = meta->tunnel_hashmap[keys];
+                        meta->cnt_queuing[idx_tunnel][tagPktRecv.GetPktID()] = tagPktRecv.GetIsQueued(); */
                         break;
                     }
                     case ProbeType::sandwich_v1:
@@ -228,7 +229,8 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                     std::cout << "Node ID: " << m_local_ID << "-Forwarding to UE, nr_socket.size()=" << nr_socket.size() << std::endl;
                     for (uint32_t i = 0; i < nr_socket.size(); i++)
                     {
-                        int nBytes = nr_socket[i]->Send(packet);
+                        nr_socket[i]->Send(packet);
+                        // int nBytes = nr_socket[i]->Send(packet);
                         // std::cout << "nBytes = " << nBytes << std::endl;
                     }
                 }

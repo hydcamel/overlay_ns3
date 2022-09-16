@@ -41,13 +41,15 @@ ta_init = [20, 36] - n_iab;
 tb_init = tb(1) - n_iab;
 E_cur_idxlist = zeros(1,3);
 idx = 1;
+n_uePerGnb = 1;
+n_probes = 3;
 for i = 1 : length(SPR)
     if ismember( SPR{i}(end), [ta_init, tb_init] )
         E_cur_idxlist(idx) = i;
         idx = idx + 1;
     end
 end
-para_probe = py.dict(pyargs('E_cur_idxlist',E_cur_idxlist,'e_new_idx',1,'n_calibrate_pkt',1000));
+para_probe = py.dict(pyargs('E_cur_idxlist',E_cur_idxlist,'e_new_idx',1,'n_calibrate_pkt',1000, 'n_uePerGnb', n_uePerGnb, 'n_probes', n_probes));
 % para_probe.E_cur_idxlist = E_cur_idxlist;
 % para_probe.e_new_idx = 1;
 % para_probe.n_calibrate_pkt = 1000;
