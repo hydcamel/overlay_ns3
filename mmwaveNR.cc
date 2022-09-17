@@ -44,7 +44,8 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     nrHelper->SetGnbPhyAttribute ("Numerology", UintegerValue (numerology));
 
     // Scheduler
-    nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerTdmaRR"));
+    // nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerTdmaRR"));
+    nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerOfdmaRR"));
     nrHelper->SetSchedulerAttribute ("FixedMcsDl", BooleanValue (useFixedMcs));
     nrHelper->SetSchedulerAttribute ("FixedMcsUl", BooleanValue (useFixedMcs));
 
@@ -231,6 +232,7 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     for (uint32_t i = 0; i < ueNodes.GetN (); ++i)
     {
         Ptr<Node> ue = ueNodes.Get (i);
+        std::cout << "UE ID for " << app_interface.GetLocalID() << " is " << ue->GetId() << std::endl;
         Ptr<NetDevice> ueDevice = ueNetDev.Get (i);
         // Address ueAddress = ueIpIface.GetAddress (i);
         vec_ue_app[i] = fact.Create<ueApp>();

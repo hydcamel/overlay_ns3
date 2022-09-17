@@ -57,6 +57,9 @@ public:
     void read_probe_intervals(std::string filename); // for probing, this will contain the probing rate profile: microsecond (us, 1e-6) 
     void read_gnb_coordinate(std::string filename);
 
+    void write_queuing_cnt(std::string filename);
+    void write_delays_cnt(std::string filename);
+
     /**
      * underlay network
      **/
@@ -97,6 +100,7 @@ public:
     std::unordered_map<std::string, int32_t> cnt_pkt;
     std::unordered_map<std::string, int32_t> cnt_congestion; 
     std::unordered_map<std::string, std::vector<bool>>  cnt_queuing; // # of queued
+    std::unordered_map<std::string, std::vector<uint64_t>>  cnt_delays; // # of queued
     // std::vector<std::vector<bool>>  cnt_queuing; // # of queued
 
     ProbeType probe_type;

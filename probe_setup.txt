@@ -1,4 +1,4 @@
-n_probes 3
+n_probes 2
 E_cur_idxlist 3 0 1 15
 e_new_idx 0
 probe_type naive

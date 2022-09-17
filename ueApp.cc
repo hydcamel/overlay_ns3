@@ -14,6 +14,7 @@ ueApp::ueApp()
 void ueApp::initUeApp(overlayApplication &app_interface)
 {
     local_ID_ = app_interface.GetLocalID();
+    oa_interface = &app_interface;
     TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
     recv_socket = Socket::CreateSocket(GetNode(), tid);
     InetSocketAddress local = InetSocketAddress(Ipv4Address::GetAny(), NRPORT);
@@ -53,7 +54,10 @@ void ueApp::HandleRead(Ptr<Socket> socket)
         // ueTag tagPktRecv;
         SDtag tagPktRecv;
         packet->PeekPacketTag(tagPktRecv);
-        std::cout << "UE ID: " << local_ID_ << "; pkt received with start-time: " << (uint64_t)(tagPktRecv.GetStartTime()) << std::endl;
+        // std::cout << "UE ID: " << local_ID_ << "; pkt received with start-time: " << (uint64_t)(tagPktRecv.GetStartTime()) << std::endl;
+        std::cout << GetNode()->GetId() << "-Received: " << uint32_t(tagPktRecv.GetSourceID()) << " to " << uint32_t(tagPktRecv.GetDestID()) << " with ID " << tagPktRecv.GetPktID() << " at " << "\t" << Now() << " with start time " << tagPktRecv.GetStartTime() << std::endl;
+        std::string keys_ = std::to_string(tagPktRecv.GetSourceID()) + " " + std::to_string(tagPktRecv.GetDestID());
+        oa_interface->meta->cnt_delays[keys_][tagPktRecv.GetPktID()] = Simulator::Now().GetMicroSeconds() - (uint64_t)(tagPktRecv.GetStartTime());
         cnt_probes ++;
         // if(cnt_probes >= max_probes) StopApplication();
     }

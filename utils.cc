@@ -54,7 +54,11 @@ void read_setup(name_input_files &input_fd)
 void txTraceIpv4(std::string context, Ptr<const Packet> packet, Ptr<Ipv4> ptr_ipv4, uint32_t dontknow){
     SDtag tagPktRecv;
     packet->PeekPacketTag(tagPktRecv);
-    if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetIsProbe() > 0)
+    /* if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetIsProbe() > 0)
+    {
+        std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
+    } */
+    if (tagPktRecv.GetIsProbe() > 0)
     {
         std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
     }
@@ -63,7 +67,11 @@ void txTraceIpv4(std::string context, Ptr<const Packet> packet, Ptr<Ipv4> ptr_ip
 void p2pDevMacTx(std::string context, Ptr<const Packet> packet){
     SDtag tagPktRecv;
     packet->PeekPacketTag(tagPktRecv);
-    if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetIsProbe() > 0)
+    /* if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetIsProbe() > 0)
+    {
+        std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
+    } */
+    if (tagPktRecv.GetIsProbe() > 0)
     {
         std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
     }
@@ -77,7 +85,11 @@ void p2pDevMacTx(std::string context, Ptr<const Packet> packet){
 void p2pDevMacRx(std::string context, Ptr<const Packet> packet){
     SDtag tagPktRecv;
     packet->PeekPacketTag(tagPktRecv);
-    if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetIsProbe() > 0)
+    /* if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetIsProbe() > 0)
+    {
+        std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
+    } */
+    if (tagPktRecv.GetIsProbe() > 0)
     {
         std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
     }

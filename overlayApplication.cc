@@ -226,7 +226,8 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                     // tag_ue_forward.SetStartTime( (uint64_t)(Simulator::Now().GetMicroSeconds()) );
                     // // packet->RemovePacketTag(tagPktRecv);
                     // packet->AddPacketTag(tag_ue_forward);
-                    std::cout << "Node ID: " << m_local_ID << "-Forwarding to UE, nr_socket.size()=" << nr_socket.size() << std::endl;
+                    packet->ReplacePacketTag(tagPktRecv);
+                    std::cout << "Node ID: " << m_local_ID << "-Forwarding to UE, PktID = " << tagPktRecv.GetPktID() << " with start time" << tagPktRecv.GetStartTime() << std::endl;
                     for (uint32_t i = 0; i < nr_socket.size(); i++)
                     {
                         nr_socket[i]->Send(packet);
@@ -450,6 +451,7 @@ void overlayApplication::SendProbeNaive(uint32_t idx)
     ++meta->m_sent[m_local_ID][idx];
     Ptr<Packet> p;
     p = Create<Packet>(ProbeSizeNaive);
+    std::cout << "Probe: " << m_local_ID << " to " << idx << " with ID " << tagToSend.GetPktID() << " at " << "\t" << Now() << ": " << tagToSend.GetStartTime() << std::endl;
     // m_txTrace(p);
     p->AddPacketTag(tagToSend);
     tab_socket[routes[1]]->Send(p);
@@ -463,12 +465,16 @@ void overlayApplication::StopApplication()
 {
     NS_LOG_FUNCTION(this);
     is_run = false;
-    /* if (m_local_ID == 0)
+    if (m_local_ID == 0)
     {
+        char *cwd = get_current_dir_name();
+        std::string pwd_tmp(cwd, cwd+strlen(cwd));
+        // std::ifstream infile( pwd_tmp + "/scratch//Category_inference/setup.txt");
         // meta->write_average_delay("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/average_delay.txt");
         // meta->write_congestion_cnt("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/congestion_cnt.txt");
-        meta->write_queuing_cnt("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/queuing_cnt.txt");
-    } */
+        meta->write_queuing_cnt(pwd_tmp + "/scratch/Category_inference/queuing_cnt.txt");
+        meta->write_delays_cnt(pwd_tmp + "/scratch/Category_inference/delays_cnt.txt");
+    }
 
     // std::cout << "Node ID: " << m_local_ID << " stop Application" << std::endl;
     for (uint32_t i = 0; i < tab_socket.size(); i++)

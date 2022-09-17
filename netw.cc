@@ -282,6 +282,7 @@ void netw::read_probe_profile(std::string filename)
 				// std::cout << "n_old_E: " << n_old_E << "-" << temp << e_idx << std::endl;
 				std::string keys_ = std::to_string(tunnel_vec[e_idx].first) + " " + std::to_string(tunnel_vec[e_idx].second);
 				cnt_queuing.insert( std::pair<std::string, std::vector<bool>>(keys_, std::vector<bool>(_MAXPKTNUM)) );
+				cnt_delays.insert( std::pair<std::string, std::vector<uint64_t>>(keys_, std::vector<uint64_t>(_MAXPKTNUM)) );
 			}
 		}
 		else if (line.substr(0, 9).compare("e_new_idx") == 0)
@@ -337,6 +338,37 @@ void netw::read_probe_intervals(std::string filename)
 void netw::set_background_type(CrossType type_name)
 {
 	background_type = type_name;
+}
+
+void netw::write_queuing_cnt(std::string filename)
+{
+	std::ofstream wrfile(filename);
+	std::string key;
+	for (auto it = cnt_queuing.begin(); it != cnt_queuing.end(); it++)
+	{
+		key = it->first;
+		wrfile << std::to_string( tunnel_vec[ tunnel_hashmap[key] ].first ) << ", " << std::to_string( tunnel_vec[ tunnel_hashmap[key] ].second );
+		for (auto val : cnt_queuing[key])
+		{
+			wrfile << ", " << std::to_string(val);
+		}
+		wrfile << std::endl;
+	}
+}
+void netw::write_delays_cnt(std::string filename)
+{
+	std::ofstream wrfile(filename);
+	std::string key;
+	for (auto it = cnt_delays.begin(); it != cnt_delays.end(); it++)
+	{
+		key = it->first;
+		wrfile << std::to_string( tunnel_vec[ tunnel_hashmap[key] ].first ) << ", " << std::to_string( tunnel_vec[ tunnel_hashmap[key] ].second );
+		for (auto val : cnt_delays[key])
+		{
+			wrfile << ", " << std::to_string(val);
+		}
+		wrfile << std::endl;
+	}
 }
 
 }
