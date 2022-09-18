@@ -9,6 +9,7 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     // setup the nr simulation
     // nrHelper = CreateObject<NrHelper> ();
     nrHelper->set_cell_ID( app_interface.GetLocalID() );
+    nrHelper->SetHarqEnabled(true);
     /*
     * Spectrum division. We create one operation band with one component carrier
     * (CC) which occupies the whole operation band bandwidth. The CC contains a
@@ -44,8 +45,8 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     nrHelper->SetGnbPhyAttribute ("Numerology", UintegerValue (numerology));
 
     // Scheduler
-    // nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerTdmaRR"));
-    nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerOfdmaRR"));
+    nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerTdmaRR"));
+    // nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerTdmaMR"));
     nrHelper->SetSchedulerAttribute ("FixedMcsDl", BooleanValue (useFixedMcs));
     nrHelper->SetSchedulerAttribute ("FixedMcsUl", BooleanValue (useFixedMcs));
 
@@ -162,6 +163,8 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
 
     NetDeviceContainer ueNetDev = nrHelper->InstallUeDevice (ueNodes, allBwps);
 
+    for (auto it = ueNetDev.Begin (); it != ueNetDev.End (); ++it) DynamicCast<NrUeNetDevice> (*it)->SetAttribute ("Mtu", UintegerValue (1500));
+
     int64_t randomStream = 1;
     randomStream += nrHelper->AssignStreams (gNbNetDev, randomStream);
     randomStream += nrHelper->AssignStreams (ueNetDev, randomStream);
@@ -232,7 +235,7 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     for (uint32_t i = 0; i < ueNodes.GetN (); ++i)
     {
         Ptr<Node> ue = ueNodes.Get (i);
-        std::cout << "UE ID for " << app_interface.GetLocalID() << " is " << ue->GetId() << std::endl;
+        // std::cout << "UE ID for " << app_interface.GetLocalID() << " is " << ue->GetId() << std::endl;
         Ptr<NetDevice> ueDevice = ueNetDev.Get (i);
         // Address ueAddress = ueIpIface.GetAddress (i);
         vec_ue_app[i] = fact.Create<ueApp>();
