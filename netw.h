@@ -78,13 +78,14 @@ public:
     std::vector<std::pair<uint32_t, uint32_t>> tunnel_vec;
     std::vector<std::vector<bool>> adj_mat;
     std::vector<bool> loc_overlay_nodes;
-    std::map<std::string, std::vector<int>> routing_map;
-    std::map<std::string, uint32_t> tunnel_hashmap; // hash_map for tunnels
+    std::unordered_map<std::string, std::vector<int>> routing_map;
+    std::unordered_map<std::string, uint32_t> tunnel_hashmap; // hash_map for tunnels
 
     /**
      * probing 
      **/
     uint32_t _AppPktSize = 1024, _IPPktSize = 1052, _MACPktSize = 1054, _NormPktSize = 46, _MAXPKTNUM = 3, _MAXBACKLOG = 200000;
+    uint32_t _epoll_time = 200; // microsecond
     uint16_t protocol_number = 150;
     std::vector<double> probe_normal_interval;
     std::vector<bool> old_E;
@@ -94,6 +95,9 @@ public:
     std::vector<uint32_t> background_interval; // microseconds
     void set_background_type(CrossType);
     std::vector<std::vector<uint32_t>> m_sent;
+    std::unordered_map<std::string, bool> is_received;
+    uint32_t idx_orchestration = 1;
+
 
     /**
      * data collection

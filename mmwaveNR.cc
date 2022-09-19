@@ -163,7 +163,8 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
 
     NetDeviceContainer ueNetDev = nrHelper->InstallUeDevice (ueNodes, allBwps);
 
-    for (auto it = ueNetDev.Begin (); it != ueNetDev.End (); ++it) DynamicCast<NrUeNetDevice> (*it)->SetAttribute ("Mtu", UintegerValue (1500));
+    for (auto it = ueNetDev.Begin (); it != ueNetDev.End (); ++it) DynamicCast<NrNetDevice> (*it)->SetAttribute ("Mtu", UintegerValue (1500));
+    for (auto it = gNbNetDev.Begin (); it != gNbNetDev.End (); ++it) DynamicCast<NrNetDevice> (*it)->SetAttribute ("Mtu", UintegerValue (1500));
 
     int64_t randomStream = 1;
     randomStream += nrHelper->AssignStreams (gNbNetDev, randomStream);

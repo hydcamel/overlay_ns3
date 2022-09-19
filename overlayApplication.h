@@ -42,6 +42,12 @@ public:
     bool is_overlay;
     std::vector<Ptr<Socket>> nr_socket;
     netw* meta;
+
+    void ScheduleProbing(Time dt, uint32_t idx);
+    void CentralOrchestration();
+    void SendProbeNaive(uint32_t idx);
+    bool StateCheckRecv();
+
 protected:
     virtual void DoDispose(void);
 private:
@@ -58,8 +64,7 @@ private:
     void SendBackground(uint32_t idx);
     uint32_t GMM_Pkt_Size(void);
 
-    void ScheduleProbing(Time dt, uint32_t idx);
-    void SendProbeNaive(uint32_t idx);
+    
 
     /** probing **/
     Time probe_interval; // probe interval

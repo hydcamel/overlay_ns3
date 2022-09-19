@@ -73,7 +73,7 @@ overlayApplication::overlayApplication()
 overlayApplication::~overlayApplication()
 {
     NS_LOG_FUNCTION(this);
-    std::cout << m_local_ID << ": start deleting." << std::endl;
+    // std::cout << m_local_ID << ": start deleting." << std::endl;
     tab_socket.clear();
     // m_interval.clear();
     recv_socket = 0;
@@ -374,11 +374,11 @@ void overlayApplication::StartApplication(void)
     /**
      * Set up probing flows
      **/
-    if (meta->loc_overlay_nodes[GetLocalID()] == true) // only if self is overlay, it can schedule probing
+    if (GetLocalID() == meta->idx_orchestration && meta->loc_overlay_nodes[GetLocalID()] == true) // only if self is overlay, it can schedule probing
     {
         switch (meta->probe_type)
         {
-            case ProbeType::naive:
+            /* case ProbeType::naive:
             {
                     for (uint32_t i = 0; i < meta->n_nodes; i++)
                     {
@@ -391,6 +391,11 @@ void overlayApplication::StartApplication(void)
                             ScheduleProbing(Time(MicroSeconds(meta->probe_normal_interval[meta->tunnel_hashmap[keys_]])), i);
                         }
                     }
+                break;
+            } */
+            case ProbeType::naive:
+            {
+                CentralOrchestration();
                 break;
             }
             case ProbeType::sandwich_v1:
@@ -413,12 +418,41 @@ void overlayApplication::StartApplication(void)
     }
 }
 
+void overlayApplication::CentralOrchestration()
+{
+    if (StateCheckRecv() == false)
+    {
+        // Simulator::Schedule(Time(MicroSeconds(meta->_epoll_time)), &overlayApplication::CentralOrchestration, this);
+    }
+    else
+    {
+        for (uint32_t i = 0; i < meta->n_nodes; i++)
+        {
+            if (meta->loc_overlay_nodes[i] == true) // target i
+            {
+                std::string keys_ = std::to_string(m_local_ID) + ' ' + std::to_string(i);
+                if ( is_run == false )
+                {
+                    std::cout << "is_run == false" << std::endl;
+                }
+                
+                if (meta->tunnel_hashmap.count(keys_) == 0 || meta->old_E[meta->tunnel_hashmap[keys_]] == false || is_run == false || meta->m_sent[m_local_ID][i] >= meta->_MAXPKTNUM)
+                    continue; // no such tunnel or not currently probed
+                std::cout << "Start Sending at: " << keys_ << std::endl;
+                ScheduleProbing(Time(0), i);
+            }
+        }
+    }
+    Simulator::Schedule(Time(MicroSeconds(meta->_epoll_time)), &overlayApplication::CentralOrchestration, this);
+}
+
 void overlayApplication::ScheduleProbing(Time dt, uint32_t idx)
 {
     switch (meta->probe_type)
     {
         case ProbeType::naive:
         {
+            // std::cout << "ScheduleProbing " << idx << std::endl;
             probe_event[idx] = Simulator::Schedule(dt, &overlayApplication::SendProbeNaive, this, idx);
             // ScheduleProbing(probe_interval, idx);
             break;
@@ -455,9 +489,11 @@ void overlayApplication::SendProbeNaive(uint32_t idx)
     // m_txTrace(p);
     p->AddPacketTag(tagToSend);
     tab_socket[routes[1]]->Send(p);
+    meta->is_received[keys_] = false;
     if (is_run == true && meta->m_sent[m_local_ID][idx] < meta->_MAXPKTNUM)
     {
-        ScheduleProbing(Time(MicroSeconds(meta->probe_normal_interval[meta->tunnel_hashmap[keys_]])), idx);
+        // ScheduleProbing(Time(MicroSeconds(meta->probe_normal_interval[meta->tunnel_hashmap[keys_]])), idx);
+        // CentralOrchestration();
     }
 }
 
@@ -465,7 +501,7 @@ void overlayApplication::StopApplication()
 {
     NS_LOG_FUNCTION(this);
     is_run = false;
-    if (m_local_ID == 0)
+    /* if (m_local_ID == 0)
     {
         char *cwd = get_current_dir_name();
         std::string pwd_tmp(cwd, cwd+strlen(cwd));
@@ -474,7 +510,7 @@ void overlayApplication::StopApplication()
         // meta->write_congestion_cnt("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/CategoryQueue/congestion_cnt.txt");
         meta->write_queuing_cnt(pwd_tmp + "/scratch/Category_inference/queuing_cnt.txt");
         meta->write_delays_cnt(pwd_tmp + "/scratch/Category_inference/delays_cnt.txt");
-    }
+    } */
 
     // std::cout << "Node ID: " << m_local_ID << " stop Application" << std::endl;
     for (uint32_t i = 0; i < tab_socket.size(); i++)
@@ -506,6 +542,25 @@ void overlayApplication::SetTag(SDtag& tagToUse, uint8_t SourceID, uint8_t DestI
     tagToUse.SetIsProbe(IsProbe);
     // tagToUse.SetSandWichLargeID(SandWichLargeID);
     tagToUse.SetStartTime(Simulator::Now().GetMicroSeconds());
+}
+
+bool overlayApplication::StateCheckRecv()
+{
+    /* if (m_local_ID == 1)
+    {
+        std::cout << "overlayApplication::StateCheckRecv()" << std::endl;
+    } */
+    // ScheduleProbing(Time(MicroSeconds(0)), idx);
+    for (auto it = meta->is_received.begin(); it != meta->is_received.end(); it++)
+    {
+        if (it->second == false) return false;
+    }
+    // std::cout << "StateCheckRecv(): Pass!" << std::endl;
+    /* for (auto it = meta->is_received.begin(); it != meta->is_received.end(); it++)
+    {
+        it->second = false;
+    } */
+    return true;
 }
 
 }

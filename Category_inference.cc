@@ -47,7 +47,7 @@ int main (int argc, char *argv[])
     // set simulation time and mobility
     // double simTime = 1; // seconds
     // double udpAppStartTime = 0.4; //seconds
-    double stop_time = 200.0; // microseconds
+    double stop_time = 150.0; // microseconds
     /**
      * Underlay Network
      *
@@ -76,7 +76,7 @@ int main (int argc, char *argv[])
         vec_app[i] = fact.Create<overlayApplication>();
         vec_app[i]->InitApp(&netw_meta, i, netw_meta._MAXPKTNUM);
         vec_app[i]->SetStartTime(MicroSeconds(AppStartTime));
-        vec_app[i]->SetStopTime(MilliSeconds(stop_time));
+        // vec_app[i]->SetStopTime(MilliSeconds(stop_time));
         underlayNodes.Get(i)->AddApplication(vec_app[i]);
         vec_app[i]->SetRecvSocket();
     }
@@ -148,7 +148,7 @@ int main (int argc, char *argv[])
         // vec_nr_app.push_back( tmpNR );
         vec_nr_app[i].init_myNR(netw_meta.vec_gnb_coordinate_[i], vec_ue_coordinate[i], network_base_number, *(vec_app[i]), internet, vec_NrHelper[i], vec_EpcHelper[i]);
         network_base_number += 7;
-        vec_nr_app[i].vec_ue_app[0]->SetStopTime(MilliSeconds(stop_time*5));
+        // vec_nr_app[i].vec_ue_app[0]->SetStopTime(MilliSeconds(stop_time*5));
     }
     // Config::SetDefault ("/NodeList/*/DeviceList/*/$ns3::NrNetDevice/Mtu", UintegerValue (1500));
     
@@ -210,8 +210,11 @@ int main (int argc, char *argv[])
     Simulator::Run();
     // flow_monitor->SerializeToXmlFile("/home/vagrant/ns3/ns-allinone-3.35/ns-3.35/scratch/MinCostFixRate/flow_monitor_res.xml", true, true);
     
-    
-    // Simulator::Stop(MilliSeconds(stop_time*3));
+    std::cout << "Before Destroy." << std::endl;
+    char *cwd = get_current_dir_name();
+    std::string pwd_tmp(cwd, cwd+strlen(cwd));
+    netw_meta.write_queuing_cnt(pwd_tmp + "/scratch/Category_inference/queuing_cnt.txt");
+    netw_meta.write_delays_cnt(pwd_tmp + "/scratch/Category_inference/delays_cnt.txt");
     std::cout << "start Destroy." << std::endl;
     Simulator::Destroy();
     NS_LOG_INFO("Done.");

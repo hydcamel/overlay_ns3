@@ -58,6 +58,7 @@ void ueApp::HandleRead(Ptr<Socket> socket)
         std::cout << GetNode()->GetId() << "-Received: " << uint32_t(tagPktRecv.GetSourceID()) << " to " << uint32_t(tagPktRecv.GetDestID()) << " with ID " << tagPktRecv.GetPktID() << " at " << "\t" << Now() << " with start time " << tagPktRecv.GetStartTime() << std::endl;
         std::string keys_ = std::to_string(tagPktRecv.GetSourceID()) + " " + std::to_string(tagPktRecv.GetDestID());
         oa_interface->meta->cnt_delays[keys_][tagPktRecv.GetPktID()] = Simulator::Now().GetMicroSeconds() - (uint64_t)(tagPktRecv.GetStartTime());
+        oa_interface->meta->is_received[keys_] = true;
         cnt_probes ++;
         // if(cnt_probes >= max_probes) StopApplication();
     }

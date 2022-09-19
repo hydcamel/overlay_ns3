@@ -283,6 +283,7 @@ void netw::read_probe_profile(std::string filename)
 				std::string keys_ = std::to_string(tunnel_vec[e_idx].first) + " " + std::to_string(tunnel_vec[e_idx].second);
 				cnt_queuing.insert( std::pair<std::string, std::vector<bool>>(keys_, std::vector<bool>(_MAXPKTNUM)) );
 				cnt_delays.insert( std::pair<std::string, std::vector<uint64_t>>(keys_, std::vector<uint64_t>(_MAXPKTNUM)) );
+				is_received.insert( std::pair<std::string, bool> ( keys_, true ) );
 			}
 		}
 		else if (line.substr(0, 9).compare("e_new_idx") == 0)
