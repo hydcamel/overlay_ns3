@@ -9,6 +9,7 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     // setup the nr simulation
     // nrHelper = CreateObject<NrHelper> ();
     nrHelper->set_cell_ID( app_interface.GetLocalID() );
+    // std::cout << "app_interface.GetLocalID() = " << app_interface.GetLocalID() << std::endl;
     nrHelper->SetHarqEnabled(true);
     /*
     * Spectrum division. We create one operation band with one component carrier
@@ -45,10 +46,12 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     nrHelper->SetGnbPhyAttribute ("Numerology", UintegerValue (numerology));
 
     // Scheduler
-    nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerTdmaRR"));
-    // nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerTdmaMR"));
+    // nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerTdmaRR"));
+    nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerOfdmaRR"));
     nrHelper->SetSchedulerAttribute ("FixedMcsDl", BooleanValue (useFixedMcs));
     nrHelper->SetSchedulerAttribute ("FixedMcsUl", BooleanValue (useFixedMcs));
+    nrHelper->SetSchedulerAttribute ("FixedMcsUl", BooleanValue (useFixedMcs));
+    // CqiTimerThreshold
 
     if (useFixedMcs == true)
         {
@@ -93,6 +96,7 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     nrHelper->SetEpcHelper (epcHelper);
     // Core latency
     epcHelper->SetAttribute ("S1uLinkDelay", TimeValue (MilliSeconds (0)));
+    epcHelper->SetAttribute ("S1uLinkMtu", UintegerValue (2500));
 
     // gNb routing between Bearer and bandwidh part
     uint32_t bwpIdForBearer = 0;
@@ -163,8 +167,8 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
 
     NetDeviceContainer ueNetDev = nrHelper->InstallUeDevice (ueNodes, allBwps);
 
-    for (auto it = ueNetDev.Begin (); it != ueNetDev.End (); ++it) DynamicCast<NrNetDevice> (*it)->SetAttribute ("Mtu", UintegerValue (1500));
-    for (auto it = gNbNetDev.Begin (); it != gNbNetDev.End (); ++it) DynamicCast<NrNetDevice> (*it)->SetAttribute ("Mtu", UintegerValue (1500));
+    // for (auto it = ueNetDev.Begin (); it != ueNetDev.End (); ++it) DynamicCast<NrNetDevice> (*it)->SetAttribute ("Mtu", UintegerValue (1500));
+    // for (auto it = gNbNetDev.Begin (); it != gNbNetDev.End (); ++it) DynamicCast<NrNetDevice> (*it)->SetAttribute ("Mtu", UintegerValue (1500));
 
     int64_t randomStream = 1;
     randomStream += nrHelper->AssignStreams (gNbNetDev, randomStream);

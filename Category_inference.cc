@@ -47,7 +47,7 @@ int main (int argc, char *argv[])
     // set simulation time and mobility
     // double simTime = 1; // seconds
     // double udpAppStartTime = 0.4; //seconds
-    double stop_time = 150.0; // microseconds
+    double stop_time = 100.0; // microseconds
     /**
      * Underlay Network
      *
@@ -215,6 +215,7 @@ int main (int argc, char *argv[])
     std::string pwd_tmp(cwd, cwd+strlen(cwd));
     netw_meta.write_queuing_cnt(pwd_tmp + "/scratch/Category_inference/queuing_cnt.txt");
     netw_meta.write_delays_cnt(pwd_tmp + "/scratch/Category_inference/delays_cnt.txt");
+    netw_meta.write_true_delays_cnt(pwd_tmp + "/scratch/Category_inference/true_delays_cnt.txt");
     std::cout << "start Destroy." << std::endl;
     Simulator::Destroy();
     NS_LOG_INFO("Done.");

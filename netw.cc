@@ -100,8 +100,8 @@ void netw::read_underlay(std::string filename)
 						edges.insert( std::pair<std::string, int>(std::to_string(src) + ' ' + std::to_string(dest), idx) );
 						//edges.insert( std::pair<std::pair<int, int>, int>(std::pair<int, int>(src, dest), idx) );
 						edges_vec[idx] = std::pair<int, int> (src, dest);
-						adj_mat[src][dest] = true;
-						adj_mat[dest][src] = true;
+						/* adj_mat[src][dest] = true;
+						adj_mat[dest][src] = true; */
 						background_interval[idx] = round( (avg_pktSize*8*USTOS) /(BGPERCENTAGE * bw[idx] * 1000) );
 						++idx;
 					}
@@ -283,6 +283,7 @@ void netw::read_probe_profile(std::string filename)
 				std::string keys_ = std::to_string(tunnel_vec[e_idx].first) + " " + std::to_string(tunnel_vec[e_idx].second);
 				cnt_queuing.insert( std::pair<std::string, std::vector<bool>>(keys_, std::vector<bool>(_MAXPKTNUM)) );
 				cnt_delays.insert( std::pair<std::string, std::vector<uint64_t>>(keys_, std::vector<uint64_t>(_MAXPKTNUM)) );
+				cnt_true_delays.insert( std::pair<std::string, std::vector<uint64_t>>(keys_, std::vector<uint64_t>(_MAXPKTNUM)) );
 				is_received.insert( std::pair<std::string, bool> ( keys_, true ) );
 			}
 		}
@@ -312,9 +313,20 @@ void netw::read_probe_profile(std::string filename)
 			iss >> temp >> _MAXPKTNUM;
 		}
 	}
-	for (uint32_t i = 0; i < n_old_E; i++)
+	// uint32_t s, t;
+	for (auto it = cnt_delays.begin(); it != cnt_delays.end(); it ++)
 	{
-		/* code */
+		// s = tunnel_vec[ tunnel_hashmap[it->first] ].first;
+		// t = tunnel_vec[ tunnel_hashmap[it->first] ].second;
+		std::vector<int> route = routing_map[it->first];
+		// std::cout << "it->first:" << it->first;
+		for (uint32_t i = 0; i < route.size()-1; i++)
+		{
+			// adj_mat[src][dest] = true;
+			adj_mat[route[i]][route[i+1]] = true;
+			// std::cout << route[i] << "-";
+		}
+		// std::cout <<  route[route.size()-1] << std::endl;
 	}
 	
 }
@@ -334,6 +346,8 @@ void netw::read_probe_intervals(std::string filename)
 		uint32_t idx_tunnel = tunnel_hashmap[std::to_string(src) + " " + std::to_string(dest)];
 		probe_normal_interval[idx_tunnel] = round(interval_val);
 	}
+	uint32_t min_bw = *std::min_element(bw.begin(), bw.end());
+	send_interval_probing = (long double)(ProbeSizeNaive*8*USTOS)/ (long double)(min_bw*1000) * 1000;
 }
 
 void netw::set_background_type(CrossType type_name)
@@ -365,6 +379,21 @@ void netw::write_delays_cnt(std::string filename)
 		key = it->first;
 		wrfile << std::to_string( tunnel_vec[ tunnel_hashmap[key] ].first ) << ", " << std::to_string( tunnel_vec[ tunnel_hashmap[key] ].second );
 		for (auto val : cnt_delays[key])
+		{
+			wrfile << ", " << std::to_string(val);
+		}
+		wrfile << std::endl;
+	}
+}
+void netw::write_true_delays_cnt(std::string filename)
+{
+	std::ofstream wrfile(filename);
+	std::string key;
+	for (auto it = cnt_true_delays.begin(); it != cnt_true_delays.end(); it++)
+	{
+		key = it->first;
+		wrfile << std::to_string( tunnel_vec[ tunnel_hashmap[key] ].first ) << ", " << std::to_string( tunnel_vec[ tunnel_hashmap[key] ].second );
+		for (auto val : cnt_true_delays[key])
 		{
 			wrfile << ", " << std::to_string(val);
 		}

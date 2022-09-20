@@ -26,14 +26,14 @@ public:
     // set simulation time and mobility
 
     //other simulation parameters default values
-    uint16_t numerology = 0;
+    uint16_t numerology = 5;
 
     uint16_t gNbNum = 1;
     uint16_t ueNumPergNb = 1;
 
     double centralFrequency = 7e9;
     double bandwidth = 100e6;
-    double txPower = 14;
+    double txPower = 30;
     double lambda = 1000;
     uint32_t udpPacketSize = 1000;
     bool udpFullBuffer = true;

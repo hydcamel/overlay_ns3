@@ -8,10 +8,12 @@
 #include "ns3/simulator.h"
 #include "ns3/nstime.h"
 #include "utils.h"
+#include <algorithm>    // std::min_element, std::max_element
 
 #define LISTENPORT 9
 // #define MAXPKTNUM 500
 #define NSTOMS 1000000
+#define NSTOS 1000000000
 #define USTOS 1000000
 #define NSTOUS 1000
 // #define MAXBACKLOG 200
@@ -23,8 +25,8 @@
 #define PrLBPkt (0.4)
 #define PrUBPkt (0.4)
 #define PrMEDPkt (0.2)
-#define ProbeSizeNaive (1460)
-// #define ProbeSizeNaive (46)
+// #define ProbeSizeNaive (1460)
+#define ProbeSizeNaive (50)
 #define ProbeSizeSWSmall (50)
 #define ProbeSizeSWlarge (1450)
 
@@ -60,6 +62,7 @@ public:
 
     void write_queuing_cnt(std::string filename);
     void write_delays_cnt(std::string filename);
+    void write_true_delays_cnt(std::string filename);
 
     /**
      * underlay network
@@ -97,6 +100,8 @@ public:
     std::vector<std::vector<uint32_t>> m_sent;
     std::unordered_map<std::string, bool> is_received;
     uint32_t idx_orchestration = 1;
+    uint32_t pkt_size_ran = 1420;
+    uint32_t send_interval_probing;
 
 
     /**
@@ -106,6 +111,7 @@ public:
     std::unordered_map<std::string, int32_t> cnt_congestion; 
     std::unordered_map<std::string, std::vector<bool>>  cnt_queuing; // # of queued
     std::unordered_map<std::string, std::vector<uint64_t>>  cnt_delays; // # of queued
+    std::unordered_map<std::string, std::vector<uint64_t>>  cnt_true_delays; // # of queued
     // std::vector<std::vector<bool>>  cnt_queuing; // # of queued
 
     ProbeType probe_type;

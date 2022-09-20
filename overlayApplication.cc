@@ -204,6 +204,7 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                         meta->cnt_queuing[keys][tagPktRecv.GetPktID()] = tagPktRecv.GetIsQueued();
                         /* uint32_t idx_tunnel = meta->tunnel_hashmap[keys];
                         meta->cnt_queuing[idx_tunnel][tagPktRecv.GetPktID()] = tagPktRecv.GetIsQueued(); */
+                        meta->cnt_true_delays[keys][tagPktRecv.GetPktID()] = Simulator::Now().GetNanoSeconds() - (uint64_t)(tagPktRecv.GetStartTime());
                         break;
                     }
                     case ProbeType::sandwich_v1:
@@ -226,10 +227,15 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                     // tag_ue_forward.SetStartTime( (uint64_t)(Simulator::Now().GetMicroSeconds()) );
                     // // packet->RemovePacketTag(tagPktRecv);
                     // packet->AddPacketTag(tag_ue_forward);
-                    packet->ReplacePacketTag(tagPktRecv);
+                    // Ptr<Packet> new_p;
+                    // new_p = Create<Packet>(meta->pkt_size_ran);
+                    // m_txTrace(p);
+                    // new_p->AddPacketTag(tagPktRecv);
+                    // packet->ReplacePacketTag(tagPktRecv);
                     std::cout << "Node ID: " << m_local_ID << "-Forwarding to UE, PktID = " << tagPktRecv.GetPktID() << " with start time" << tagPktRecv.GetStartTime() << " at " << "\t" << Now() << std::endl;
                     for (uint32_t i = 0; i < nr_socket.size(); i++)
                     {
+                        // nr_socket[i]->Send(new_p);
                         nr_socket[i]->Send(packet);
                         // int nBytes = nr_socket[i]->Send(packet);
                         // std::cout << "nBytes = " << nBytes << std::endl;
@@ -239,7 +245,7 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
             }
             /* if (tagPktRecv.GetIsProbe() == 0)
             {
-                std::cout << m_local_ID << ": recv background at " << Simulator::Now().As(Time::US) << " with " << keys << std::endl; 
+                std::cout << m_local_ID << ": recv background at " << Simulator::Now().As(Time::US) << " with " << keys << " with pkt_size = " << packet->GetSize() << std::endl; 
             } */
 
         }
@@ -311,7 +317,7 @@ void overlayApplication::SendBackground(uint32_t idx)
     tagToSend.SetPktID(0);
     tagToSend.SetIsProbe(0);
     tagToSend.SetIsQueued(0);
-    tagToSend.SetStartTime( Simulator::Now().GetMicroSeconds() );
+    tagToSend.SetStartTime( Simulator::Now().GetNanoSeconds() );
     if ( meta->background_type == CrossType::PktPoisson )
     {
         // pkt size
@@ -426,6 +432,7 @@ void overlayApplication::CentralOrchestration()
     }
     else
     {
+        uint32_t next_send_time = 0;
         for (uint32_t i = 0; i < meta->n_nodes; i++)
         {
             if (meta->loc_overlay_nodes[i] == true) // target i
@@ -438,8 +445,9 @@ void overlayApplication::CentralOrchestration()
                 
                 if (meta->tunnel_hashmap.count(keys_) == 0 || meta->old_E[meta->tunnel_hashmap[keys_]] == false || is_run == false || meta->m_sent[m_local_ID][i] >= meta->_MAXPKTNUM)
                     continue; // no such tunnel or not currently probed
-                std::cout << "Start Sending at: " << keys_ << std::endl;
-                ScheduleProbing(Time(0), i);
+                std::cout << "Start Sending at: " << keys_ << " after " << next_send_time << std::endl;
+                ScheduleProbing(Time(NanoSeconds(next_send_time)), i);
+                next_send_time += meta->send_interval_probing;
             }
         }
     }
@@ -489,6 +497,9 @@ void overlayApplication::SendProbeNaive(uint32_t idx)
     // m_txTrace(p);
     p->AddPacketTag(tagToSend);
     tab_socket[routes[1]]->Send(p);
+    // tab_socket[routes[1]]->Send(p);
+    // tab_socket[routes[1]]->Send(p);
+    // tab_socket[routes[1]]->Send(p);
     meta->is_received[keys_] = false;
     if (is_run == true && meta->m_sent[m_local_ID][idx] < meta->_MAXPKTNUM)
     {
@@ -541,7 +552,7 @@ void overlayApplication::SetTag(SDtag& tagToUse, uint8_t SourceID, uint8_t DestI
     // tagToUse.SetSandWichID(SandWichID);
     tagToUse.SetIsProbe(IsProbe);
     // tagToUse.SetSandWichLargeID(SandWichLargeID);
-    tagToUse.SetStartTime(Simulator::Now().GetMicroSeconds());
+    tagToUse.SetStartTime(Simulator::Now().GetNanoSeconds());
 }
 
 bool overlayApplication::StateCheckRecv()
