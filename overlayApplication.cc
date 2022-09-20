@@ -327,6 +327,24 @@ void overlayApplication::SendBackground(uint32_t idx)
         // m_txTrace(p);
         p->AddPacketTag(tagToSend);
         tab_socket[idx]->Send(p);
+        // burst
+        Ptr<UniformRandomVariable> rand_burst = CreateObject<UniformRandomVariable>();
+        double rng_val = rand_burst->GetValue(0.0, 1.0);
+        // std::cout << "rng_val = " << rng_val << " at " << m_local_ID << " to " << idx << std::endl;
+        if (rng_val <= meta->prob_burst)
+        {
+            std::cout << "Burst happens at " << m_local_ID << " to " << idx << std::endl;
+            std::vector<Ptr<Packet>> vec_burst_pkt(meta->n_burst_pkt);
+            for (uint32_t i = 0; i < meta->n_burst_pkt; i++)
+            {
+                pkt_size = GMM_Pkt_Size();
+                vec_burst_pkt[i] = Create<Packet>(pkt_size);
+                // m_txTrace(p);
+                vec_burst_pkt[i]->AddPacketTag(tagToSend);
+                tab_socket[idx]->Send(vec_burst_pkt[i]);
+            }
+        }
+
         // inter-arrival time
         Ptr<ExponentialRandomVariable> rand = CreateObject<ExponentialRandomVariable> ();
         int edgeID = 0;

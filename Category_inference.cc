@@ -47,7 +47,7 @@ int main (int argc, char *argv[])
     // set simulation time and mobility
     // double simTime = 1; // seconds
     // double udpAppStartTime = 0.4; //seconds
-    double stop_time = 100.0; // microseconds
+    double stop_time = 200.0; // microseconds
     /**
      * Underlay Network
      *

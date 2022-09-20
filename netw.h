@@ -102,6 +102,8 @@ public:
     uint32_t idx_orchestration = 1;
     uint32_t pkt_size_ran = 1420;
     uint32_t send_interval_probing;
+    double prob_burst = 0.005;
+    uint32_t n_burst_pkt = 50;
 
 
     /**
