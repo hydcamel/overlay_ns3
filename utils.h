@@ -27,6 +27,7 @@ typedef struct name_files
     std::string probe_setup_filename;
     std::string probe_interval_files;
     std::string gnb_coordinate_files;
+    std::string hyper_param_files;
 }name_input_files;
 
 typedef struct coordinate

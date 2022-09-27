@@ -48,6 +48,10 @@ void read_setup(name_input_files &input_fd)
         {
             iss >> input_fd.gnb_coordinate_files;
         }
+        else if (temp.compare("hyper_param_filename") == 0)
+        {
+            iss >> input_fd.hyper_param_files;
+        }
     }
 }
 

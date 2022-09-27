@@ -213,9 +213,9 @@ int main (int argc, char *argv[])
     std::cout << "Before Destroy." << std::endl;
     char *cwd = get_current_dir_name();
     std::string pwd_tmp(cwd, cwd+strlen(cwd));
-    netw_meta.write_queuing_cnt(pwd_tmp + "/scratch/Category_inference/queuing_cnt.txt");
-    netw_meta.write_delays_cnt(pwd_tmp + "/scratch/Category_inference/delays_cnt.txt");
-    netw_meta.write_true_delays_cnt(pwd_tmp + "/scratch/Category_inference/true_delays_cnt.txt");
+    netw_meta.write_queuing_cnt(pwd_tmp + "/scratch/Category_inference/queuing_cnt.csv");
+    netw_meta.write_delays_cnt(pwd_tmp + "/scratch/Category_inference/delays_cnt.csv");
+    netw_meta.write_true_delays_cnt(pwd_tmp + "/scratch/Category_inference/true_delays_cnt.csv");
     std::cout << "start Destroy." << std::endl;
     Simulator::Destroy();
     NS_LOG_INFO("Done.");

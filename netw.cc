@@ -42,6 +42,7 @@ netw::netw(name_input_files &fd_setup)
 	read_probe_profile(fd_setup.probe_setup_filename);
 	read_probe_intervals(fd_setup.probe_interval_files);
 	read_gnb_coordinate(fd_setup.gnb_coordinate_files);
+	read_hyper_param(fd_setup.hyper_param_files);
 }
 
 void netw::read_underlay(std::string filename)
@@ -278,6 +279,11 @@ void netw::read_probe_profile(std::string filename)
 			for (uint32_t i = 0; i < n_old_E; i++)
 			{
 				iss >> e_idx;
+				if (e_idx == -1)
+				{
+					continue;
+				}
+				
 				old_E[e_idx] = true;
 				// std::cout << "n_old_E: " << n_old_E << "-" << temp << e_idx << std::endl;
 				std::string keys_ = std::to_string(tunnel_vec[e_idx].first) + " " + std::to_string(tunnel_vec[e_idx].second);
@@ -348,6 +354,37 @@ void netw::read_probe_intervals(std::string filename)
 	}
 	uint32_t min_bw = *std::min_element(bw.begin(), bw.end());
 	send_interval_probing = (long double)(ProbeSizeNaive*8*USTOS)/ (long double)(min_bw*1000) * 1000;
+}
+
+void netw::read_hyper_param(std::string filename)
+{
+	std::ifstream infile(filename);
+    std::string line;
+	// int src, dest;
+	// double probe_interval; //microsecond (us, 1e-6) 
+	std::string temp;
+	std::cout << "read_hyper_param: " << filename << std::endl;
+	uint32_t n_old_E, e_idx;
+
+	while (getline(infile, line))
+	{
+		std::istringstream iss(line);
+		if (line.substr(0, 13).compare("E_cur_idxlist") == 0)
+		{
+			iss >> temp >> n_old_E;
+			for (uint32_t i = 0; i < n_old_E; i++)
+			{
+				iss >> e_idx;
+				old_E[e_idx] = true;
+				// std::cout << "n_old_E: " << n_old_E << "-" << temp << e_idx << std::endl;
+				std::string keys_ = std::to_string(tunnel_vec[e_idx].first) + " " + std::to_string(tunnel_vec[e_idx].second);
+				cnt_queuing.insert( std::pair<std::string, std::vector<bool>>(keys_, std::vector<bool>(_MAXPKTNUM)) );
+				cnt_delays.insert( std::pair<std::string, std::vector<uint64_t>>(keys_, std::vector<uint64_t>(_MAXPKTNUM)) );
+				cnt_true_delays.insert( std::pair<std::string, std::vector<uint64_t>>(keys_, std::vector<uint64_t>(_MAXPKTNUM)) );
+				is_received.insert( std::pair<std::string, bool> ( keys_, true ) );
+			}
+		}
+	}
 }
 
 void netw::set_background_type(CrossType type_name)

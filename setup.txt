@@ -5,3 +5,4 @@ route_name /export/home/Yudi_Huang/ns-3-dev/scratch/Category_inference/route_tab
 probe_setup_filename /export/home/Yudi_Huang/ns-3-dev/scratch/Category_inference/probe_setup.txt
 probe_interval_filename /export/home/Yudi_Huang/ns-3-dev/scratch/Category_inference/probe_intervals.txt
 gnb_coordinate_file /export/home/Yudi_Huang/ns-3-dev/scratch/Category_inference/coordinate_gnb.txt
+hyper_param_filename /export/home/Yudi_Huang/ns-3-dev/scratch/Category_inference/hyper_param.txt

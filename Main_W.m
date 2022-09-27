@@ -1,5 +1,6 @@
 clear classes
-is_recompute = 1;
+is_recompute = 0;
+global root n_iab SPR XPAttack_utils thr_burst tol
 if is_recompute == 1
     G_type = 0;
     [ Adj, D, Adj_full, sa, sb, ta, tb, path_a, path_b, DG, SPR, node_xval, node_yval ] = G_gen(G_type); % G_type = 0:Hex
@@ -37,27 +38,54 @@ else
 end
 
 %% Init
+root = 2;
+thr_burst = 100000;
+tol = 0.05;
 ta_init = [20, 36] - n_iab;
 tb_init = tb(1) - n_iab;
 E_cur_idxlist = zeros(1,3);
 idx = 1;
 n_uePerGnb = 1;
-n_probes = 3;
-for i = 1 : length(SPR)
-    if ismember( SPR{i}(end), [ta_init, tb_init] )
-        E_cur_idxlist(idx) = i;
-        idx = idx + 1;
-    end
-end
+n_probes = 1000;
+
 para_probe = py.dict(pyargs('E_cur_idxlist',E_cur_idxlist,'e_new_idx',1,'n_calibrate_pkt',1000, 'n_uePerGnb', n_uePerGnb, 'n_probes', n_probes));
-% para_probe.E_cur_idxlist = E_cur_idxlist;
-% para_probe.e_new_idx = 1;
-% para_probe.n_calibrate_pkt = 1000;
 %% Prepare Python Env
 if count(py.sys.path,'') == 0
     insert(py.sys.path,int32(0),'');
 end
 XPAttack_utils = py.importlib.import_module('XPAttack_utils');
 py.importlib.reload(XPAttack_utils);
-
 py.XPAttack_utils.init_setup(para_probe);
+
+% py.XPAttack_utils.run_simulation(para_probe);
+
+%% Iterate over each branch of the root
+BT_set = find(T_true(root,:));
+BT_set = BT_set( BT_set <= n_iab );
+tb_per = tb(1);
+W=zeros(length(T_true),length(T_true)); %W(i,j) means the weight share with edge (i,j) in T
+for i = 1 : length(BT_set)
+    T_per = T_true;
+    T_per(root, BT_set) = 0;
+    T_per(root, n_iab+1:end) = 0;
+    T_per(root, BT_set(i)) = 1;
+    new_tT = zeros(1, n_iab);
+    idx = 1;
+    for j = 1 : n_iab
+        route = path_a_full{j};
+        if( route(2) == BT_set(i) ) 
+            new_tT(idx) = route(end);
+            idx = idx + 1;
+        end
+    end
+    [ W ] = W_Inference( Adj_full, W, T_per, path_a_full, path_b_full, tb_per, new_tT(1:idx-1) );
+end
+
+
+
+for i = 1 : length(SPR)
+    if ismember( SPR{i}(end), [ta_init, tb_init] )
+        E_cur_idxlist(idx) = i;
+        idx = idx + 1;
+    end
+end

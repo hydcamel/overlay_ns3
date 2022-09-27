@@ -59,6 +59,7 @@ public:
     void read_probe_profile(std::string filename); // for probing, this will contain the probing rate profile: microsecond (us, 1e-6) 
     void read_probe_intervals(std::string filename); // for probing, this will contain the probing rate profile: microsecond (us, 1e-6) 
     void read_gnb_coordinate(std::string filename);
+    void read_hyper_param(std::string filename);
 
     void write_queuing_cnt(std::string filename);
     void write_delays_cnt(std::string filename);
@@ -102,7 +103,7 @@ public:
     uint32_t idx_orchestration = 1;
     uint32_t pkt_size_ran = 1420;
     uint32_t send_interval_probing;
-    double prob_burst = 0.005;
+    double prob_burst = 0.002;
     uint32_t n_burst_pkt = 50;
 
 

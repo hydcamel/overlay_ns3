@@ -6,6 +6,7 @@ Created on Tue Sep 13 12:43:05 2022
 """
 import numpy as np
 import scipy.io as sio
+import os
 
 
 def adj2underlay(Adj, D, bw, delay, filename):
@@ -69,6 +70,20 @@ def write_setup(file_name, *para):
         for entry in para:
             stf.write(entry + '\n')
             
+def run_simulation(para_from_matlab):
+    # dir_name = "/export/home/Yudi_Huang/ns-3-dev/scratch/Category_inference/"
+    dir_name = ""
+    file_hyper_param = dir_name + "hyper_param.txt"
+    E_cur_idxlist = para_from_matlab['E_cur_idxlist']
+    '''Index Transformation'''
+    E_cur_idxlist = [int(e-1) for e in E_cur_idxlist]
+    
+    '''Write to file'''
+    str_old_E = "E_cur_idxlist " + str(len(E_cur_idxlist)) + " " + " ".join( [str(e) for e in E_cur_idxlist] )
+    write_setup(file_hyper_param, str_old_E)
+    os.system("../.././ns3 run Category_inference")
+    
+            
 def init_setup(para_from_matlab):
     para_dict = sio.loadmat('para2py_hex3.mat', struct_as_record=False, squeeze_me=True)['para2py']
     Adj, D, SPR, sa, sb, ta, tb = para_dict.Adj, para_dict.D, para_dict.SPR, para_dict.sa, para_dict.sb, para_dict.ta, para_dict.tb
@@ -79,8 +94,8 @@ def init_setup(para_from_matlab):
     ta = np.array( [u for u in ta] )
     tb = tb - 1
     
-    bw = [100000]*len(D[0]) # bw in kbps, delay in microsec (us).
-    delay = [10]*len(D[0]) # bw in kbps, delay in microsec (us).
+    bw = [1000000]*len(D[0]) # bw in kbps, delay in microsec (us).
+    delay = [20]*len(D[0]) # bw in kbps, delay in microsec (us).
 
     tunnel_list = [ (route[0], route[-1]) for route in SPR if len(route) > 0 ]
     n_tunnels = len(tunnel_list)
@@ -95,6 +110,7 @@ def init_setup(para_from_matlab):
     probe_interval_files = dir_name + "probe_intervals.txt"
     probe_setup_name = dir_name + "probe_setup.txt"
     gnb_coordinate_file_name = dir_name + "coordinate_gnb.txt"
+    hyper_param_filename = dir_name + "hyper_param.txt"
     
     adj2underlay(Adj=Adj, D=D, bw=bw, delay=delay, filename=graph_name)
     SPR2routeTable(SPR=SPR, filename=route_name)
@@ -110,4 +126,4 @@ def init_setup(para_from_matlab):
     write_tunnel_demands(tunnel_demands=tunnel_demands, tunnel_list=tunnel_list, filename=name_demands)
     wr_probe_intervals(probe_intervals=probe_intervals, tunnel_list=tunnel_list, filename=probe_interval_files)
     wr_coordinate_gnb(node_xval=node_xval, node_yval=node_yval, filename=gnb_coordinate_file_name)
-    write_setup("setup.txt", "graph_name " + graph_name, "name_overlay_nodes " + name_overlay_nodes, "name_demands " + name_demands, "route_name " + route_name, "probe_setup_filename " + probe_setup_name, "probe_interval_filename " + probe_interval_files, "gnb_coordinate_file " + gnb_coordinate_file_name)
+    write_setup("setup.txt", "graph_name " + graph_name, "name_overlay_nodes " + name_overlay_nodes, "name_demands " + name_demands, "route_name " + route_name, "probe_setup_filename " + probe_setup_name, "probe_interval_filename " + probe_interval_files, "gnb_coordinate_file " + gnb_coordinate_file_name, "hyper_param_filename " + hyper_param_filename)

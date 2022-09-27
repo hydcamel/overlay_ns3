@@ -1,5 +1,5 @@
-n_probes 100
-E_cur_idxlist 3 0 1 15
+n_probes 1000
+E_cur_idxlist 3 -1 -1 -1
 e_new_idx 0
 probe_type naive
 len_long_train 1000
