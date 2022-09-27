@@ -104,6 +104,10 @@ void overlayApplication::InitApp(netw *netw_meta, uint32_t localId, uint32_t Max
     probe_event.resize(meta->n_nodes, EventId());
     SetLocalID(localId);
     is_overlay = meta->loc_overlay_nodes[localId];
+    Ptr<ParetoRandomVariable> rand_burst_pareto = CreateObject<ParetoRandomVariable>();
+    rand_burst_pareto->SetAttribute ("Scale", DoubleValue (meta->parato_scale));
+    rand_burst_pareto->SetAttribute ("Shape", DoubleValue (meta->parato_shape));
+    rand_burst_pareto->SetAttribute ("Bound", DoubleValue (meta->parato_bound));
 }
 void overlayApplication::SetLocalID(uint32_t localID)
 {
@@ -371,6 +375,28 @@ void overlayApplication::SendBackground(uint32_t idx)
             ScheduleBackground(pkt_inter_arrival, idx);
         }
     }
+    else if ( meta->background_type == CrossType::ParetoBurst )
+    {
+        uint32_t rng_val = rand_burst_pareto->GetInteger();
+        std::vector<Ptr<Packet>> vec_burst_pkt(rng_val);
+        double time_to_sent = 0;
+        for (uint32_t i = 0; i < rng_val; i++)
+        {
+            uint32_t pkt_size = GMM_Pkt_Size();
+            time_to_sent += (long double)(pkt_size*8*USTOS)/ (long double)(meta->min_bw*1000);
+            vec_burst_pkt[i] = Create<Packet>(pkt_size);
+            // m_txTrace(p);
+            vec_burst_pkt[i]->AddPacketTag(tagToSend);
+            tab_socket[idx]->Send(vec_burst_pkt[i]);
+        }
+        // OFF duration
+        rng_val = rand_burst_pareto->GetInteger();
+        if (is_run == true)
+        {
+            ScheduleBackground(Time(MicroSeconds(time_to_sent + rng_val*meta->avg_pkt_transmission_delay)), idx);
+        }
+    }
+    
     else
     {
         std::cout << "Wrong Background Type" << std::endl;

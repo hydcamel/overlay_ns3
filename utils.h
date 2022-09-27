@@ -9,6 +9,7 @@
 #include "ns3/ipv4-l3-protocol.h"
 #include "ns3/udp-socket.h"
 #include "ns3/log.h"
+#include <math.h>
 #include <unistd.h>
 
 namespace ns3

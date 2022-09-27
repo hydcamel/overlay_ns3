@@ -71,6 +71,8 @@ private:
     Time sandwich_interval; // Interval for the sandwich probing -- microsecond (us, 1e-6) 
     std::vector<EventId> m_sendEvent; // background traffic
     std::vector<EventId> probe_event;
+    Ptr<ParetoRandomVariable> rand_burst_pareto;
+
     /** connection **/
     uint16_t m_peerPort;
     uint16_t ListenPort;

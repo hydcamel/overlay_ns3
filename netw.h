@@ -41,7 +41,8 @@ enum ProbeType
 };
 enum CrossType
 {
-    PktPoisson = 1
+    PktPoisson = 1,
+    ParetoBurst = 2
 };
 
 class netw
@@ -74,6 +75,8 @@ public:
     uint32_t n_nodes,n_edges;
     std::vector<coordinate> vec_gnb_coordinate_;
     uint32_t n_uePerGnb;
+    uint32_t min_bw;
+    uint32_t avg_pkt_transmission_delay;
 
     /**
      * overlay network
@@ -105,6 +108,9 @@ public:
     uint32_t send_interval_probing;
     double prob_burst = 0.002;
     uint32_t n_burst_pkt = 50;
+    double parato_scale = 20;
+    double parato_shape = 1.04;
+    uint32_t parato_bound = 300;
 
 
     /**

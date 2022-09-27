@@ -33,7 +33,8 @@ netw::netw(std::string filename, std::string demands_file, std::string file_over
 }
 netw::netw(name_input_files &fd_setup)
 {
-	set_background_type(CrossType::PktPoisson);
+	// set_background_type(CrossType::PktPoisson);
+	set_background_type(CrossType::ParetoBurst);
 	// probe_type = ProbeType::naive;
 	read_underlay(fd_setup.netw_filename);
     read_overlay(fd_setup.file_overlay_nodes);
@@ -353,8 +354,9 @@ void netw::read_probe_intervals(std::string filename)
 		uint32_t idx_tunnel = tunnel_hashmap[std::to_string(src) + " " + std::to_string(dest)];
 		probe_normal_interval[idx_tunnel] = round(interval_val);
 	}
-	uint32_t min_bw = *std::min_element(bw.begin(), bw.end());
+	min_bw = *std::min_element(bw.begin(), bw.end());
 	send_interval_probing = (long double)(ProbeSizeNaive*8*USTOS)/ (long double)(min_bw*1000) * 1000;
+	avg_pkt_transmission_delay = (long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * 1000;
 }
 
 void netw::read_hyper_param(std::string filename)
