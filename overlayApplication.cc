@@ -232,7 +232,7 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                     // m_txTrace(p);
                     // new_p->AddPacketTag(tagPktRecv);
                     // packet->ReplacePacketTag(tagPktRecv);
-                    std::cout << "Node ID: " << m_local_ID << "-Forwarding to UE, PktID = " << tagPktRecv.GetPktID() << " with start time" << tagPktRecv.GetStartTime() << " at " << "\t" << Now() << std::endl;
+                    // std::cout << "Node ID: " << m_local_ID << "-Forwarding to UE, PktID = " << tagPktRecv.GetPktID() << " with start time" << tagPktRecv.GetStartTime() << " at " << "\t" << Now() << std::endl;
                     for (uint32_t i = 0; i < nr_socket.size(); i++)
                     {
                         // nr_socket[i]->Send(new_p);
@@ -384,11 +384,14 @@ void overlayApplication::StartApplication(void)
     /**
      * Set up background traffic
      **/
+    
     if (meta->background_type == CrossType::PktPoisson)
     {
+        // std::cout << "test background: " << meta->old_E.size() << " - " << meta->old_E[0] << " " << meta->old_E[1] << std::endl;
         for (uint32_t j = 0; j < meta->n_nodes; j++)
         {
             if (meta->adj_mat[m_local_ID][j] == false) continue;
+            // std::cout << "test background: " << m_local_ID << " " << j << std::endl;
             Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable>();
             Time random_offset = MicroSeconds(rand->GetValue(0, 50));
             ScheduleBackground(random_offset, j);
@@ -451,7 +454,20 @@ void overlayApplication::CentralOrchestration()
     else
     {
         uint32_t next_send_time = 0;
-        for (uint32_t i = 0; i < meta->n_nodes; i++)
+        uint32_t s = 0, t = 0;
+        for (auto it = meta->cnt_delays.begin(); it != meta->cnt_delays.end(); it++)
+        {
+            s = meta->tunnel_vec[ meta->tunnel_hashmap[it->first] ].first;
+            t = meta->tunnel_vec[ meta->tunnel_hashmap[it->first] ].second;
+            if ( s == m_local_ID && is_run == true && meta->m_sent[m_local_ID][t] < meta->_MAXPKTNUM )
+            {
+                ScheduleProbing(Time(NanoSeconds(next_send_time)), t);
+                next_send_time += meta->send_interval_probing;
+            }
+        }
+        std::cout << meta->m_sent[s][t] << " ";
+        
+        /* for (uint32_t i = 0; i < meta->n_nodes; i++)
         {
             if (meta->loc_overlay_nodes[i] == true) // target i
             {
@@ -463,11 +479,11 @@ void overlayApplication::CentralOrchestration()
                 
                 if (meta->tunnel_hashmap.count(keys_) == 0 || meta->old_E[meta->tunnel_hashmap[keys_]] == false || is_run == false || meta->m_sent[m_local_ID][i] >= meta->_MAXPKTNUM)
                     continue; // no such tunnel or not currently probed
-                std::cout << "Start Sending at: " << keys_ << " after " << next_send_time << std::endl;
+                // std::cout << "Start Sending at: " << keys_ << " after " << next_send_time << std::endl;
                 ScheduleProbing(Time(NanoSeconds(next_send_time)), i);
                 next_send_time += meta->send_interval_probing;
             }
-        }
+        } */
     }
     Simulator::Schedule(Time(MicroSeconds(meta->_epoll_time)), &overlayApplication::CentralOrchestration, this);
 }
@@ -511,7 +527,7 @@ void overlayApplication::SendProbeNaive(uint32_t idx)
     ++meta->m_sent[m_local_ID][idx];
     Ptr<Packet> p;
     p = Create<Packet>(ProbeSizeNaive);
-    std::cout << "Probe: " << m_local_ID << " to " << idx << " with ID " << tagToSend.GetPktID() << " at " << "\t" << Now() << ": " << tagToSend.GetStartTime() << std::endl;
+    // std::cout << "Probe: " << m_local_ID << " to " << idx << " with ID " << tagToSend.GetPktID() << " at " << "\t" << Now() << ": " << tagToSend.GetStartTime() << std::endl;
     // m_txTrace(p);
     p->AddPacketTag(tagToSend);
     tab_socket[routes[1]]->Send(p);

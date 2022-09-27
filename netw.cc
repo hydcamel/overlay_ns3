@@ -268,7 +268,8 @@ void netw::read_probe_profile(std::string filename)
 	// double probe_interval; //microsecond (us, 1e-6) 
 	std::string temp;
 	std::cout << "read_probe_setup: " << filename << std::endl;
-	uint32_t n_old_E, e_idx;
+	uint32_t n_old_E;
+	int e_idx;
 
 	while (getline(infile, line))
 	{
@@ -380,6 +381,11 @@ void netw::read_hyper_param(std::string filename)
 				std::string keys_ = std::to_string(tunnel_vec[e_idx].first) + " " + std::to_string(tunnel_vec[e_idx].second);
 				cnt_queuing.insert( std::pair<std::string, std::vector<bool>>(keys_, std::vector<bool>(_MAXPKTNUM)) );
 				cnt_delays.insert( std::pair<std::string, std::vector<uint64_t>>(keys_, std::vector<uint64_t>(_MAXPKTNUM)) );
+				std::vector<int> route = routing_map[keys_];
+				for (uint32_t i = 0; i < route.size()-1; i++)
+				{
+					adj_mat[route[i]][route[i+1]] = true;
+				}
 				cnt_true_delays.insert( std::pair<std::string, std::vector<uint64_t>>(keys_, std::vector<uint64_t>(_MAXPKTNUM)) );
 				is_received.insert( std::pair<std::string, bool> ( keys_, true ) );
 			}
