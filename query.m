@@ -9,8 +9,9 @@ function [ W ] = query( G, W, T, sT, tT, path_a, path_b, sb, tb, RNJ)
 %     tol=0.024;
 % end
 %tol=0.05;
-global tol n_iab
+global tol n_iab root
 BT=find(T(sT,:)~=0); %BT: successor of sT
+is_three_targets = 0;
 % BT = BT(BT <= n_iab);
 % child_BT = find(T(BT,:)~=0);
 % if ismember(BT,1:length(path_a)) %if BT is a destination
@@ -34,13 +35,19 @@ else
             temp=sp{i};
             if temp(2)~=sec_node
                 t2=i;
+                is_three_targets = 1;
                 break;
             end
         end
     end
 end
 
-if t1 ~= t2
+if t1 == tb
+    W(sT, tb) = 1;
+    return;
+end
+
+if is_three_targets > 0
     [weight] = weight_calc([t1 - n_iab, t2 - n_iab], tb - n_iab);
 else
     [weight] = weight_calc(t1 - n_iab, tb - n_iab);
@@ -53,7 +60,7 @@ else
 end
 
 if rhos>tol
-    [~,sp]=Dijkstra_source(RNJ,length(RNJ));
+    [~,sp]=Dijkstra_source(RNJ,root);
     temp_path=sp{sT};
     sum_w=0;
     for i=1:length(temp_path)-1

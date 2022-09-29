@@ -378,16 +378,16 @@ void overlayApplication::SendBackground(uint32_t idx)
     else if ( meta->background_type == CrossType::ParetoBurst )
     {
         uint32_t rng_val = rand_burst_pareto->GetInteger();
-        if (rng_val >= 40)
+        /* if (rng_val >= 40)
         {
             std::cout << "Burst! rng_val = " << rng_val << " at " << m_local_ID << " - " << idx << std::endl;
-        }
+        } */
         std::vector<Ptr<Packet>> vec_burst_pkt(rng_val);
         double time_to_sent = 0;
         for (uint32_t i = 0; i < rng_val; i++)
         {
-            // uint32_t pkt_size = GMM_Pkt_Size();
-            uint32_t pkt_size = UBPKTSIZE;
+            uint32_t pkt_size = GMM_Pkt_Size();
+            // uint32_t pkt_size = UBPKTSIZE;
             time_to_sent += (long double)(pkt_size*8*USTOS)/ (long double)(meta->min_bw*1000);
             vec_burst_pkt[i] = Create<Packet>(pkt_size);
             // m_txTrace(p);
@@ -396,7 +396,7 @@ void overlayApplication::SendBackground(uint32_t idx)
         }
         // OFF duration
         rng_val = rand_burst_pareto->GetInteger();
-        std::cout << "ON duration: rng_val=" << vec_burst_pkt.size() << ", time_to_sent=" << time_to_sent << "; OFF duration = rng_val=" << rng_val << ", time_to_sent=" << rng_val*meta->avg_pkt_transmission_delay << std::endl;
+        // std::cout << "ON duration: rng_val=" << vec_burst_pkt.size() << ", time_to_sent=" << time_to_sent << "; OFF duration = rng_val=" << rng_val << ", time_to_sent=" << rng_val*meta->avg_pkt_transmission_delay << std::endl;
         if (is_run == true)
         {
             ScheduleBackground(Time(MicroSeconds(time_to_sent + rng_val*meta->avg_pkt_transmission_delay)), idx);
@@ -497,7 +497,7 @@ void overlayApplication::CentralOrchestration()
                 next_send_time += meta->send_interval_probing;
             }
         }
-        std::cout << meta->m_sent[s][t] << " ";
+        // std::cout << meta->m_sent[s][t] << " ";
         
         /* for (uint32_t i = 0; i < meta->n_nodes; i++)
         {

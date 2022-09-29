@@ -22,11 +22,11 @@ end
 py.XPAttack_utils.run_simulation(para_probe);
 
 %% Binarization
-delays_raw = readmatrix('res_delays.csv');
+delays_raw = readmatrix('delays_cnt.csv');
 tmp = sum(delays_raw > 0, 1);
 tmp(1:2) = size(delays_raw,1) + 5;
 n_effective = sum( tmp >= size(delays_raw,1) ) - 2;
-delays_raw = delays_raw(:, 1:n_effective);
+delays_raw = delays_raw(:, 1:n_effective+2);
 index_permute = zeros(1, n_old_E);
 
 for i = 1 : size(delays_raw,1)
@@ -36,12 +36,13 @@ for i = 1 : size(delays_raw,1)
         route = SPR{E_cur_idxlist(j)};
         if route(end) == t
             index_permute(j) = i;
+            delays_raw(i, 3:end) = delays_raw(i, 3:end) > thr_burst(3, E_cur_idxlist(j));
             break;
         end
     end
 end
 delays_raw = delays_raw(index_permute, 3:end);
-delays_raw = delays_raw > thr_burst;
+% delays_raw = delays_raw > thr_burst;
 
 n_samples = size(delays_raw, 2);
 if n_old_E == 3

@@ -108,7 +108,7 @@ public:
     uint32_t send_interval_probing;
     double prob_burst = 0.002;
     uint32_t n_burst_pkt = 50;
-    double parato_scale = 20;
+    double parato_scale = 12;
     double parato_shape = 1.04;
     uint32_t parato_bound = 300;
 

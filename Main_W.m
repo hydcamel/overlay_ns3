@@ -1,5 +1,6 @@
 clear classes
 is_recompute = 0;
+is_init = 0;
 global root n_iab SPR XPAttack_utils thr_burst tol
 if is_recompute == 1
     G_type = 0;
@@ -39,7 +40,9 @@ end
 
 %% Init
 root = 2;
-thr_burst = 100000;
+% thr_burst = 338483;
+thr_burst = load('Thr_burst_pareto_hex3.mat');
+thr_burst = thr_burst.thr_burst_delay;
 tol = 0.05;
 ta_init = [20, 36] - n_iab;
 tb_init = tb(1) - n_iab;
@@ -55,9 +58,10 @@ if count(py.sys.path,'') == 0
 end
 XPAttack_utils = py.importlib.import_module('XPAttack_utils');
 py.importlib.reload(XPAttack_utils);
-py.XPAttack_utils.init_setup(para_probe);
-
-% py.XPAttack_utils.run_simulation(para_probe);
+% py.XPAttack_utils.init_setup(para_probe);
+if is_init > 0
+    py.XPAttack_utils.run_simulation(para_probe);
+end
 
 %% Iterate over each branch of the root
 BT_set = find(T_true(root,:));

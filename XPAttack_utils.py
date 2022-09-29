@@ -71,8 +71,8 @@ def write_setup(file_name, *para):
             stf.write(entry + '\n')
             
 def run_simulation(para_from_matlab):
-    # dir_name = "/export/home/Yudi_Huang/ns-3-dev/scratch/Category_inference/"
-    dir_name = ""
+    dir_name = "/export/home/Yudi_Huang/ns-3-dev/scratch/Category_inference/"
+    # dir_name = ""
     file_hyper_param = dir_name + "hyper_param.txt"
     E_cur_idxlist = para_from_matlab['E_cur_idxlist']
     '''Index Transformation'''
@@ -81,7 +81,7 @@ def run_simulation(para_from_matlab):
     '''Write to file'''
     str_old_E = "E_cur_idxlist " + str(len(E_cur_idxlist)) + " " + " ".join( [str(e) for e in E_cur_idxlist] )
     write_setup(file_hyper_param, str_old_E)
-    os.system("../.././ns3 run Category_inference")
+    os.system("/export/home/Yudi_Huang/ns-3-dev/ns3 run Category_inference")
     
             
 def init_setup(para_from_matlab):
