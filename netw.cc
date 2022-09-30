@@ -356,7 +356,7 @@ void netw::read_probe_intervals(std::string filename)
 	}
 	min_bw = *std::min_element(bw.begin(), bw.end());
 	send_interval_probing = (long double)(ProbeSizeNaive*8*USTOS)/ (long double)(min_bw*1000) * 1000;
-	avg_pkt_transmission_delay = (long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * 80;
+	avg_pkt_transmission_delay = (long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * 10;
 }
 
 void netw::read_hyper_param(std::string filename)

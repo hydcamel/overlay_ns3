@@ -72,7 +72,7 @@ if rhos>tol
         return
     end
 end
-if t1==t2
+if BT > n_iab
     return
 end
 

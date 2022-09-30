@@ -52,7 +52,8 @@ while flag
                     if j~=index
                         W(i,candidate_next(j))=0;
                     end
-                    if ~ismember(candidate_next(j),1:length(path_a))
+%                     if ~ismember(candidate_next(j),1:length(path_a))
+                    if candidate_next(j) < n_iab
                         [~,sp]=Dijkstra_source(T,candidate_next(j));
                         for k=1:length(sp)
                             tmp=sp{k};

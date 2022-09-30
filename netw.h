@@ -109,8 +109,8 @@ public:
     double prob_burst = 0.002;
     uint32_t n_burst_pkt = 50;
     double parato_scale = 12;
-    double parato_shape = 1.04;
-    uint32_t parato_bound = 300;
+    double parato_shape = 2.04;
+    uint32_t parato_bound = 50;
 
 
     /**
