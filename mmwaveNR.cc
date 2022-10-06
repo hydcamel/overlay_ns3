@@ -10,33 +10,177 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     // nrHelper = CreateObject<NrHelper> ();
     nrHelper->set_cell_ID( app_interface.GetLocalID() );
     // std::cout << "app_interface.GetLocalID() = " << app_interface.GetLocalID() << std::endl;
-    nrHelper->SetHarqEnabled(true);
-    /*
-    * Spectrum division. We create one operation band with one component carrier
-    * (CC) which occupies the whole operation band bandwidth. The CC contains a
-    * single Bandwidth Part (BWP). This BWP occupies the whole CC band.
-    * Both operational bands will use the StreetCanyon channel modeling.
-    */
-    const uint8_t numCcPerBand = 1;  // in this example, both bands have a single CC
-    BandwidthPartInfo::Scenario scenario = BandwidthPartInfo::RMa_LoS;
-    if (ueNumPergNb  > 1) scenario = BandwidthPartInfo::InH_OfficeOpen;
-    // Create the configuration for the CcBwpHelper. SimpleOperationBandConf creates
-    // a single BWP per CC
-    CcBwpCreator::SimpleOperationBandConf bandConf (centralFrequency, bandwidth, numCcPerBand, scenario);
+    // nrHelper->SetHarqEnabled(false);
+    NodeContainer gNbNodes;
+    NodeContainer ueNodes;
 
-    // By using the configuration created, it is time to make the operation bands
+    /*
+   *  Create the gNB and UE nodes according to the network topology
+   */
+    MobilityHelper mobility;
+    mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
+    Ptr<ListPositionAllocator> bsPositionAlloc = CreateObject<ListPositionAllocator> ();
+    Ptr<ListPositionAllocator> utPositionAlloc = CreateObject<ListPositionAllocator> ();
+
+    const double gNbHeight = 10;
+    const double ueHeight = 1.5;
+    
+    // mobility.Install (gNbNodes);
+    // mobility.Install (ueNodes);
+
+    if (singleUeTopology)
+    {
+      gNbNodes.Create (1);
+      ueNodes.Create (1);
+      gNbNum = 1;
+      ueNumPergNb = 1;
+
+      mobility.Install (gNbNodes);
+      mobility.Install (ueNodes);
+      bsPositionAlloc->Add (Vector (gnb_coordinate.x_val, gnb_coordinate.y_val, gNbHeight));
+      utPositionAlloc->Add (Vector (ue_coordinate.x_val, ue_coordinate.y_val, ueHeight));
+    }
+    else
+    {
+        gNbNodes.Create (gNbNum);
+        ueNodes.Create (ueNumPergNb * gNbNum);
+        // mobility.Install (gNbNodes);
+        // mobility.Install (ueNodes);
+
+        bsPositionAlloc->Add (Vector (gnb_coordinate.x_val, gnb_coordinate.y_val, gNbHeight));
+        // std::cout << "Node ID = " << app_interface.GetLocalID() << ":gnb = " << gnb_coordinate.x_val << ", gnb = " << gnb_coordinate.y_val << std::endl;
+        for (uint16_t j = 0; j < ueNumPergNb; ++j)
+        {
+            double ut_x, ut_y;
+            switch (app_interface.meta->pos_ue_x[j])
+            {
+                case 0:
+                    ut_x = gnb_coordinate.x_val;
+                    break;
+                case 1:
+                    ut_x = gnb_coordinate.x_val + app_interface.meta->distance_ue_from_gnb;
+                    break;
+                case -1:
+                    ut_x = gnb_coordinate.x_val - app_interface.meta->distance_ue_from_gnb;
+                    break;
+                default:
+                    break;
+            }
+            switch (app_interface.meta->pos_ue_y[j])
+            {
+                case 0:
+                    ut_y = gnb_coordinate.y_val;
+                    break;
+                case 1:
+                    ut_y = gnb_coordinate.y_val + app_interface.meta->distance_ue_from_gnb;
+                    break;
+                case -1:
+                    ut_y = gnb_coordinate.y_val - app_interface.meta->distance_ue_from_gnb;
+                    break;
+                default:
+                    break;
+            }
+            // std::cout << "app_interface.meta->pos_ue_x = " << app_interface.meta->pos_ue_x[j] << "ut_x = " << ut_x << "app_interface.meta->pos_ue_y = " << app_interface.meta->pos_ue_y[j] << ", ut_y = " << ut_y << std::endl;
+            // ueNodes.Get (j)->GetObject<MobilityModel> ()->SetPosition (Vector (ut_x, ut_y, ueHeight)); // (x, y, z) in m
+            utPositionAlloc->Add (Vector (ut_x, ut_y, ueHeight));
+        }
+    }
+    mobility.SetPositionAllocator (bsPositionAlloc);
+    mobility.Install (gNbNodes);
+
+    mobility.SetPositionAllocator (utPositionAlloc);
+    mobility.Install (ueNodes);
+
+    BandwidthPartInfoPtrVector allBwps;
     CcBwpCreator ccBwpCreator;
-    OperationBandInfo band = ccBwpCreator.CreateOperationBandContiguousCc (bandConf);
+    OperationBandInfo band;
+    if ( !multi_bwp )
+    {
+        /*
+        * Spectrum division. We create one operation band with one component carrier
+        * (CC) which occupies the whole operation band bandwidth. The CC contains a
+        * single Bandwidth Part (BWP). This BWP occupies the whole CC band.
+        * Both operational bands will use the StreetCanyon channel modeling.
+        */
+        const uint8_t numCcPerBand = 1;  // in this example, both bands have a single CC
+        BandwidthPartInfo::Scenario scenario = BandwidthPartInfo::RMa_LoS;
+        // if (ueNumPergNb  > 1) scenario = BandwidthPartInfo::InH_OfficeOpen;
+        if (ueNumPergNb  > 1) scenario = BandwidthPartInfo::RMa_LoS;
+        // Create the configuration for the CcBwpHelper. SimpleOperationBandConf creates
+        // a single BWP per CC
+        CcBwpCreator::SimpleOperationBandConf bandConf (centralFrequency, bandwidth, numCcPerBand, scenario);
+
+        // By using the configuration created, it is time to make the operation bands
+        
+        band = ccBwpCreator.CreateOperationBandContiguousCc (bandConf);
+
+        /*
+        * Initialize channel and pathloss, plus other things inside band1. If needed,
+        * the band configuration can be done manually, but we leave it for more
+        * sophisticated examples. For the moment, this method will take care
+        * of all the spectrum initialization needs.
+        */
+        nrHelper->InitializeOperationBand (&band);
+
+        allBwps = CcBwpCreator::GetAllBwps ({band});
+
+    }
+    else
+    {
+        //non-contiguous case
+        double centralFrequencyCc0 = 28e9;
+        double centralFrequencyCc1 = 29e9;
+        double bandwidthCc0 = 100e6;
+        double bandwidthCc1 = 100e6;
+        std::string pattern = "F|F|F|F|F|F|F|F|F|F|";
+
+        std::unique_ptr<ComponentCarrierInfo> cc0 (new ComponentCarrierInfo ());
+        std::unique_ptr<BandwidthPartInfo> bwp0 (new BandwidthPartInfo ());
+
+        std::unique_ptr<ComponentCarrierInfo> cc1 (new ComponentCarrierInfo ());
+        std::unique_ptr<BandwidthPartInfo> bwp1 (new BandwidthPartInfo ());
+
+        /*
+        * The configured spectrum division is:
+        * ----------------------------- Band ---------------------------------
+        * ---------------CC0--------------|----------------CC1----------------
+        * ------BWP0------|------BWP1-----|----------------BWP0---------------
+        */
+        const uint8_t numContiguousCcs = 2; // 4 CCs per Band
+        CcBwpCreator::SimpleOperationBandConf bandConf (centralFrequency, bandwidth, numContiguousCcs, BandwidthPartInfo::UMi_StreetCanyon_LoS);
+        bandConf.m_numBwp = 1; // 1 BWP per CC
+
+        // By using the configuration created, it is time to make the operation band
+        band = ccBwpCreator.CreateOperationBandContiguousCc (bandConf);
+        nrHelper->InitializeOperationBand (&band);
+        allBwps = CcBwpCreator::GetAllBwps ({band});
+    }
+    
+
 
     /*
-    * Initialize channel and pathloss, plus other things inside band1. If needed,
-    * the band configuration can be done manually, but we leave it for more
-    * sophisticated examples. For the moment, this method will take care
-    * of all the spectrum initialization needs.
+    * Old runnable backup for single BWP
     */
-    nrHelper->InitializeOperationBand (&band);
+    // const uint8_t numCcPerBand = 1;  // in this example, both bands have a single CC
+    // BandwidthPartInfo::Scenario scenario = BandwidthPartInfo::RMa_LoS;
+    // if (ueNumPergNb  > 1) scenario = BandwidthPartInfo::InH_OfficeOpen;
+    // // Create the configuration for the CcBwpHelper. SimpleOperationBandConf creates
+    // // a single BWP per CC
+    // CcBwpCreator::SimpleOperationBandConf bandConf (centralFrequency, bandwidth, numCcPerBand, scenario);
 
-    BandwidthPartInfoPtrVector allBwps = CcBwpCreator::GetAllBwps ({band});
+    // // By using the configuration created, it is time to make the operation bands
+    // CcBwpCreator ccBwpCreator;
+    // OperationBandInfo band = ccBwpCreator.CreateOperationBandContiguousCc (bandConf);
+
+    // /*
+    // * Initialize channel and pathloss, plus other things inside band1. If needed,
+    // * the band configuration can be done manually, but we leave it for more
+    // * sophisticated examples. For the moment, this method will take care
+    // * of all the spectrum initialization needs.
+    // */
+    // nrHelper->InitializeOperationBand (&band);
+
+    // BandwidthPartInfoPtrVector allBwps = CcBwpCreator::GetAllBwps ({band});
 
     /*
     * Continue setting the parameters which are common to all the nodes, like the
@@ -46,8 +190,8 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     nrHelper->SetGnbPhyAttribute ("Numerology", UintegerValue (numerology));
 
     // Scheduler
-    // nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerTdmaRR"));
-    nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerOfdmaRR"));
+    nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerTdmaRR"));
+    // nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerOfdmaRR"));
     nrHelper->SetSchedulerAttribute ("FixedMcsDl", BooleanValue (useFixedMcs));
     nrHelper->SetSchedulerAttribute ("FixedMcsUl", BooleanValue (useFixedMcs));
     nrHelper->SetSchedulerAttribute ("FixedMcsUl", BooleanValue (useFixedMcs));
@@ -97,78 +241,23 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     // Core latency
     epcHelper->SetAttribute ("S1uLinkDelay", TimeValue (MilliSeconds (0)));
     epcHelper->SetAttribute ("S1uLinkMtu", UintegerValue (2500));
+    // epcHelper->SetAttribute ("S1uLinkMtu", UintegerValue (9000));
 
     // gNb routing between Bearer and bandwidh part
     uint32_t bwpIdForBearer = 0;
     nrHelper->SetGnbBwpManagerAlgorithmAttribute ("GBR_CONV_VOICE", UintegerValue (bwpIdForBearer));
+    // nrHelper->SetGnbBwpManagerAlgorithmAttribute ("NGBR_VOICE_VIDEO_GAMING", UintegerValue (1));
 
     // Initialize nrHelper
     nrHelper->Initialize ();
-
-    /*
-   *  Create the gNB and UE nodes according to the network topology
-   */
-    MobilityHelper mobility;
-    mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
-    Ptr<ListPositionAllocator> bsPositionAlloc = CreateObject<ListPositionAllocator> ();
-    Ptr<ListPositionAllocator> utPositionAlloc = CreateObject<ListPositionAllocator> ();
-
-    const double gNbHeight = 10;
-    const double ueHeight = 1.5;
-    NodeContainer gNbNodes;
-    NodeContainer ueNodes;
-
-    if (singleUeTopology)
-    {
-      gNbNodes.Create (1);
-      ueNodes.Create (1);
-      gNbNum = 1;
-      ueNumPergNb = 1;
-
-      mobility.Install (gNbNodes);
-      mobility.Install (ueNodes);
-      bsPositionAlloc->Add (Vector (gnb_coordinate.x_val, gnb_coordinate.y_val, gNbHeight));
-      utPositionAlloc->Add (Vector (ue_coordinate.x_val, ue_coordinate.y_val, ueHeight));
-    }
-    else
-    {
-        gNbNodes.Create (gNbNum);
-        ueNodes.Create (ueNumPergNb * gNbNum);
-
-        int32_t yValue = 0.0;
-        for (uint32_t i = 1; i <= gNbNodes.GetN (); ++i)
-        {
-        // 2.0, -2.0, 6.0, -6.0, 10.0, -10.0, ....
-        if (i % 2 != 0) yValue = static_cast<int> (i) * 30;
-        else yValue = -yValue;
-
-        bsPositionAlloc->Add (Vector (0.0, yValue, gNbHeight));
-
-        // 1.0, -1.0, 3.0, -3.0, 5.0, -5.0, ...
-        double xValue = 0.0;
-        for (uint16_t j = 1; j <= ueNumPergNb; ++j)
-            {
-            if (j % 2 != 0) xValue = j;
-            else xValue = -xValue;
-
-            if (yValue > 0) utPositionAlloc->Add (Vector (xValue, 1, ueHeight));
-            else utPositionAlloc->Add (Vector (xValue, -1, ueHeight));
-            }
-        }
-        }
-    mobility.SetPositionAllocator (bsPositionAlloc);
-    mobility.Install (gNbNodes);
-
-    mobility.SetPositionAllocator (utPositionAlloc);
-    mobility.Install (ueNodes);
 
     // Install nr net devices
     NetDeviceContainer gNbNetDev = nrHelper->InstallGnbDevice (gNbNodes, allBwps);
 
     NetDeviceContainer ueNetDev = nrHelper->InstallUeDevice (ueNodes, allBwps);
 
-    // for (auto it = ueNetDev.Begin (); it != ueNetDev.End (); ++it) DynamicCast<NrNetDevice> (*it)->SetAttribute ("Mtu", UintegerValue (1500));
-    // for (auto it = gNbNetDev.Begin (); it != gNbNetDev.End (); ++it) DynamicCast<NrNetDevice> (*it)->SetAttribute ("Mtu", UintegerValue (1500));
+    // for (auto it = ueNetDev.Begin (); it != ueNetDev.End (); ++it) DynamicCast<NrNetDevice> (*it)->SetAttribute ("Mtu", UintegerValue (5000));
+    // for (auto it = gNbNetDev.Begin (); it != gNbNetDev.End (); ++it) DynamicCast<NrNetDevice> (*it)->SetAttribute ("Mtu", UintegerValue (5000));
 
     int64_t randomStream = 1;
     randomStream += nrHelper->AssignStreams (gNbNetDev, randomStream);
@@ -188,7 +277,8 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     // connect a remoteHost to pgw. Setup routing too
     PointToPointHelper p2ph;
     p2ph.SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("500Gb/s")));
-    p2ph.SetDeviceAttribute ("Mtu", UintegerValue (2500));
+    p2ph.SetDeviceAttribute ("Mtu", UintegerValue (9000));
+    // p2ph.SetDeviceAttribute ("Mtu", UintegerValue (3000));
     p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (0.000)));
     NetDeviceContainer internetDevices = p2ph.Install (pgw, remoteHost);
     Ipv4AddressHelper ipv4h;
@@ -261,7 +351,7 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
         // if (app_interface.GetLocalID() == 3)
         //     std::cout << app_interface.GetLocalID() << "-ue->GetObject<Ipv4> (): " << ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal() << std::endl;
         app_interface.nr_socket[i]->Connect(InetSocketAddress(ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal(), dlPort));
-        /* if (app_interface.GetLocalID() == 3 || app_interface.GetLocalID() == 4 || app_interface.GetLocalID() == 6)
+        /* if (app_interface.GetLocalID() == 0 || app_interface.GetLocalID() == 3 || app_interface.GetLocalID() == 4)
         {
             std::cout << "NR ID: " << app_interface.GetLocalID() << " - " << ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal() << std::endl;
         } */

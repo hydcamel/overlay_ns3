@@ -145,6 +145,12 @@ int main (int argc, char *argv[])
         // netw_meta.vec_gnb_coordinate_[i].y_val = i*10;
         vec_ue_coordinate[i].x_val = netw_meta.vec_gnb_coordinate_[i].x_val + 20;
         vec_ue_coordinate[i].y_val = netw_meta.vec_gnb_coordinate_[i].y_val;
+        if (netw_meta.n_perUE[i] > 1)
+        {
+            vec_nr_app[i].singleUeTopology = false;
+            vec_nr_app[i].ueNumPergNb = netw_meta.n_perUE[i];
+        }
+        
         // myNR tmpNR(vec_gnb_coordinate[i], vec_ue_coordinate[i], network_base_number, *(vec_app[i]), internet);
         // vec_nr_app.push_back( tmpNR );
         vec_nr_app[i].init_myNR(netw_meta.vec_gnb_coordinate_[i], vec_ue_coordinate[i], network_base_number, *(vec_app[i]), internet, vec_NrHelper[i], vec_EpcHelper[i]);

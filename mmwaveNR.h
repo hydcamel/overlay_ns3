@@ -32,7 +32,9 @@ public:
     uint16_t ueNumPergNb = 1;
 
     double centralFrequency = 7e9;
-    double bandwidth = 100e6;
+    double bandwidth = 200e6;
+    // double centralFrequency = 28e9;
+    // double bandwidth = 3e9;
     double txPower = 30;
     double lambda = 1000;
     uint32_t udpPacketSize = 1000;
@@ -40,6 +42,7 @@ public:
     uint8_t fixedMcs = 28;
     bool useFixedMcs = true;
     bool singleUeTopology = true;
+    bool multi_bwp = false;
 
     /** NR **/
     // NodeContainer gNbNodes;

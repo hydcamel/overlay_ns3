@@ -26,6 +26,7 @@
 #define PrUBPkt (0.4)
 #define PrMEDPkt (0.2)
 // #define ProbeSizeNaive (1460)
+// #define ProbeSizeNaive (300)
 #define ProbeSizeNaive (50)
 #define ProbeSizeSWSmall (50)
 #define ProbeSizeSWlarge (1450)
@@ -61,6 +62,7 @@ public:
     void read_probe_intervals(std::string filename); // for probing, this will contain the probing rate profile: microsecond (us, 1e-6) 
     void read_gnb_coordinate(std::string filename);
     void read_hyper_param(std::string filename);
+    void read_n_UE(std::string filename);
 
     void write_queuing_cnt(std::string filename);
     void write_delays_cnt(std::string filename);
@@ -77,6 +79,10 @@ public:
     uint32_t n_uePerGnb;
     uint32_t min_bw;
     uint32_t avg_pkt_transmission_delay;
+    std::vector<uint32_t> n_perUE;
+    uint32_t distance_ue_from_gnb = 20;
+    std::vector<int> pos_ue_x {1, -1, 0, 0, 1, -1, -1, 1}; // 0: 0, 1: '+', -1: '-'
+    std::vector<int> pos_ue_y {0, 0, -1, 1, 1, 1, -1, -1};
 
     /**
      * overlay network
@@ -92,7 +98,7 @@ public:
      * probing 
      **/
     uint32_t _AppPktSize = 1024, _IPPktSize = 1052, _MACPktSize = 1054, _NormPktSize = 46, _MAXPKTNUM = 3, _MAXBACKLOG = 200000;
-    uint32_t _epoll_time = 200; // microsecond
+    uint32_t _epoll_time = 10; // microsecond
     uint16_t protocol_number = 150;
     std::vector<double> probe_normal_interval;
     std::vector<bool> old_E;
@@ -111,6 +117,7 @@ public:
     double parato_scale = 12;
     double parato_shape = 2.04;
     uint32_t parato_bound = 50;
+    bool is_w_probing = true;
 
 
     /**

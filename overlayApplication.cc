@@ -236,14 +236,16 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                     // m_txTrace(p);
                     // new_p->AddPacketTag(tagPktRecv);
                     // packet->ReplacePacketTag(tagPktRecv);
-                    // std::cout << "Node ID: " << m_local_ID << "-Forwarding to UE, PktID = " << tagPktRecv.GetPktID() << " with start time" << tagPktRecv.GetStartTime() << " at " << "\t" << Now() << std::endl;
-                    for (uint32_t i = 0; i < nr_socket.size(); i++)
+                    // std::cout << "Node ID: " << m_local_ID << "-Forwarding to UE, PktID = " << tagPktRecv.GetPktID() << ": " << uint32_t(tagPktRecv.GetUeID()) << " with start time" << tagPktRecv.GetStartTime() << " at " << "\t" << Now() << std::endl;
+                    /* for (uint32_t i = 0; i < nr_socket.size(); i++)
                     {
                         // nr_socket[i]->Send(new_p);
                         nr_socket[i]->Send(packet);
                         // int nBytes = nr_socket[i]->Send(packet);
                         // std::cout << "nBytes = " << nBytes << std::endl;
-                    }
+                    } */
+                    nr_socket[tagPktRecv.GetUeID()]->Send(packet);
+                    
                 }
                 // NS_LOG_INFO(m_local_ID << ": recv probe at " << Simulator::Now().As(Time::US) << " with " << keys);
             }
@@ -479,13 +481,13 @@ void overlayApplication::StartApplication(void)
 
 void overlayApplication::CentralOrchestration()
 {
-    if (StateCheckRecv() == false)
+    uint32_t next_send_time = 0;
+    if (meta->is_w_probing && StateCheckRecv() == false)
     {
         // Simulator::Schedule(Time(MicroSeconds(meta->_epoll_time)), &overlayApplication::CentralOrchestration, this);
     }
     else
     {
-        uint32_t next_send_time = 0;
         uint32_t s = 0, t = 0;
         for (auto it = meta->cnt_delays.begin(); it != meta->cnt_delays.end(); it++)
         {
@@ -493,7 +495,7 @@ void overlayApplication::CentralOrchestration()
             t = meta->tunnel_vec[ meta->tunnel_hashmap[it->first] ].second;
             if ( s == m_local_ID && is_run == true && meta->m_sent[m_local_ID][t] < meta->_MAXPKTNUM )
             {
-                ScheduleProbing(Time(NanoSeconds(next_send_time)), t);
+                ScheduleProbing(Time(MicroSeconds(next_send_time)), t);
                 next_send_time += meta->send_interval_probing;
             }
         }
@@ -517,7 +519,8 @@ void overlayApplication::CentralOrchestration()
             }
         } */
     }
-    Simulator::Schedule(Time(MicroSeconds(meta->_epoll_time)), &overlayApplication::CentralOrchestration, this);
+    Simulator::Schedule(Time(MicroSeconds(std::max(meta->_epoll_time, next_send_time))), &overlayApplication::CentralOrchestration, this);
+    // Simulator::Schedule(Time(MicroSeconds(meta->_epoll_time)), &overlayApplication::CentralOrchestration, this);
 }
 
 void overlayApplication::ScheduleProbing(Time dt, uint32_t idx)
@@ -556,15 +559,21 @@ void overlayApplication::SendProbeNaive(uint32_t idx)
     std::vector<int> &routes = meta->routing_map[keys_];
     SDtag tagToSend;
     SetTag(tagToSend, m_local_ID, idx, 1, meta->m_sent[m_local_ID][idx], 1);
+    
     ++meta->m_sent[m_local_ID][idx];
     Ptr<Packet> p;
     p = Create<Packet>(ProbeSizeNaive);
+    p->AddPacketTag(tagToSend);
     // std::cout << "Probe: " << m_local_ID << " to " << idx << " with ID " << tagToSend.GetPktID() << " at " << "\t" << Now() << ": " << tagToSend.GetStartTime() << std::endl;
     // m_txTrace(p);
-    p->AddPacketTag(tagToSend);
-    tab_socket[routes[1]]->Send(p);
-    // tab_socket[routes[1]]->Send(p);
-    // tab_socket[routes[1]]->Send(p);
+    for (uint32_t i = 0; i < meta->n_perUE[idx]; i++)
+    {
+        tagToSend.SetUeID(i);
+        std::cout << "Probe: " << m_local_ID << " to " << idx << ": " << uint32_t(tagToSend.GetUeID()) << " with ID " << tagToSend.GetPktID() << " at " << "\t" << Now() << ": " << tagToSend.GetStartTime() << std::endl;
+        p->ReplacePacketTag(tagToSend);
+        tab_socket[routes[1]]->Send(p);
+    }
+
     // tab_socket[routes[1]]->Send(p);
     meta->is_received[keys_] = false;
     if (is_run == true && meta->m_sent[m_local_ID][idx] < meta->_MAXPKTNUM)

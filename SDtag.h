@@ -40,6 +40,8 @@ public:
     uint8_t GetSourceID (void) const;
     void SetDestID (uint8_t value);
     uint8_t GetDestID (void) const;
+    void SetUeID (uint8_t value);
+    uint8_t GetUeID (void) const;
     void SetCurrentHop (uint8_t value);
     void AddCurrentHop (void);
     uint8_t GetCurrentHop (void) const;
@@ -54,6 +56,7 @@ public:
 private:
     uint8_t SourceID;
     uint8_t DestID;
+    uint8_t ueID = 0;
     uint8_t currentHop;
     uint8_t IsProbe;
     uint8_t IsQueued;

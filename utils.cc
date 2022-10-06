@@ -52,6 +52,10 @@ void read_setup(name_input_files &input_fd)
         {
             iss >> input_fd.hyper_param_files;
         }
+        else if (temp.compare("nUE_filename") == 0)
+        {
+            iss >> input_fd.nUE_filename;
+        }
     }
 }
 

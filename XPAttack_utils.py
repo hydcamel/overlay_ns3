@@ -63,6 +63,10 @@ def wr_coordinate_gnb(node_xval, node_yval, filename):
         f.write( ' '.join(str(u) for u in node_xval) )
         f.write('\n')
         f.write( ' '.join(str(u) for u in node_yval) )
+        
+def wr_nUE(n_UE, filename):
+    with open(filename, "w") as f:
+        f.write( ' '.join(str(u) for u in n_UE) )
     
         
 def write_setup(file_name, *para):
@@ -75,12 +79,14 @@ def run_simulation(para_from_matlab):
     # dir_name = ""
     file_hyper_param = dir_name + "hyper_param.txt"
     E_cur_idxlist = para_from_matlab['E_cur_idxlist']
+    pareto_shape = para_from_matlab['shape']
     '''Index Transformation'''
     E_cur_idxlist = [int(e-1) for e in E_cur_idxlist]
     
     '''Write to file'''
     str_old_E = "E_cur_idxlist " + str(len(E_cur_idxlist)) + " " + " ".join( [str(e) for e in E_cur_idxlist] )
-    write_setup(file_hyper_param, str_old_E)
+    str_pareto_shape = "pareto_shape " + str(pareto_shape)
+    write_setup(file_hyper_param, str_old_E, str_pareto_shape)
     os.system("/export/home/Yudi_Huang/ns-3-dev/ns3 run Category_inference")
     
             
@@ -111,11 +117,14 @@ def init_setup(para_from_matlab):
     probe_setup_name = dir_name + "probe_setup.txt"
     gnb_coordinate_file_name = dir_name + "coordinate_gnb.txt"
     hyper_param_filename = dir_name + "hyper_param.txt"
+    nUE_filename = dir_name + "nUE_file.txt"
     
     adj2underlay(Adj=Adj, D=D, bw=bw, delay=delay, filename=graph_name)
     SPR2routeTable(SPR=SPR, filename=route_name)
     E_cur_idxlist, e_new_idx, n_calibrate_pkt, n_uePerGnb, n_probes = para_from_matlab['E_cur_idxlist'], para_from_matlab['e_new_idx'], para_from_matlab['n_calibrate_pkt'], para_from_matlab['n_uePerGnb'], para_from_matlab['n_probes']
+    n_UE = para_from_matlab['n_UE']
     '''Index Transformation'''
+    n_UE = [int(u) for u in n_UE]
     E_cur_idxlist = [int(e-1) for e in E_cur_idxlist]
     e_new_idx = int(e_new_idx - 1)
     n_calibrate_pkt = int(n_calibrate_pkt)
@@ -126,4 +135,5 @@ def init_setup(para_from_matlab):
     write_tunnel_demands(tunnel_demands=tunnel_demands, tunnel_list=tunnel_list, filename=name_demands)
     wr_probe_intervals(probe_intervals=probe_intervals, tunnel_list=tunnel_list, filename=probe_interval_files)
     wr_coordinate_gnb(node_xval=node_xval, node_yval=node_yval, filename=gnb_coordinate_file_name)
-    write_setup("setup.txt", "graph_name " + graph_name, "name_overlay_nodes " + name_overlay_nodes, "name_demands " + name_demands, "route_name " + route_name, "probe_setup_filename " + probe_setup_name, "probe_interval_filename " + probe_interval_files, "gnb_coordinate_file " + gnb_coordinate_file_name, "hyper_param_filename " + hyper_param_filename)
+    wr_nUE(n_UE=n_UE, filename=nUE_filename)
+    write_setup("setup.txt", "graph_name " + graph_name, "name_overlay_nodes " + name_overlay_nodes, "name_demands " + name_demands, "route_name " + route_name, "probe_setup_filename " + probe_setup_name, "probe_interval_filename " + probe_interval_files, "gnb_coordinate_file " + gnb_coordinate_file_name, "hyper_param_filename " + hyper_param_filename, "nUE_filename " + nUE_filename)

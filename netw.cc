@@ -44,6 +44,7 @@ netw::netw(name_input_files &fd_setup)
 	read_probe_intervals(fd_setup.probe_interval_files);
 	read_gnb_coordinate(fd_setup.gnb_coordinate_files);
 	read_hyper_param(fd_setup.hyper_param_files);
+	read_n_UE(fd_setup.nUE_filename);
 }
 
 void netw::read_underlay(std::string filename)
@@ -74,6 +75,7 @@ void netw::read_underlay(std::string filename)
 						adj_mat[i].resize(n_nodes, false);
 						m_sent[i].resize(n_nodes, 0);
 					}
+					n_perUE.resize(n_nodes, 0);
 				}
 				else if (line.substr(0, 5).compare("EDGES") == 0)
 				{
@@ -320,6 +322,12 @@ void netw::read_probe_profile(std::string filename)
 		{
 			iss >> temp >> _MAXPKTNUM;
 		}
+		else if (line.substr(0, 12).compare("is_w_probing") == 0)
+		{
+			int tmp_int_val;
+			iss >> temp >> tmp_int_val;
+			is_w_probing = tmp_int_val >= 1 ? true : false;
+		}
 	}
 	// uint32_t s, t;
 	for (auto it = cnt_delays.begin(); it != cnt_delays.end(); it ++)
@@ -355,8 +363,23 @@ void netw::read_probe_intervals(std::string filename)
 		probe_normal_interval[idx_tunnel] = round(interval_val);
 	}
 	min_bw = *std::min_element(bw.begin(), bw.end());
-	send_interval_probing = (long double)(ProbeSizeNaive*8*USTOS)/ (long double)(min_bw*1000) * 1000;
+	send_interval_probing = (long double)(ProbeSizeNaive*8*USTOS)/ (long double)(min_bw*1000);
 	avg_pkt_transmission_delay = (long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * 10;
+}
+
+void netw::read_n_UE(std::string filename)
+{
+	std::ifstream infile(filename);
+    std::string line;
+	std::cout << "read_n_UE: " << filename << std::endl;
+	while (getline(infile, line))
+	{
+		std::istringstream iss(line);
+		for (uint32_t i = 0; i < n_nodes; i++)
+		{
+			iss >> n_perUE[i];
+		}
+	}
 }
 
 void netw::read_hyper_param(std::string filename)
@@ -391,6 +414,10 @@ void netw::read_hyper_param(std::string filename)
 				cnt_true_delays.insert( std::pair<std::string, std::vector<uint64_t>>(keys_, std::vector<uint64_t>(_MAXPKTNUM)) );
 				is_received.insert( std::pair<std::string, bool> ( keys_, true ) );
 			}
+		}
+		else if (line.substr(0, 12).compare("pareto_shape") == 0)
+		{
+			iss >> temp >> parato_shape;
 		}
 	}
 }

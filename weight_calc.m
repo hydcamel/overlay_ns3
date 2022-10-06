@@ -1,5 +1,5 @@
 function [weight] = weight_calc(ta, tb)
-global SPR thr_burst XPAttack_utils
+global SPR thr_burst XPAttack_utils pareto_shape
 
 %% run one round of simulation
 n_old_E = length(ta)+1;
@@ -14,7 +14,7 @@ for i = 1 : length(SPR)
 end
 
 %% Run simulation through python
-para_probe = py.dict(pyargs('E_cur_idxlist',E_cur_idxlist));
+para_probe = py.dict(pyargs('E_cur_idxlist',E_cur_idxlist, 'shape', pareto_shape));
 %% Prepare Python Env
 if count(py.sys.path,'') == 0
     insert(py.sys.path,int32(0),'');
