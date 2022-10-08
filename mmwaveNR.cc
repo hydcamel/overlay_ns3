@@ -51,7 +51,7 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
         // std::cout << "Node ID = " << app_interface.GetLocalID() << ":gnb = " << gnb_coordinate.x_val << ", gnb = " << gnb_coordinate.y_val << std::endl;
         for (uint16_t j = 0; j < ueNumPergNb; ++j)
         {
-            double ut_x, ut_y;
+            double ut_x = 0, ut_y = 0;
             switch (app_interface.meta->pos_ue_x[j])
             {
                 case 0:
@@ -94,6 +94,14 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     BandwidthPartInfoPtrVector allBwps;
     CcBwpCreator ccBwpCreator;
     OperationBandInfo band;
+    OperationBandInfo band0, band1;
+    std::unique_ptr<ComponentCarrierInfo> cc0 (new ComponentCarrierInfo ());
+    std::unique_ptr<BandwidthPartInfo> bwp0 (new BandwidthPartInfo ());
+    std::unique_ptr<ComponentCarrierInfo> cc1 (new ComponentCarrierInfo ());
+    std::unique_ptr<BandwidthPartInfo> bwp1 (new BandwidthPartInfo ());
+
+    // std::unique_ptr<ComponentCarrierInfo> cc1 (new ComponentCarrierInfo ());
+    // std::unique_ptr<BandwidthPartInfo> bwp2 (new BandwidthPartInfo ());
     if ( !multi_bwp )
     {
         /*
@@ -132,13 +140,13 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
         double centralFrequencyCc1 = 29e9;
         double bandwidthCc0 = 100e6;
         double bandwidthCc1 = 100e6;
-        std::string pattern = "F|F|F|F|F|F|F|F|F|F|";
+        
 
-        std::unique_ptr<ComponentCarrierInfo> cc0 (new ComponentCarrierInfo ());
-        std::unique_ptr<BandwidthPartInfo> bwp0 (new BandwidthPartInfo ());
+        // std::unique_ptr<ComponentCarrierInfo> cc0 (new ComponentCarrierInfo ());
+        // std::unique_ptr<BandwidthPartInfo> bwp0 (new BandwidthPartInfo ());
 
-        std::unique_ptr<ComponentCarrierInfo> cc1 (new ComponentCarrierInfo ());
-        std::unique_ptr<BandwidthPartInfo> bwp1 (new BandwidthPartInfo ());
+        // std::unique_ptr<ComponentCarrierInfo> cc1 (new ComponentCarrierInfo ());
+        // std::unique_ptr<BandwidthPartInfo> bwp1 (new BandwidthPartInfo ());
 
         /*
         * The configured spectrum division is:
@@ -146,16 +154,65 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
         * ---------------CC0--------------|----------------CC1----------------
         * ------BWP0------|------BWP1-----|----------------BWP0---------------
         */
-        const uint8_t numContiguousCcs = 2; // 4 CCs per Band
-        CcBwpCreator::SimpleOperationBandConf bandConf (centralFrequency, bandwidth, numContiguousCcs, BandwidthPartInfo::UMi_StreetCanyon_LoS);
-        bandConf.m_numBwp = 1; // 1 BWP per CC
+        // const uint8_t numContiguousCcs = 1; // 4 CCs per Band
+        // CcBwpCreator::SimpleOperationBandConf bandConf0 (centralFrequencyCc0, bandwidthCc0, numContiguousCcs, BandwidthPartInfo::UMi_StreetCanyon);
+        // bandConf0.m_numBwp = 1; // 1 BWP per CC
+        // band0 = ccBwpCreator.CreateOperationBandContiguousCc (bandConf0);
+        // nrHelper->InitializeOperationBand (&band0);
 
-        // By using the configuration created, it is time to make the operation band
-        band = ccBwpCreator.CreateOperationBandContiguousCc (bandConf);
+        // CcBwpCreator::SimpleOperationBandConf bandConf1 (centralFrequencyCc1, bandwidthCc1, numContiguousCcs, BandwidthPartInfo::UMi_StreetCanyon);
+        // bandConf1.m_numBwp = 1; // 1 BWP per CC
+        // band1 = ccBwpCreator.CreateOperationBandContiguousCc (bandConf1);
+        // nrHelper->InitializeOperationBand (&band1);
+
+
+        // // allBwps = CcBwpCreator::GetAllBwps ({band});
+        // allBwps = CcBwpCreator::GetAllBwps ({band0, band1});
+
+        band.m_centralFrequency  = centralFrequency;
+        band.m_channelBandwidth = bandwidth;
+        band.m_lowerFrequency = band.m_centralFrequency - band.m_channelBandwidth / 2;
+        band.m_higherFrequency = band.m_centralFrequency + band.m_channelBandwidth / 2;
+
+        // Component Carrier 0
+        cc0->m_ccId = 0;
+        cc0->m_centralFrequency = centralFrequencyCc0;
+        cc0->m_channelBandwidth = bandwidthCc0;
+        cc0->m_lowerFrequency = cc0->m_centralFrequency - cc0->m_channelBandwidth / 2;
+        cc0->m_higherFrequency = cc0->m_centralFrequency + cc0->m_channelBandwidth / 2;
+
+        // BWP 0
+        bwp0->m_bwpId = 0;
+        bwp0->m_centralFrequency = cc0->m_centralFrequency;
+        bwp0->m_channelBandwidth = bandwidthCc0;
+        bwp0->m_lowerFrequency = bwp0->m_centralFrequency - bwp0->m_channelBandwidth / 2;
+        bwp0->m_higherFrequency = bwp0->m_centralFrequency + bwp0->m_channelBandwidth / 2;
+
+        cc0->AddBwp (std::move (bwp0));
+
+        // Component Carrier 1
+        cc1->m_ccId = 1;
+        cc1->m_centralFrequency = centralFrequencyCc1;
+        cc1->m_channelBandwidth = bandwidthCc1;
+        cc1->m_lowerFrequency = cc1->m_centralFrequency - cc1->m_channelBandwidth / 2;
+        cc1->m_higherFrequency = cc1->m_centralFrequency + cc1->m_channelBandwidth / 2;
+
+        // BWP 2
+        bwp1->m_bwpId = 1;
+        bwp1->m_centralFrequency = cc1->m_centralFrequency;
+        bwp1->m_channelBandwidth = cc1->m_channelBandwidth;
+        bwp1->m_lowerFrequency = cc1->m_lowerFrequency;
+        bwp1->m_higherFrequency = cc1->m_higherFrequency;
+
+        cc1->AddBwp (std::move (bwp1));
+
+        // Add CC to the corresponding operation band.
+        band.AddCc (std::move (cc1));
+        band.AddCc (std::move (cc0));
         nrHelper->InitializeOperationBand (&band);
         allBwps = CcBwpCreator::GetAllBwps ({band});
     }
-    
+    std::cout << allBwps.size() << std::endl;
 
 
     /*
@@ -188,6 +245,8 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     */
     nrHelper->SetGnbPhyAttribute ("TxPower", DoubleValue (txPower));
     nrHelper->SetGnbPhyAttribute ("Numerology", UintegerValue (numerology));
+    std::string pattern = "F|F|F|F|F|F|F|F|F|F|";
+    nrHelper->SetGnbPhyAttribute ("Pattern", StringValue (pattern));
 
     // Scheduler
     nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerTdmaRR"));
@@ -244,12 +303,15 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     // epcHelper->SetAttribute ("S1uLinkMtu", UintegerValue (9000));
 
     // gNb routing between Bearer and bandwidh part
-    uint32_t bwpIdForBearer = 0;
-    nrHelper->SetGnbBwpManagerAlgorithmAttribute ("GBR_CONV_VOICE", UintegerValue (bwpIdForBearer));
-    // nrHelper->SetGnbBwpManagerAlgorithmAttribute ("NGBR_VOICE_VIDEO_GAMING", UintegerValue (1));
+    uint32_t bwpIdForVoice = 0;
+    uint32_t bwpIdForVideoGaming = 1;
+    nrHelper->SetGnbBwpManagerAlgorithmAttribute ("GBR_CONV_VOICE", UintegerValue (bwpIdForVoice));
+    nrHelper->SetGnbBwpManagerAlgorithmAttribute ("NGBR_LOW_LAT_EMBB", UintegerValue (bwpIdForVideoGaming));
+    nrHelper->SetUeBwpManagerAlgorithmAttribute ("GBR_CONV_VOICE", UintegerValue (bwpIdForVoice));
+    nrHelper->SetUeBwpManagerAlgorithmAttribute ("NGBR_LOW_LAT_EMBB", UintegerValue (bwpIdForVideoGaming));
 
     // Initialize nrHelper
-    nrHelper->Initialize ();
+    // nrHelper->Initialize ();
 
     // Install nr net devices
     NetDeviceContainer gNbNetDev = nrHelper->InstallGnbDevice (gNbNodes, allBwps);
@@ -262,6 +324,19 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     int64_t randomStream = 1;
     randomStream += nrHelper->AssignStreams (gNbNetDev, randomStream);
     randomStream += nrHelper->AssignStreams (ueNetDev, randomStream);
+
+    // BWP0, the TDD one
+    nrHelper->GetGnbPhy (gNbNetDev.Get (0), 0)->SetAttribute ("Numerology", UintegerValue (numerology));
+    nrHelper->GetGnbPhy (gNbNetDev.Get (0), 0)->SetAttribute ("Pattern", StringValue ("F|F|F|F|F|F|F|F|F|F|"));
+    nrHelper->GetGnbPhy (gNbNetDev.Get (0), 0)->SetAttribute ("TxPower", DoubleValue (30.0));
+
+    // BWP1, FDD-DL
+    if (multi_bwp && ueNumPergNb > 1 && allBwps.size()>1)
+    {
+        nrHelper->GetGnbPhy (gNbNetDev.Get (0), 1)->SetAttribute ("Numerology", UintegerValue (numerology));
+        nrHelper->GetGnbPhy (gNbNetDev.Get (0), 1)->SetAttribute ("Pattern", StringValue ("F|F|F|F|F|F|F|F|F|F|"));
+        nrHelper->GetGnbPhy (gNbNetDev.Get (0), 1)->SetAttribute ("TxPower", DoubleValue (30.0));
+    }
 
 
     // When all the configuration is done, explicitly call UpdateConfig ()
@@ -308,17 +383,27 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     // attach UEs to the closest eNB
     nrHelper->AttachToClosestEnb (ueNetDev, gNbNetDev);
 
-    // The bearer that will carry low latency traffic
-    uint16_t dlPort = NRPORT;
-    EpsBearer bearer (EpsBearer::GBR_CONV_VOICE);
+    // The bearer that will carry CONV_VOICE traffic
+    uint16_t dlPort_bwp0 = NRPORT;
+    EpsBearer bearer_0 (EpsBearer::GBR_CONV_VOICE);
 
-    Ptr<EpcTft> tft = Create<EpcTft> ();
-    EpcTft::PacketFilter dlpf;
-    dlpf.localPortStart = dlPort;
-    dlpf.localPortEnd = dlPort;
-    tft->Add (dlpf);
+    Ptr<EpcTft> tft_0 = Create<EpcTft> ();
+    EpcTft::PacketFilter dlpf_0;
+    dlpf_0.localPortStart = dlPort_bwp0;
+    dlpf_0.localPortEnd = dlPort_bwp0;
+    tft_0->Add (dlpf_0);
     // uint32_t re_tftadd = tft->Add (dlpf);
     // std::cout << "NR ID: " << app_interface.GetLocalID() << " re_tftadd = " << re_tftadd << std::endl;
+
+    // The bearer that will carry low latency traffic
+    uint16_t dlPort_bwp1 = NRPORT + 1;
+    EpsBearer bearer_1 (EpsBearer::NGBR_LOW_LAT_EMBB);
+
+    Ptr<EpcTft> tft_1 = Create<EpcTft> ();
+    EpcTft::PacketFilter dlpf_1;
+    dlpf_1.localPortStart = dlPort_bwp1;
+    dlpf_1.localPortEnd = dlPort_bwp1;
+    tft_1->Add (dlpf_1);
 
     /** set the Recv Listen Socket for UE **/
     ObjectFactory fact;
@@ -335,7 +420,15 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
         // Address ueAddress = ueIpIface.GetAddress (i);
         vec_ue_app[i] = fact.Create<ueApp>();
         ue->AddApplication(vec_ue_app[i]);
-        vec_ue_app[i]->initUeApp(app_interface);
+        if (!multi_bwp)
+        {
+            vec_ue_app[i]->initUeApp(app_interface);
+        }
+        else
+        {
+            vec_ue_app[i]->initUeApp(app_interface);
+        }
+        // vec_ue_app[i]->SetStartTime(MicroSeconds(20000));
 
         // The client, who is transmitting, is installed in the remote host,
         // with destination address set to the address of the UE
@@ -350,13 +443,33 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
         // app_interface.nr_socket[i]->Connect(InetSocketAddress(Ipv4Address::ConvertFrom(ueAddress), dlPort));
         // if (app_interface.GetLocalID() == 3)
         //     std::cout << app_interface.GetLocalID() << "-ue->GetObject<Ipv4> (): " << ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal() << std::endl;
-        app_interface.nr_socket[i]->Connect(InetSocketAddress(ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal(), dlPort));
+        if (!multi_bwp)
+        {
+            app_interface.nr_socket[i]->Connect(InetSocketAddress(ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal(), dlPort_bwp0));
+        }
+        else
+        {
+            if (i == 0)
+            {
+                app_interface.nr_socket[i]->Connect(InetSocketAddress(ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal(), dlPort_bwp0));
+                // nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer_0, tft_0);
+            }
+            else
+            {   
+                std::cout << "activate for " << i << " with port = " << uint32_t(dlPort_bwp1) << std::endl;
+                app_interface.nr_socket[i]->Connect(InetSocketAddress(ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal(), dlPort_bwp0));
+                // nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer_1, tft_1);
+            }
+        }
+        nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer_0, tft_0);
+        nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer_1, tft_1);
+        
         /* if (app_interface.GetLocalID() == 0 || app_interface.GetLocalID() == 3 || app_interface.GetLocalID() == 4)
         {
             std::cout << "NR ID: " << app_interface.GetLocalID() << " - " << ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal() << std::endl;
         } */
         // Activate a dedicated bearer for the traffic type
-        // uint32_t res_activateBearer = nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer, tft);
+        
         // std::cout << "NR ID: " << app_interface.GetLocalID() << " ActivateDedicatedEpsBearer = " << res_activateBearer << std::endl;
     }
     

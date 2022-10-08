@@ -55,7 +55,7 @@ void ueApp::HandleRead(Ptr<Socket> socket)
         SDtag tagPktRecv;
         packet->PeekPacketTag(tagPktRecv);
         // std::cout << "UE ID: " << local_ID_ << "; pkt received with start-time: " << (uint64_t)(tagPktRecv.GetStartTime()) << std::endl;
-        // std::cout << "Received: " << uint32_t(tagPktRecv.GetSourceID()) << " to " << uint32_t(tagPktRecv.GetDestID()) << ": " << uint32_t(tagPktRecv.GetUeID()) << " with ID " << tagPktRecv.GetPktID() << " at " << "\t" << Now() << " with start time " << tagPktRecv.GetStartTime() << std::endl;
+        std::cout << "Received: " << uint32_t(tagPktRecv.GetSourceID()) << " to " << uint32_t(tagPktRecv.GetDestID()) << ": " << uint32_t(tagPktRecv.GetUeID()) << " with ID " << tagPktRecv.GetPktID() << " at " << "\t" << Now() << " with start time " << tagPktRecv.GetStartTime() << std::endl;
         std::string keys_ = std::to_string(tagPktRecv.GetSourceID()) + " " + std::to_string(tagPktRecv.GetDestID());
         oa_interface->meta->cnt_delays[keys_][tagPktRecv.GetPktID()] = Simulator::Now().GetNanoSeconds() - (uint64_t)(tagPktRecv.GetStartTime());
         if (tagPktRecv.GetUeID() == 0)

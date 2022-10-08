@@ -1,2 +1,2 @@
-E_cur_idxlist 1 1 3 4
+E_cur_idxlist 1 0 3 4
 pareto_shape 1.14

@@ -236,7 +236,7 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                     // m_txTrace(p);
                     // new_p->AddPacketTag(tagPktRecv);
                     // packet->ReplacePacketTag(tagPktRecv);
-                    // std::cout << "Node ID: " << m_local_ID << "-Forwarding to UE, PktID = " << tagPktRecv.GetPktID() << ": " << uint32_t(tagPktRecv.GetUeID()) << " with start time" << tagPktRecv.GetStartTime() << " at " << "\t" << Now() << std::endl;
+                    std::cout << "Node ID: " << m_local_ID << "-Forwarding to UE, PktID = " << tagPktRecv.GetPktID() << ": " << uint32_t(tagPktRecv.GetUeID()) << " with start time" << tagPktRecv.GetStartTime() << " at " << "\t" << Now() << std::endl;
                     /* for (uint32_t i = 0; i < nr_socket.size(); i++)
                     {
                         // nr_socket[i]->Send(new_p);

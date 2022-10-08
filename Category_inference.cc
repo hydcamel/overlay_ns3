@@ -139,7 +139,7 @@ int main (int argc, char *argv[])
     // std::vector<coordinate> vec_gnb_coordinate( vec_app.size() );
     std::vector<coordinate> vec_ue_coordinate( vec_app.size() );
     // myNR testNR(vec_gnb_coordinate[2], vec_ue_coordinate[2], network_base_number, *(vec_app[2]), internet);
-    for (uint32_t i = 0; i < vec_app.size(); i++)
+    for (uint32_t i = 0; i < 1; i++)
     {
         // netw_meta.vec_gnb_coordinate_[i].x_val = i*100;
         // netw_meta.vec_gnb_coordinate_[i].y_val = i*10;
@@ -221,7 +221,7 @@ int main (int argc, char *argv[])
     char *cwd = get_current_dir_name();
     std::string pwd_tmp(cwd, cwd+strlen(cwd));
     // netw_meta.write_queuing_cnt(pwd_tmp + "/scratch/Category_inference/queuing_cnt.csv");
-    netw_meta.write_delays_cnt(pwd_tmp + "/scratch/Category_inference/delays_cnt.csv");
+    // netw_meta.write_delays_cnt(pwd_tmp + "/scratch/Category_inference/delays_cnt.csv");
     // netw_meta.write_true_delays_cnt(pwd_tmp + "/scratch/Category_inference/true_delays_cnt.csv");
     std::cout << "start Destroy." << std::endl;
     Simulator::Destroy();
