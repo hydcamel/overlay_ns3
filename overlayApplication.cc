@@ -569,7 +569,7 @@ void overlayApplication::SendProbeNaive(uint32_t idx)
     for (uint32_t i = 0; i < meta->n_perUE[idx]; i++)
     {
         tagToSend.SetUeID(i);
-        std::cout << "Probe: " << m_local_ID << " to " << idx << ": " << uint32_t(tagToSend.GetUeID()) << " with ID " << tagToSend.GetPktID() << " at " << "\t" << Now() << ": " << tagToSend.GetStartTime() << std::endl;
+        // std::cout << "Probe: " << m_local_ID << " to " << idx << ": " << uint32_t(tagToSend.GetUeID()) << " with ID " << tagToSend.GetPktID() << " at " << "\t" << Now() << ": " << tagToSend.GetStartTime() << std::endl;
         p->ReplacePacketTag(tagToSend);
         tab_socket[routes[1]]->Send(p);
     }

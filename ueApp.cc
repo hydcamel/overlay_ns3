@@ -17,14 +17,22 @@ void ueApp::initUeApp(overlayApplication &app_interface)
     oa_interface = &app_interface;
     TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
     recv_socket = Socket::CreateSocket(GetNode(), tid);
+    recv_socket_1 = Socket::CreateSocket(GetNode(), tid);
     InetSocketAddress local = InetSocketAddress(Ipv4Address::GetAny(), NRPORT);
+    InetSocketAddress local_1 = InetSocketAddress(Ipv4Address::GetAny(), NRPORT+1);
     if (recv_socket->Bind(local) == -1)
+    {
+        std::cout << "Failed to bind socket" << std::endl;
+        // NS_FATAL_ERROR("Failed to bind socket");
+    }
+    if (recv_socket_1->Bind(local_1) == -1)
     {
         std::cout << "Failed to bind socket" << std::endl;
         // NS_FATAL_ERROR("Failed to bind socket");
     }
     // else std::cout << "UE bind socket" << std::endl;
     recv_socket->SetRecvCallback(MakeCallback(&ueApp::HandleRead, this));
+    recv_socket_1->SetRecvCallback(MakeCallback(&ueApp::HandleRead, this));
     /* if (local_ID_ == 3 || local_ID_ == 4 || local_ID_ == 6)
     {
         Address tmpAddr;

@@ -43,6 +43,7 @@ public:
     bool useFixedMcs = true;
     bool singleUeTopology = true;
     bool multi_bwp = true;
+    double distance_ue2ue = 4;
 
     /** NR **/
     // NodeContainer gNbNodes;
@@ -68,6 +69,7 @@ public:
      **/
     myNR();
     void init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, overlayApplication &app_interface, InternetStackHelper &internet, Ptr<NrHelper> &nrHelper, Ptr<NrPointToPointEpcHelper> &epcHelper);
+    void init_myNR(std::vector<coordinate> &gnb_coordinate, uint32_t netw_base, netw *meta, std::vector<Ptr<overlayApplication>> &app_interface, InternetStackHelper &internet);
     ~myNR();
 };
 

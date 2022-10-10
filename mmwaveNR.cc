@@ -2,8 +2,274 @@
 
 namespace ns3
 {
-
 myNR::myNR(){}
+
+void myNR::init_myNR(std::vector<coordinate> &gnb_coordinate, uint32_t netw_base, netw *meta, std::vector<Ptr<overlayApplication>> &app_interface, InternetStackHelper &internet)
+{
+    double centralFrequencyCc0 = 28e9;
+    double centralFrequencyCc1 = 29e9;
+    double bandwidthCc0 = 100e6;
+    double bandwidthCc1 = 100e6;
+    double bandwidthBand = 3e9;
+    std::string pattern = "F|F|F|F|F|F|F|F|F|F|";
+
+    NodeContainer gNbNodes;
+    NodeContainer ueNodes;
+    MobilityHelper mobility;
+    Ptr<ListPositionAllocator> bsPositionAlloc = CreateObject<ListPositionAllocator> ();
+    Ptr<ListPositionAllocator> utPositionAlloc = CreateObject<ListPositionAllocator> ();
+    const double gNbHeight = 10;
+    const double ueHeight = 1.5;
+    gNbNodes.Create (meta->n_nodes);
+    std::vector<NodeContainer> vec_UE(meta->n_nodes);
+    for (uint32_t j = 0; j < meta->n_nodes; j++)
+    {
+        vec_UE[j].Create(meta->n_perUE[j]);
+        ueNodes.Add(vec_UE[j]);
+    }
+
+    for (uint32_t i = 0; i < meta->n_nodes; i++)
+    {
+        bsPositionAlloc->Add (Vector (gnb_coordinate[i].x_val, gnb_coordinate[i].y_val, gNbHeight));
+        std::cout << "Node ID = " << app_interface[i]->GetLocalID() << ":gnb = " << gnb_coordinate[i].x_val << ", gnb = " << gnb_coordinate[i].y_val << std::endl;
+        for (uint16_t j = 0; j < vec_UE[i].GetN(); ++j)
+        {
+            double ut_x = gnb_coordinate[i].x_val + meta->distance_ue_from_gnb, ut_y = 0;
+            
+            if (j == 0)
+            {
+                ut_y = gnb_coordinate[i].y_val + meta->distance_ue_from_gnb;
+            }
+            else
+            {
+                ut_y = gnb_coordinate[i].y_val - meta->distance_ue_from_gnb + distance_ue2ue * j;
+            }
+            
+            std::cout << "ut_x = " << ut_x << ", ut_y = " << ut_y << std::endl;
+            utPositionAlloc->Add (Vector (ut_x, ut_y, ueHeight));
+        }
+    }
+    mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
+    mobility.SetPositionAllocator (bsPositionAlloc);
+    mobility.Install (gNbNodes);
+
+    mobility.SetPositionAllocator (utPositionAlloc);
+    mobility.Install (ueNodes);
+    
+
+    Ptr<NrPointToPointEpcHelper> epcHelper = CreateObject<NrPointToPointEpcHelper> (netw_base);
+    Ptr<IdealBeamformingHelper> idealBeamformingHelper = CreateObject<IdealBeamformingHelper>();
+    Ptr<NrHelper> nrHelper = CreateObject<NrHelper> ();
+    nrHelper->SetBeamformingHelper (idealBeamformingHelper);
+    nrHelper->SetEpcHelper (epcHelper);
+
+    BandwidthPartInfoPtrVector allBwps;
+    CcBwpCreator ccBwpCreator;
+
+    OperationBandInfo band;
+
+    //For the case of manual configuration of CCs and BWPs 
+    std::unique_ptr<ComponentCarrierInfo> cc0 (new ComponentCarrierInfo ());
+    std::unique_ptr<BandwidthPartInfo> bwp0 (new BandwidthPartInfo ());
+
+    std::unique_ptr<ComponentCarrierInfo> cc1 (new ComponentCarrierInfo ());
+    std::unique_ptr<BandwidthPartInfo> bwp1 (new BandwidthPartInfo ());
+
+    band.m_centralFrequency  = centralFrequency;
+    band.m_channelBandwidth = bandwidth;
+    band.m_lowerFrequency = band.m_centralFrequency - band.m_channelBandwidth / 2;
+    band.m_higherFrequency = band.m_centralFrequency + band.m_channelBandwidth / 2;
+
+    // Component Carrier 0
+    cc0->m_ccId = 0;
+    cc0->m_centralFrequency = centralFrequencyCc0;
+    cc0->m_channelBandwidth = bandwidthCc0;
+    cc0->m_lowerFrequency = cc0->m_centralFrequency - cc0->m_channelBandwidth / 2;
+    cc0->m_higherFrequency = cc0->m_centralFrequency + cc0->m_channelBandwidth / 2;
+
+    // BWP 0
+    bwp0->m_bwpId = 0;
+    bwp0->m_centralFrequency = cc0->m_centralFrequency;
+    bwp0->m_channelBandwidth = cc0->m_channelBandwidth;
+    bwp0->m_lowerFrequency = bwp0->m_centralFrequency - bwp0->m_channelBandwidth / 2;
+    bwp0->m_higherFrequency = bwp0->m_centralFrequency + bwp0->m_channelBandwidth / 2;
+
+    cc0->AddBwp (std::move (bwp0));
+
+    // Component Carrier 1
+    cc1->m_ccId = 1;
+    cc1->m_centralFrequency = centralFrequencyCc1;
+    cc1->m_channelBandwidth = bandwidthCc1;
+    cc1->m_lowerFrequency = cc1->m_centralFrequency - cc1->m_channelBandwidth / 2;
+    cc1->m_higherFrequency = cc1->m_centralFrequency + cc1->m_channelBandwidth / 2;
+
+    // BWP 2
+    bwp1->m_bwpId = 1;
+    bwp1->m_centralFrequency = cc1->m_centralFrequency;
+    bwp1->m_channelBandwidth = cc1->m_channelBandwidth;
+    bwp1->m_lowerFrequency = cc1->m_lowerFrequency;
+    bwp1->m_higherFrequency = cc1->m_higherFrequency;
+
+    cc1->AddBwp (std::move (bwp1));
+
+    // Add CC to the corresponding operation band.
+    band.AddCc (std::move (cc1));
+    band.AddCc (std::move (cc0));
+    nrHelper->InitializeOperationBand (&band);
+    allBwps = CcBwpCreator::GetAllBwps ({band});
+
+    nrHelper->SetPathlossAttribute ("ShadowingEnabled", BooleanValue (false));
+    epcHelper->SetAttribute ("S1uLinkDelay", TimeValue (MilliSeconds (0)));
+    nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerTdmaRR"));
+    idealBeamformingHelper->SetAttribute ("BeamformingMethod", TypeIdValue (DirectPathBeamforming::GetTypeId ()));
+    // nrHelper->InitializeOperationBand (&band);
+    // allBwps = CcBwpCreator::GetAllBwps ({band});
+
+    double x = pow (10, txPower / 10);
+
+    // Antennas for all the UEs
+    nrHelper->SetUeAntennaAttribute ("NumRows", UintegerValue (2));
+    nrHelper->SetUeAntennaAttribute ("NumColumns", UintegerValue (4));
+    nrHelper->SetUeAntennaAttribute ("AntennaElement", PointerValue (CreateObject<IsotropicAntennaModel> ()));
+
+    // Antennas for all the gNbs
+    nrHelper->SetGnbAntennaAttribute ("NumRows", UintegerValue (4));
+    nrHelper->SetGnbAntennaAttribute ("NumColumns", UintegerValue (8));
+    nrHelper->SetGnbAntennaAttribute ("AntennaElement", PointerValue (CreateObject<IsotropicAntennaModel> ()));
+
+
+    uint32_t bwpIdForLowLat = 0;
+    uint32_t bwpIdForVoice = 1;
+    uint32_t bwpIdForVideo = 2;
+    uint32_t bwpIdForVideoGaming = 3;
+
+    nrHelper->SetGnbBwpManagerAlgorithmAttribute ("NGBR_LOW_LAT_EMBB", UintegerValue (bwpIdForLowLat));
+    nrHelper->SetGnbBwpManagerAlgorithmAttribute ("GBR_CONV_VOICE", UintegerValue (bwpIdForVoice));
+    nrHelper->SetGnbBwpManagerAlgorithmAttribute ("NGBR_VIDEO_TCP_PREMIUM", UintegerValue (bwpIdForVideo));
+    nrHelper->SetGnbBwpManagerAlgorithmAttribute ("NGBR_VOICE_VIDEO_GAMING", UintegerValue (bwpIdForVideoGaming));
+
+    //Install and get the pointers to the NetDevices
+    NetDeviceContainer enbNetDev = nrHelper->InstallGnbDevice (gNbNodes, allBwps);
+    NetDeviceContainer ueNetDev = nrHelper->InstallUeDevice (ueNodes, allBwps);
+
+    int64_t randomStream = 1;
+    randomStream += nrHelper->AssignStreams (enbNetDev, randomStream);
+    randomStream += nrHelper->AssignStreams (ueNetDev, randomStream);
+
+    // Set the attribute of the netdevice (enbNetDev.Get (0)) and bandwidth part (0), (1), ...
+    for (uint32_t j = 0; j < enbNetDev.GetN(); j++)
+    {
+        for (uint32_t u = 0; u < allBwps.size(); u++)
+        {
+            nrHelper->GetGnbPhy (enbNetDev.Get (j), u)->SetAttribute ("Numerology", UintegerValue (numerology));
+            nrHelper->GetGnbPhy (enbNetDev.Get (j), u)->SetAttribute ("TxPower", DoubleValue (10 * log10 ((band.GetBwpAt (0,0)->m_channelBandwidth / bandwidthBand) * x)));
+            nrHelper->GetGnbPhy (enbNetDev.Get (j), u)->SetAttribute ("Pattern", StringValue (pattern));
+        }
+    }
+
+    for (auto it = enbNetDev.Begin (); it != enbNetDev.End (); ++it) DynamicCast<NrGnbNetDevice> (*it)->UpdateConfig ();
+    for (auto it = ueNetDev.Begin (); it != ueNetDev.End (); ++it) DynamicCast<NrUeNetDevice> (*it)->UpdateConfig ();
+
+    Ptr<Node> pgw = epcHelper->GetPgwNode ();
+    std::vector<PointToPointHelper> vec_p2ph(app_interface.size());
+    NetDeviceContainer internetDevices;
+    Ipv4AddressHelper ipv4h;
+    Ipv4StaticRoutingHelper ipv4RoutingHelper;
+    const std::string p2pPgwEpc{std::to_string(netw_base+1) + ".0.0.0"};
+    ipv4h.SetBase (Ipv4Address(p2pPgwEpc.data()), "255.0.0.0");
+    const std::string Addr_IPv4_Network_gNB {std::to_string(netw_base) + ".0.0.0"};
+    for (uint32_t j = 0; j < app_interface.size(); j++)
+    {
+        Ptr<Node> remoteHost = app_interface[j]->GetNode();
+        // connect a remoteHost to pgw. Setup routing too
+        vec_p2ph[j].SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("1000Gb/s")));
+        vec_p2ph[j].SetDeviceAttribute ("Mtu", UintegerValue (10000));
+        vec_p2ph[j].SetChannelAttribute ("Delay", TimeValue (Seconds (0.000)));
+        vec_p2ph[j].DisableFlowControl();
+        NetDeviceContainer tmp_NetDeviceContainer = vec_p2ph[j].Install (pgw, remoteHost);
+        std::cout << tmp_NetDeviceContainer.Get(0) << " " << tmp_NetDeviceContainer.Get(1) << std::endl;
+        internetDevices.Add( tmp_NetDeviceContainer );
+        Ptr<Ipv4StaticRouting> remoteHostStaticRouting = ipv4RoutingHelper.GetStaticRouting (remoteHost->GetObject<Ipv4> ());
+        // remoteHostStaticRouting->AddNetworkRouteTo (Ipv4Address ("7.0.0.0"), Ipv4Mask ("255.0.0.0"), 1);
+        remoteHostStaticRouting->AddNetworkRouteTo (Ipv4Address (Addr_IPv4_Network_gNB.data()), Ipv4Mask ("255.0.0.0"), remoteHost->GetNDevices()-1);
+    }
+    Ipv4InterfaceContainer internetIpIfaces = ipv4h.Assign (internetDevices);
+
+    internet.Install (ueNodes);
+    Ipv4InterfaceContainer ueIpIface;
+    ueIpIface = epcHelper->AssignUeIpv4Address (NetDeviceContainer (ueNetDev));
+    // Set the default gateway for the UEs
+    for (uint32_t j = 0; j < ueNodes.GetN (); ++j)
+    {
+        Ptr<Ipv4StaticRouting> ueStaticRouting = ipv4RoutingHelper.GetStaticRouting (ueNodes.Get (j)->GetObject<Ipv4> ());
+        ueStaticRouting->SetDefaultRoute (epcHelper->GetUeDefaultGatewayAddress (), 1);
+    }
+    // attach UEs to the closest eNB before creating the dedicated flows
+    nrHelper->AttachToClosestEnb (ueNetDev, enbNetDev);
+
+    // The bearer that will carry CONV_VOICE traffic
+    uint16_t dlPort_bwp0 = NRPORT;
+    EpsBearer bearer_0 (EpsBearer::GBR_CONV_VOICE);
+
+    Ptr<EpcTft> tft_0 = Create<EpcTft> ();
+    EpcTft::PacketFilter dlpf_0;
+    dlpf_0.localPortStart = dlPort_bwp0;
+    dlpf_0.localPortEnd = dlPort_bwp0;
+    tft_0->Add (dlpf_0);
+
+    // The bearer that will carry low latency traffic
+    uint16_t dlPort_bwp1 = NRPORT + 1;
+    EpsBearer bearer_1 (EpsBearer::NGBR_LOW_LAT_EMBB);
+
+    Ptr<EpcTft> tft_1 = Create<EpcTft> ();
+    EpcTft::PacketFilter dlpf_1;
+    dlpf_1.localPortStart = dlPort_bwp1;
+    dlpf_1.localPortEnd = dlPort_bwp1;
+    tft_1->Add (dlpf_1);
+
+    /** set the Recv Listen Socket for UE **/
+    ObjectFactory fact;
+    fact.SetTypeId("ns3::ueApp");
+    vec_ue_app.resize(ueNodes.GetN ());
+    uint32_t idx = 0;
+    for (uint32_t i = 0; i < meta->n_nodes; i++)
+    {
+        /** Set Connection between RemoteHost and UEs **/
+        app_interface[i]->nr_socket.resize(vec_UE[i].GetN());
+        for (uint32_t j = 0; j < vec_UE[i].GetN(); j++)
+        {
+            Ptr<Node> ue = vec_UE[i].Get (j);
+            vec_ue_app[idx] = fact.Create<ueApp>();
+            // std::cout << "UE ID for " << app_interface.GetLocalID() << " is " << ue->GetId() << std::endl;
+            ue->AddApplication(vec_ue_app[idx]);
+            vec_ue_app[idx]->initUeApp(*app_interface[i]);
+            Ptr<NetDevice> ueDevice = ueNetDev.Get (idx++);
+            
+            TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
+            app_interface[i]->nr_socket[j] = Socket::CreateSocket(app_interface[i]->GetNode(), tid);
+            if (app_interface[i]->nr_socket[j]->Bind() == -1) NS_FATAL_ERROR("Failed to bind socket");
+
+            if (j == 0)
+            {
+                app_interface[i]->nr_socket[j]->Connect(InetSocketAddress(ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal(), dlPort_bwp0));
+            }
+            else
+            {   
+                std::cout << "activate for " << i << " with port = " << uint32_t(dlPort_bwp1) << std::endl;
+                app_interface[i]->nr_socket[j]->Connect(InetSocketAddress(ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal(), dlPort_bwp1));
+            }
+            nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer_0, tft_0);
+            nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer_1, tft_1);
+        }
+    }
+    
+}
+myNR::~myNR()
+{
+    vec_ue_app.clear();
+    // nrHelper = nullptr;
+}
+
 void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint32_t netw_base, overlayApplication &app_interface, InternetStackHelper &internet, Ptr<NrHelper> &nrHelper, Ptr<NrPointToPointEpcHelper> &epcHelper)
 {
     // setup the nr simulation
@@ -457,7 +723,7 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
             else
             {   
                 std::cout << "activate for " << i << " with port = " << uint32_t(dlPort_bwp1) << std::endl;
-                app_interface.nr_socket[i]->Connect(InetSocketAddress(ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal(), dlPort_bwp0));
+                app_interface.nr_socket[i]->Connect(InetSocketAddress(ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal(), dlPort_bwp1));
                 // nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer_1, tft_1);
             }
         }
@@ -524,10 +790,5 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
     clientApps.Stop (Seconds (simTime)); */
     
 }
-myNR::~myNR()
-{
-    vec_ue_app.clear();
-    // nrHelper = nullptr;
-}
 
-} // namespace ns3
+}

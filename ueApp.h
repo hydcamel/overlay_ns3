@@ -32,6 +32,7 @@ private:
     uint32_t cnt_probes = 0;
     uint32_t max_probes;
     Ptr<Socket> recv_socket;
+    Ptr<Socket> recv_socket_1;
     overlayApplication *oa_interface;
     // overlayApplication &app_interface_;
     virtual void StartApplication(void);
