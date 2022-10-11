@@ -236,7 +236,12 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                     // m_txTrace(p);
                     // new_p->AddPacketTag(tagPktRecv);
                     // packet->ReplacePacketTag(tagPktRecv);
-                    std::cout << "Node ID: " << m_local_ID << "-Forwarding to UE, PktID = " << tagPktRecv.GetPktID() << ": " << uint32_t(tagPktRecv.GetUeID()) << " with start time" << tagPktRecv.GetStartTime() << " at " << "\t" << Now() << std::endl;
+                    // std::cout << "Node ID: " << m_local_ID << "-Forwarding to UE, PktID = " << tagPktRecv.GetPktID() << ": " << uint32_t(tagPktRecv.GetUeID()) << " with start time" << tagPktRecv.GetStartTime() << " at " << "\t" << Now() << std::endl;
+                    if ((tagPktRecv.GetPktID() == 0 || tagPktRecv.GetPktID() >= meta->_MAXPKTNUM-1 || tagPktRecv.GetPktID()%50 == 0 || tagPktRecv.GetPktID()%50 == 1 || tagPktRecv.GetPktID()%50 == 2) && tagPktRecv.GetUeID() == 0)
+                    {
+                        std::cout <<"pkt_ID = " << tagPktRecv.GetPktID() << "First forwarding time = " << "\t" << Now() << std::endl;
+                    }
+                    
                     /* for (uint32_t i = 0; i < nr_socket.size(); i++)
                     {
                         // nr_socket[i]->Send(new_p);
@@ -484,6 +489,7 @@ void overlayApplication::CentralOrchestration()
     uint32_t next_send_time = 0;
     if (meta->is_w_probing && StateCheckRecv() == false)
     {
+        std::cout << "cannot send" << std::endl;
         // Simulator::Schedule(Time(MicroSeconds(meta->_epoll_time)), &overlayApplication::CentralOrchestration, this);
     }
     else
@@ -495,6 +501,7 @@ void overlayApplication::CentralOrchestration()
             t = meta->tunnel_vec[ meta->tunnel_hashmap[it->first] ].second;
             if ( s == m_local_ID && is_run == true && meta->m_sent[m_local_ID][t] < meta->_MAXPKTNUM )
             {
+                // std::cout << "Send " << meta->is_received["1 0"] << " " << meta->is_w_probing << " " << StateCheckRecv() << std::endl;
                 ScheduleProbing(Time(MicroSeconds(next_send_time)), t);
                 next_send_time += meta->send_interval_probing;
             }

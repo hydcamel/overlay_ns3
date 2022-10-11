@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include <unordered_set>
 #include "ns3/ptr.h"
 #include "ns3/simulator.h"
 #include "ns3/nstime.h"
@@ -26,8 +27,8 @@
 #define PrUBPkt (0.4)
 #define PrMEDPkt (0.2)
 // #define ProbeSizeNaive (1460)
-// #define ProbeSizeNaive (300)
-#define ProbeSizeNaive (50)
+#define ProbeSizeNaive (600)
+// #define ProbeSizeNaive (50)
 #define ProbeSizeSWSmall (50)
 #define ProbeSizeSWlarge (1450)
 
@@ -118,6 +119,7 @@ public:
     double parato_shape = 2.04;
     uint32_t parato_bound = 50;
     bool is_w_probing = true;
+    std::unordered_set<uint32_t> set_tb;
 
 
     /**

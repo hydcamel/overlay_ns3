@@ -47,8 +47,8 @@ int main (int argc, char *argv[])
     // set simulation time and mobility
     // double simTime = 1; // seconds
     // double udpAppStartTime = 0.4; //seconds
-    // double stop_time = 4200.0; // microseconds
-    double stop_time = 400.0; // microseconds
+    double stop_time = 3500.0; // microseconds
+    // double stop_time = 400.0; // microseconds
     /**
      * Underlay Network
      *
@@ -132,7 +132,7 @@ int main (int argc, char *argv[])
     double centralFrequencyCc1 = 29e9;
     double bandwidthCc0 = 400e6;
     double bandwidthCc1 = 400e6;
-    double bandwidthBand = 3e9;
+    // double bandwidthBand = 3e9;
     std::string pattern = "F|F|F|F|F|F|F|F|F|F|";
 
     NodeContainer gNbNodes;
@@ -146,6 +146,7 @@ int main (int argc, char *argv[])
     std::vector<NodeContainer> vec_UE(netw_meta.n_nodes);
     for (uint32_t j = 0; j < netw_meta.n_nodes; j++)
     {
+        if (!netw_meta.is_w_probing && netw_meta.set_tb.count(j) == 0) continue;
         vec_UE[j].Create(netw_meta.n_perUE[j]);
         ueNodes.Add(vec_UE[j]);
     }
@@ -153,6 +154,7 @@ int main (int argc, char *argv[])
     for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
     {
         bsPositionAlloc->Add (Vector (netw_meta.vec_gnb_coordinate_[i].x_val, netw_meta.vec_gnb_coordinate_[i].y_val, gNbHeight));
+        if (!netw_meta.is_w_probing && netw_meta.set_tb.count(i) == 0) continue;
         // std::cout << "Node ID = " << vec_app[i]->GetLocalID() << ":gnb = " << netw_meta.vec_gnb_coordinate_[i].x_val << ", gnb = " << netw_meta.vec_gnb_coordinate_[i].y_val << std::endl;
         for (uint16_t j = 0; j < vec_UE[i].GetN(); ++j)
         {
@@ -308,6 +310,7 @@ int main (int argc, char *argv[])
     const std::string Addr_IPv4_Network_gNB {std::to_string(network_base_number) + ".0.0.0"};
     for (uint32_t j = 0; j < vec_app.size(); j++)
     {
+        if (!netw_meta.is_w_probing && netw_meta.set_tb.count(j) == 0) continue;
         Ptr<Node> remoteHost = vec_app[j]->GetNode();
         // connect a remoteHost to pgw. Setup routing too
         vec_p2ph[j].SetDeviceAttribute ("DataRate", DataRateValue (DataRate ("1000Gb/s")));
@@ -363,6 +366,7 @@ int main (int argc, char *argv[])
     uint32_t idx = 0;
     for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
     {
+        if (!netw_meta.is_w_probing && netw_meta.set_tb.count(i) == 0) continue;
         /** Set Connection between RemoteHost and UEs **/
         vec_app[i]->nr_socket.resize(vec_UE[i].GetN());
         for (uint32_t j = 0; j < vec_UE[i].GetN(); j++)
@@ -491,7 +495,7 @@ int main (int argc, char *argv[])
     char *cwd = get_current_dir_name();
     std::string pwd_tmp(cwd, cwd+strlen(cwd));
     // netw_meta.write_queuing_cnt(pwd_tmp + "/scratch/Category_inference/queuing_cnt.csv");
-    // netw_meta.write_delays_cnt(pwd_tmp + "/scratch/Category_inference/delays_cnt.csv");
+    netw_meta.write_delays_cnt(pwd_tmp + "/scratch/Category_inference/delays_cnt.csv");
     // netw_meta.write_true_delays_cnt(pwd_tmp + "/scratch/Category_inference/true_delays_cnt.csv");
     std::cout << "start Destroy." << std::endl;
     Simulator::Destroy();

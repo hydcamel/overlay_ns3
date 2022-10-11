@@ -363,8 +363,8 @@ void netw::read_probe_intervals(std::string filename)
 		probe_normal_interval[idx_tunnel] = round(interval_val);
 	}
 	min_bw = *std::min_element(bw.begin(), bw.end());
-	send_interval_probing = (long double)(ProbeSizeNaive*8*USTOS)/ (long double)(min_bw*1000);
-	avg_pkt_transmission_delay = (long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * 10;
+	send_interval_probing = (long double)(ProbeSizeNaive*8)/ (long double)(min_bw*1000)*USTOS;
+	avg_pkt_transmission_delay = (long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * 1000;
 }
 
 void netw::read_n_UE(std::string filename)
@@ -413,11 +413,22 @@ void netw::read_hyper_param(std::string filename)
 				}
 				cnt_true_delays.insert( std::pair<std::string, std::vector<uint64_t>>(keys_, std::vector<uint64_t>(_MAXPKTNUM)) );
 				is_received.insert( std::pair<std::string, bool> ( keys_, true ) );
+				set_tb.insert(tunnel_vec[e_idx].second);
 			}
 		}
 		else if (line.substr(0, 12).compare("pareto_shape") == 0)
 		{
 			iss >> temp >> parato_shape;
+		}
+		else if (line.substr(0, 2).compare("tb") == 0)
+		{
+			uint32_t n_tb = 0, x_tb;
+			iss >> temp >> n_tb;
+			for (uint32_t i = 0; i < n_tb; i++)
+			{
+				iss >> x_tb;
+				set_tb.insert( x_tb );
+			}
 		}
 	}
 }
