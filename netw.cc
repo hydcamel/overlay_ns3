@@ -76,6 +76,8 @@ void netw::read_underlay(std::string filename)
 						m_sent[i].resize(n_nodes, 0);
 					}
 					n_perUE.resize(n_nodes, 0);
+					// cnt_node_received_pkt.resize(n_nodes, 0);
+					// cnt_node_attack_pkt.resize(n_nodes, 0);
 				}
 				else if (line.substr(0, 5).compare("EDGES") == 0)
 				{
@@ -363,8 +365,8 @@ void netw::read_probe_intervals(std::string filename)
 		probe_normal_interval[idx_tunnel] = round(interval_val);
 	}
 	min_bw = *std::min_element(bw.begin(), bw.end());
-	send_interval_probing = (long double)(ProbeSizeNaive*8)/ (long double)(min_bw*1000)*USTOS;
-	avg_pkt_transmission_delay = (long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * 1000;
+	send_interval_probing = (long double)(avg_pktSize*8)/ (long double)(min_bw*1000)*USTOS;
+	avg_pkt_transmission_delay = (long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * 4;
 }
 
 void netw::read_n_UE(std::string filename)
@@ -413,12 +415,30 @@ void netw::read_hyper_param(std::string filename)
 				}
 				cnt_true_delays.insert( std::pair<std::string, std::vector<uint64_t>>(keys_, std::vector<uint64_t>(_MAXPKTNUM)) );
 				is_received.insert( std::pair<std::string, bool> ( keys_, true ) );
-				set_tb.insert(tunnel_vec[e_idx].second);
+				// set_tb.insert(tunnel_vec[e_idx].second);
 			}
 		}
 		else if (line.substr(0, 12).compare("pareto_shape") == 0)
 		{
 			iss >> temp >> parato_shape;
+		}
+		else if (line.substr(0, 20).compare("probe_param_interval") == 0)
+		{
+			iss >> temp >> probe_param_interval;
+		}
+		else if (line.substr(0, 14).compare("probe_pkt_size") == 0)
+		{
+			iss >> temp >> probe_pkt_size;
+		}
+		else if (line.substr(0, 3).compare("tau") == 0)
+		{
+			iss >> temp >> tau_attack;
+			std::string keys_ = std::to_string(idx_orchestration) + " " + std::to_string(tau_attack);
+			std::vector<int> route = routing_map[keys_];
+			for (uint32_t i = 0; i < route.size()-1; i++)
+			{
+				adj_mat[route[i]][route[i+1]] = true;
+			}
 		}
 		else if (line.substr(0, 2).compare("tb") == 0)
 		{

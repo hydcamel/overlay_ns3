@@ -47,7 +47,7 @@ int main (int argc, char *argv[])
     // set simulation time and mobility
     // double simTime = 1; // seconds
     // double udpAppStartTime = 0.4; //seconds
-    double stop_time = 3500.0; // microseconds
+    double stop_time = 700.0; // ms
     // double stop_time = 400.0; // microseconds
     /**
      * Underlay Network
@@ -109,9 +109,9 @@ int main (int argc, char *argv[])
             linkIpv4Addr[k] = linkIpv4[k]->GetAddress(n_devices_perNode[k] - 1, 0);
         }
         vec_app[netw_meta.edges_vec[i].first]->SetSocket(linkIpv4Addr[1].GetAddress(), netw_meta.edges_vec[i].second, n_devices_perNode[0] - 1);
-        // std::cout << netw_meta.edges_vec[i].first << ": " << linkIpv4Addr[1].GetAddress() << std::endl;
+        std::cout << netw_meta.edges_vec[i].first << ": " << linkIpv4Addr[1].GetAddress() << std::endl;
         vec_app[netw_meta.edges_vec[i].second]->SetSocket(linkIpv4Addr[0].GetAddress(), netw_meta.edges_vec[i].first, n_devices_perNode[1] - 1);
-        // std::cout << netw_meta.edges_vec[i].second << ": " << linkIpv4Addr[0].GetAddress() << std::endl;
+        std::cout << netw_meta.edges_vec[i].second << ": " << linkIpv4Addr[0].GetAddress() << std::endl;
 
         /* for (int k = 0; k < 2; k++)
         {
@@ -129,9 +129,12 @@ int main (int argc, char *argv[])
     // myNR proxy_NR;
     // proxy_NR.init_myNR(netw_meta.vec_gnb_coordinate_, network_base_number, &netw_meta, vec_app, internet);
     double centralFrequencyCc0 = 28e9;
-    double centralFrequencyCc1 = 29e9;
-    double bandwidthCc0 = 400e6;
-    double bandwidthCc1 = 400e6;
+    double centralFrequencyCc1 = 30e9;
+    double bandwidthCc0 = 2e9;
+    double bandwidthCc1 = 2e9;
+    // double centralFrequencyCc1 = 29e9;
+    // double bandwidthCc0 = 400e6;
+    // double bandwidthCc1 = 400e6;
     // double bandwidthBand = 3e9;
     std::string pattern = "F|F|F|F|F|F|F|F|F|F|";
 
@@ -142,7 +145,8 @@ int main (int argc, char *argv[])
     Ptr<ListPositionAllocator> utPositionAlloc = CreateObject<ListPositionAllocator> ();
     const double gNbHeight = 10;
     const double ueHeight = 1.5;
-    gNbNodes.Create (netw_meta.n_nodes);
+    // gNbNodes.Create (netw_meta.n_nodes);
+    gNbNodes.Create(netw_meta.set_tb.size());
     std::vector<NodeContainer> vec_UE(netw_meta.n_nodes);
     for (uint32_t j = 0; j < netw_meta.n_nodes; j++)
     {
@@ -153,8 +157,9 @@ int main (int argc, char *argv[])
 
     for (uint32_t i = 0; i < netw_meta.n_nodes; i++)
     {
-        bsPositionAlloc->Add (Vector (netw_meta.vec_gnb_coordinate_[i].x_val, netw_meta.vec_gnb_coordinate_[i].y_val, gNbHeight));
         if (!netw_meta.is_w_probing && netw_meta.set_tb.count(i) == 0) continue;
+        bsPositionAlloc->Add (Vector (netw_meta.vec_gnb_coordinate_[i].x_val, netw_meta.vec_gnb_coordinate_[i].y_val, gNbHeight));
+        // if (!netw_meta.is_w_probing && netw_meta.set_tb.count(i) == 0) continue;
         // std::cout << "Node ID = " << vec_app[i]->GetLocalID() << ":gnb = " << netw_meta.vec_gnb_coordinate_[i].x_val << ", gnb = " << netw_meta.vec_gnb_coordinate_[i].y_val << std::endl;
         for (uint16_t j = 0; j < vec_UE[i].GetN(); ++j)
         {
@@ -191,8 +196,8 @@ int main (int argc, char *argv[])
     CcBwpCreator ccBwpCreator;
 
     OperationBandInfo band;
-    double centralFrequency = 28e9;
-    double bandwidth = 3e9;
+    double centralFrequency = 29e9;
+    double bandwidth = 5e9;
     double txPower = 30;
     uint16_t numerology = 5;
 
@@ -250,33 +255,36 @@ int main (int argc, char *argv[])
     epcHelper->SetAttribute ("S1uLinkDelay", TimeValue (MilliSeconds (0)));
     epcHelper->SetAttribute ("S1uLinkDataRate", DataRateValue (DataRate ("1000Gb/s")));
     epcHelper->SetAttribute ("S1uLinkMtu", UintegerValue (10000));
-    nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerTdmaRR"));
+    // nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerTdmaRR"));
+    nrHelper->SetSchedulerTypeId (TypeId::LookupByName ("ns3::NrMacSchedulerOfdmaPF"));
     idealBeamformingHelper->SetAttribute ("BeamformingMethod", TypeIdValue (DirectPathBeamforming::GetTypeId ()));
     nrHelper->InitializeOperationBand (&band);
     allBwps = CcBwpCreator::GetAllBwps ({band});
 
-    double x = pow (10, txPower / 10);
+    Config::SetDefault ("ns3::LteRlcUm::MaxTxBufferSize", UintegerValue (999999999));
+
+    // double x = pow (10, txPower / 10);
 
     // Antennas for all the UEs
     nrHelper->SetUeAntennaAttribute ("NumRows", UintegerValue (2));
-    nrHelper->SetUeAntennaAttribute ("NumColumns", UintegerValue (4));
+    nrHelper->SetUeAntennaAttribute ("NumColumns", UintegerValue (2));
     nrHelper->SetUeAntennaAttribute ("AntennaElement", PointerValue (CreateObject<IsotropicAntennaModel> ()));
 
     // Antennas for all the gNbs
-    nrHelper->SetGnbAntennaAttribute ("NumRows", UintegerValue (4));
+    nrHelper->SetGnbAntennaAttribute ("NumRows", UintegerValue (8));
     nrHelper->SetGnbAntennaAttribute ("NumColumns", UintegerValue (8));
     nrHelper->SetGnbAntennaAttribute ("AntennaElement", PointerValue (CreateObject<IsotropicAntennaModel> ()));
 
 
     uint32_t bwpIdForLowLat = 0;
     uint32_t bwpIdForVoice = 1;
-    uint32_t bwpIdForVideo = 2;
-    uint32_t bwpIdForVideoGaming = 3;
+    // uint32_t bwpIdForVideo = 2;
+    // uint32_t bwpIdForVideoGaming = 3;
 
     nrHelper->SetGnbBwpManagerAlgorithmAttribute ("NGBR_LOW_LAT_EMBB", UintegerValue (bwpIdForLowLat));
     nrHelper->SetGnbBwpManagerAlgorithmAttribute ("GBR_CONV_VOICE", UintegerValue (bwpIdForVoice));
-    nrHelper->SetGnbBwpManagerAlgorithmAttribute ("NGBR_VIDEO_TCP_PREMIUM", UintegerValue (bwpIdForVideo));
-    nrHelper->SetGnbBwpManagerAlgorithmAttribute ("NGBR_VOICE_VIDEO_GAMING", UintegerValue (bwpIdForVideoGaming));
+    // nrHelper->SetGnbBwpManagerAlgorithmAttribute ("NGBR_VIDEO_TCP_PREMIUM", UintegerValue (bwpIdForVideo));
+    // nrHelper->SetGnbBwpManagerAlgorithmAttribute ("NGBR_VOICE_VIDEO_GAMING", UintegerValue (bwpIdForVideoGaming));
 
     //Install and get the pointers to the NetDevices
     NetDeviceContainer enbNetDev = nrHelper->InstallGnbDevice (gNbNodes, allBwps);
@@ -289,6 +297,7 @@ int main (int argc, char *argv[])
     // Set the attribute of the netdevice (enbNetDev.Get (0)) and bandwidth part (0), (1), ...
     for (uint32_t j = 0; j < enbNetDev.GetN(); j++)
     {
+        // if (!netw_meta.is_w_probing && netw_meta.set_tb.count(j) == 0) continue;
         for (uint32_t u = 0; u < allBwps.size(); u++)
         {
             nrHelper->GetGnbPhy (enbNetDev.Get (j), u)->SetAttribute ("Numerology", UintegerValue (numerology));
@@ -381,8 +390,10 @@ int main (int argc, char *argv[])
             TypeId tid = TypeId::LookupByName("ns3::UdpSocketFactory");
             vec_app[i]->nr_socket[j] = Socket::CreateSocket(vec_app[i]->GetNode(), tid);
             if (vec_app[i]->nr_socket[j]->Bind() == -1) NS_FATAL_ERROR("Failed to bind socket");
+            vec_app[i]->nr_socket[j]->Connect(InetSocketAddress(ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal(), dlPort_bwp0));
+            nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer_0, tft_0);
 
-            if (j == 0)
+            /* if (j == 0)
             {
                 vec_app[i]->nr_socket[j]->Connect(InetSocketAddress(ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal(), dlPort_bwp0));
                 nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer_0, tft_0);
@@ -392,7 +403,8 @@ int main (int argc, char *argv[])
                 // std::cout << "activate for " << i << " with port = " << uint32_t(dlPort_bwp1) << std::endl;
                 vec_app[i]->nr_socket[j]->Connect(InetSocketAddress(ue->GetObject<Ipv4> ()->GetAddress( 1, 0 ).GetLocal(), dlPort_bwp1));
                 nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer_1, tft_1);
-            }
+            } */
+
             // nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer_0, tft_0);
             // nrHelper->ActivateDedicatedEpsBearer (ueDevice, bearer_1, tft_1);
         }
@@ -482,6 +494,20 @@ int main (int argc, char *argv[])
 
     // Config::SetDefault ("/NodeList/*/DeviceList/*/$ns3::LteNetDevice/Mtu", UintegerValue (9000));
 
+    FlowMonitorHelper flowmonHelper;
+    NodeContainer endpointNodes;
+    endpointNodes.Add(underlayNodes);
+    // for (auto it = netw_meta.set_tb.begin(); it != netw_meta.set_tb.end(); it++)
+    // {
+    //     endpointNodes.Add (underlayNodes.Get(*it));
+    //     endpointNodes.Add (vec_UE[*it]);
+    // }
+
+    Ptr<ns3::FlowMonitor> monitor = flowmonHelper.Install (endpointNodes);
+    monitor->SetAttribute ("DelayBinWidth", DoubleValue (0.001));
+    monitor->SetAttribute ("JitterBinWidth", DoubleValue (0.001));
+    monitor->SetAttribute ("PacketSizeBinWidth", DoubleValue (20));
+
 
     NS_LOG_INFO("Run Simulation.");
     std::cout << "before run" << std::endl;
@@ -498,6 +524,76 @@ int main (int argc, char *argv[])
     netw_meta.write_delays_cnt(pwd_tmp + "/scratch/Category_inference/delays_cnt.csv");
     // netw_meta.write_true_delays_cnt(pwd_tmp + "/scratch/Category_inference/true_delays_cnt.csv");
     std::cout << "start Destroy." << std::endl;
+
+
+    // Print per-flow statistics
+    monitor->CheckForLostPackets ();
+    Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier> (flowmonHelper.GetClassifier ());
+    FlowMonitor::FlowStatsContainer stats = monitor->GetFlowStats ();
+
+    double averageFlowThroughput = 0.0;
+    double averageFlowDelay = 0.0;
+
+    std::ofstream outFile;
+    std::string simTag = "default";
+    std::string outputDir = "./";
+    std::string filename = outputDir + "/" + simTag;
+    outFile.open (filename.c_str (), std::ofstream::out | std::ofstream::trunc);
+    if (!outFile.is_open ())
+    {
+        std::cerr << "Can't open file " << filename << std::endl;
+        return 1;
+    }
+
+    outFile.setf (std::ios_base::fixed);
+
+    double flowDuration = (time_stop_simulation - Time(MicroSeconds(AppStartTime))).GetSeconds ();
+    for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator i = stats.begin (); i != stats.end (); ++i)
+    {
+        Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow (i->first);
+        std::stringstream protoStream;
+        protoStream << (uint16_t) t.protocol;
+        if (t.protocol == 6) protoStream.str ("TCP"); 
+        if (t.protocol == 17) protoStream.str ("UDP");
+        outFile << "Flow " << i->first << " (" << t.sourceAddress << ":" << t.sourcePort << " -> " << t.destinationAddress << ":" << t.destinationPort << ") proto " << protoStream.str () << "\n";
+        outFile << "  Tx Packets: " << i->second.txPackets << "\n";
+        outFile << "  Tx Bytes:   " << i->second.txBytes << "\n";
+        outFile << "  TxOffered:  " << i->second.txBytes * 8.0 / flowDuration / 1000.0 / 1000.0  << " Mbps\n";
+        outFile << "  Rx Bytes:   " << i->second.rxBytes << "\n";
+        outFile << "  Pkts Dropped:   " << i->second.lostPackets << "\n";
+        if (i->second.rxPackets > 0)
+        {
+            // Measure the duration of the flow from receiver's perspective
+            averageFlowThroughput += i->second.rxBytes * 8.0 / flowDuration / 1000 / 1000;
+            averageFlowDelay += 1000 * i->second.delaySum.GetSeconds () / i->second.rxPackets;
+
+            outFile << "  Throughput: " << i->second.rxBytes * 8.0 / flowDuration / 1000 / 1000  << " Mbps\n";
+            outFile << "  Mean delay:  " << 1000 * i->second.delaySum.GetSeconds () / i->second.rxPackets << " ms\n";
+            //outFile << "  Mean upt:  " << i->second.uptSum / i->second.rxPackets / 1000/1000 << " Mbps \n";
+            outFile << "  Mean jitter:  " << 1000 * i->second.jitterSum.GetSeconds () / i->second.rxPackets  << " ms\n";
+        }
+        else
+        {
+            outFile << "  Throughput:  0 Mbps\n";
+            outFile << "  Mean delay:  0 ms\n";
+            outFile << "  Mean jitter: 0 ms\n";
+        }
+        outFile << "  Rx Packets: " << i->second.rxPackets << "\n";
+    }
+
+    outFile << "\n\n  Mean flow throughput: " << averageFlowThroughput / stats.size () << "\n";
+    outFile << "  Mean flow delay: " << averageFlowDelay / stats.size () << "\n";
+
+    outFile.close ();
+
+    std::ifstream f (filename.c_str ());
+
+    if (f.is_open ())
+    {
+        std::cout << f.rdbuf ();
+    }
+
+
     Simulator::Destroy();
     NS_LOG_INFO("Done.");
 }

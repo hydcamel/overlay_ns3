@@ -44,7 +44,7 @@ uint32_t SDtag::GetSerializedSize (void) const
 {
     // return 9;
     // return 17;
-    return 18;
+    return 19;
 }
 void SDtag::Serialize (TagBuffer i) const
 {
@@ -54,6 +54,7 @@ void SDtag::Serialize (TagBuffer i) const
     i.WriteU8(currentHop);
     i.WriteU8(IsProbe);
     i.WriteU8(IsQueued);
+    i.WriteU8 (bwpID);
     // i.WriteU8(SandWichID);
     // i.WriteU8(SandWichLargeID);
     i.WriteU32 (PktID);
@@ -67,6 +68,7 @@ void SDtag::Deserialize (TagBuffer i)
     currentHop = i.ReadU8();
     IsProbe = i.ReadU8();
     IsQueued = i.ReadU8();
+    bwpID = i.ReadU8();
     // SandWichID = i.ReadU8();
     // SandWichLargeID = i.ReadU8();
     PktID = i.ReadU32();
@@ -99,6 +101,14 @@ void SDtag::SetUeID (uint8_t value)
 uint8_t SDtag::GetUeID (void) const
 {
     return ueID;
+}
+void SDtag::SetBwpID (uint8_t value)
+{
+    bwpID= value;
+}
+uint8_t SDtag::GetBwpID (void) const
+{
+    return bwpID;
 }
 void SDtag::SetCurrentHop (uint8_t value)
 {

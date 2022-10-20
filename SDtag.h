@@ -42,6 +42,8 @@ public:
     uint8_t GetDestID (void) const;
     void SetUeID (uint8_t value);
     uint8_t GetUeID (void) const;
+    void SetBwpID (uint8_t value);
+    uint8_t GetBwpID (void) const;
     void SetCurrentHop (uint8_t value);
     void AddCurrentHop (void);
     uint8_t GetCurrentHop (void) const;
@@ -60,6 +62,7 @@ private:
     uint8_t currentHop;
     uint8_t IsProbe;
     uint8_t IsQueued;
+    uint8_t bwpID = 1;
     uint32_t PktID;
     uint64_t StartTime;
 };

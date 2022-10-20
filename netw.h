@@ -26,8 +26,8 @@
 #define PrLBPkt (0.4)
 #define PrUBPkt (0.4)
 #define PrMEDPkt (0.2)
-// #define ProbeSizeNaive (1460)
-#define ProbeSizeNaive (600)
+#define ProbeSizeNaive (1460)
+// #define ProbeSizeNaive (600)
 // #define ProbeSizeNaive (50)
 #define ProbeSizeSWSmall (50)
 #define ProbeSizeSWlarge (1450)
@@ -39,7 +39,8 @@ enum ProbeType
 {
     naive = 1,
     sandwich_v1 = 2,
-    calibration = 3
+    calibration = 3,
+    poisson = 4
 };
 enum CrossType
 {
@@ -98,10 +99,12 @@ public:
     /**
      * probing 
      **/
-    uint32_t _AppPktSize = 1024, _IPPktSize = 1052, _MACPktSize = 1054, _NormPktSize = 46, _MAXPKTNUM = 3, _MAXBACKLOG = 200000;
+    uint32_t _AppPktSize = 1024, _IPPktSize = 1052, _MACPktSize = 1054, _NormPktSize = 46, _MAXPKTNUM = 3, _MAXBACKLOG = 2000000;
     uint32_t _epoll_time = 10; // microsecond
     uint16_t protocol_number = 150;
     std::vector<double> probe_normal_interval;
+    uint32_t probe_param_interval; //ns
+    uint32_t target_interval = 80000; // 40000ns = 200 mb/s
     std::vector<bool> old_E;
     uint32_t new_e;
     uint32_t len_long_train;
@@ -117,9 +120,14 @@ public:
     uint32_t n_burst_pkt = 50;
     double parato_scale = 12;
     double parato_shape = 2.04;
-    uint32_t parato_bound = 50;
+    uint32_t parato_bound = 300;
+    uint32_t probe_pkt_size = ProbeSizeNaive;
     bool is_w_probing = true;
+    bool is_param_probing = true;
     std::unordered_set<uint32_t> set_tb;
+    uint32_t tau_attack;
+    // std::vector<uint32_t> cnt_node_received_pkt;
+    // std::vector<uint32_t> cnt_node_attack_pkt;
 
 
     /**

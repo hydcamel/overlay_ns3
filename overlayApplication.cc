@@ -191,6 +191,13 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
         // NS_LOG_INFO("Node ID: " << m_local_ID << "; pkt received -- " << keys);
 
         std::vector<int> &routes = meta->routing_map[keys];
+        // meta->cnt_node_received_pkt[m_local_ID]++;
+        // if (tagPktRecv.GetBwpID() > 2)
+        // {
+        //     std::cout << "This node = " << m_local_ID << " from " << uint32_t(tagPktRecv.GetSourceID()) << " to " << uint32_t(tagPktRecv.GetDestID()) << " with " << meta->cnt_node_attack_pkt[m_local_ID] << " at \t" << Now()  << std::endl;
+        //     meta->cnt_node_attack_pkt[m_local_ID]++;
+        // }
+        
         
         if (tagPktRecv.GetDestID() == GetLocalID())
         {
@@ -205,10 +212,10 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                 {
                     case ProbeType::naive:
                     {
-                        meta->cnt_queuing[keys][tagPktRecv.GetPktID()] = tagPktRecv.GetIsQueued();
+                        // meta->cnt_queuing[keys][tagPktRecv.GetPktID()] = tagPktRecv.GetIsQueued();
                         /* uint32_t idx_tunnel = meta->tunnel_hashmap[keys];
                         meta->cnt_queuing[idx_tunnel][tagPktRecv.GetPktID()] = tagPktRecv.GetIsQueued(); */
-                        meta->cnt_true_delays[keys][tagPktRecv.GetPktID()] = Simulator::Now().GetNanoSeconds() - (uint64_t)(tagPktRecv.GetStartTime());
+                        // meta->cnt_true_delays[keys][tagPktRecv.GetPktID()] = Simulator::Now().GetNanoSeconds() - (uint64_t)(tagPktRecv.GetStartTime());
                         break;
                     }
                     case ProbeType::sandwich_v1:
@@ -237,10 +244,10 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                     // new_p->AddPacketTag(tagPktRecv);
                     // packet->ReplacePacketTag(tagPktRecv);
                     // std::cout << "Node ID: " << m_local_ID << "-Forwarding to UE, PktID = " << tagPktRecv.GetPktID() << ": " << uint32_t(tagPktRecv.GetUeID()) << " with start time" << tagPktRecv.GetStartTime() << " at " << "\t" << Now() << std::endl;
-                    if ((tagPktRecv.GetPktID() == 0 || tagPktRecv.GetPktID() >= meta->_MAXPKTNUM-1 || tagPktRecv.GetPktID()%50 == 0 || tagPktRecv.GetPktID()%50 == 1 || tagPktRecv.GetPktID()%50 == 2) && tagPktRecv.GetUeID() == 0)
+                    /* if ((tagPktRecv.GetPktID() == 0 || tagPktRecv.GetPktID() >= meta->_MAXPKTNUM-1 || tagPktRecv.GetPktID()%50 == 0 || tagPktRecv.GetPktID()%50 == 1 || tagPktRecv.GetPktID()%50 == 2) && tagPktRecv.GetUeID() == 0)
                     {
                         std::cout <<"pkt_ID = " << tagPktRecv.GetPktID() << "First forwarding time = " << "\t" << Now() << std::endl;
-                    }
+                    } */
                     
                     /* for (uint32_t i = 0; i < nr_socket.size(); i++)
                     {
@@ -249,8 +256,15 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                         // int nBytes = nr_socket[i]->Send(packet);
                         // std::cout << "nBytes = " << nBytes << std::endl;
                     } */
-                    nr_socket[tagPktRecv.GetUeID()]->Send(packet);
-                    
+                    if ( meta->set_tb.count(m_local_ID) && tagPktRecv.GetUeID() == 0) 
+                    // nr_socket[tagPktRecv.GetUeID()]->Send(packet);
+                    {
+                        for (uint32_t k = 0; k < 1; k++)
+                        {
+                            nr_socket[tagPktRecv.GetUeID()]->Send(packet);
+                        }
+                    }
+
                 }
                 // NS_LOG_INFO(m_local_ID << ": recv probe at " << Simulator::Now().As(Time::US) << " with " << keys);
             }
@@ -269,10 +283,10 @@ void overlayApplication::HandleRead(Ptr<Socket> socket)
                 std::cout << "Node ID: " << m_local_ID << " forward at: " << Simulator::Now().ToDouble(Time::US) << std::endl;
             } */
             
-            if ( CheckCongestion(map_neighbor_device[routes[tagPktRecv.GetCurrentHop()+1]], (uint32_t)tagPktRecv.GetSourceID(), (uint32_t)tagPktRecv.GetDestID(), (uint16_t)tagPktRecv.GetPktID()) )
+            /* if ( CheckCongestion(map_neighbor_device[routes[tagPktRecv.GetCurrentHop()+1]], (uint32_t)tagPktRecv.GetSourceID(), (uint32_t)tagPktRecv.GetDestID(), (uint16_t)tagPktRecv.GetPktID()) )
             {
                 tagPktRecv.SetIsQueued(1);
-            }
+            } */
             tagPktRecv.AddCurrentHop();
             packet->ReplacePacketTag(tagPktRecv);
             tab_socket[routes[tagPktRecv.GetCurrentHop()]]->Send(packet);
@@ -287,7 +301,7 @@ bool overlayApplication::CheckCongestion(uint32_t deviceID, uint32_t src, uint32
     Ptr<PointToPointNetDevice> net_device = DynamicCast<PointToPointNetDevice, NetDevice>(GetNode()->GetDevice(deviceID));
     Ptr<Queue<Packet>> net_queue = net_device->GetQueue();
     // std::cout << "src: " << src << " -dest: " << dest << " queue backlog: " << net_queue->GetNPackets() << std::endl;
-    /* if (src == SRC && dest == DEST && net_queue->GetNPackets() > 0)
+    /* if (src == 1 && dest == 3 && net_queue->GetNPackets() > 0)
     {
         std::cout << "Node ID: " << m_local_ID << "PktID: " << PktID << "src: " << src << " -dest: " << dest << " queue backlog: " << net_queue->GetNPackets() << " limit = " << net_queue->GetMaxSize() << std::endl;
     } */
@@ -438,6 +452,14 @@ void overlayApplication::StartApplication(void)
     }
 
     /**
+     * Set up attack probing flow
+     **/
+    if (GetLocalID() == meta->idx_orchestration && meta->is_param_probing && meta->probe_param_interval > 0)
+    {
+        Send_Attack_Flow(meta->tau_attack);
+    }
+
+    /**
      * Set up probing flows
      **/
     if (GetLocalID() == meta->idx_orchestration && meta->loc_overlay_nodes[GetLocalID()] == true) // only if self is overlay, it can schedule probing
@@ -484,9 +506,46 @@ void overlayApplication::StartApplication(void)
     }
 }
 
+void overlayApplication::Send_Attack_Flow(uint32_t idx)
+{
+    NS_LOG_FUNCTION(this);
+    // NS_ASSERT(probe_event[idx].IsExpired());
+    std::string keys_ {std::to_string(m_local_ID) + " " + std::to_string(idx)};
+    std::vector<int> &routes = meta->routing_map[keys_];
+    SDtag tagToSend;
+    SetTag(tagToSend, m_local_ID, idx, 1, meta->m_sent[m_local_ID][idx], 1);
+    
+    // ++meta->m_sent[m_local_ID][idx];
+    Ptr<Packet> p;
+    p = Create<Packet>(meta->probe_pkt_size);
+    p->AddPacketTag(tagToSend);
+    // std::cout << "Probe: " << m_local_ID << " to " << idx << " with ID " << tagToSend.GetPktID() << " at " << "\t" << Now() << ": " << tagToSend.GetStartTime() << std::endl;
+    // m_txTrace(p);
+    // for (uint32_t i = 0; i < meta->n_perUE[idx]; i++)
+    // {
+    //     // tagToSend.SetUeID(i);
+    //     tagToSend.SetUeID(10);
+    //     // std::cout << "Probe: " << m_local_ID << " to " << idx << ": " << uint32_t(tagToSend.GetUeID()) << " with ID " << tagToSend.GetPktID() << " at " << "\t" << Now() << ": " << tagToSend.GetStartTime() << std::endl;
+    //     p->ReplacePacketTag(tagToSend);
+    //     tab_socket[routes[1]]->Send(p);
+    // }
+    if (is_run == true)
+    {
+        // std::cout << keys_ << std::endl;
+        tagToSend.SetUeID(10);
+        tagToSend.SetBwpID(10);
+        // std::cout << "Probe: " << m_local_ID << " to " << idx << ": " << uint32_t(tagToSend.GetUeID()) << " with ID " << tagToSend.GetPktID() << " at " << "\t" << Now() << ": " << tagToSend.GetStartTime() << std::endl;
+        p->ReplacePacketTag(tagToSend);
+        tab_socket[routes[1]]->Send(p);
+        Simulator::Schedule(Time(NanoSeconds(meta->probe_param_interval)), &overlayApplication::Send_Attack_Flow, this, idx);
+    }
+}
+
 void overlayApplication::CentralOrchestration()
 {
     uint32_t next_send_time = 0;
+    uint32_t s = 0, t = 0;
+    uint32_t n_still_sent = 0;
     if (meta->is_w_probing && StateCheckRecv() == false)
     {
         std::cout << "cannot send" << std::endl;
@@ -494,7 +553,6 @@ void overlayApplication::CentralOrchestration()
     }
     else
     {
-        uint32_t s = 0, t = 0;
         for (auto it = meta->cnt_delays.begin(); it != meta->cnt_delays.end(); it++)
         {
             s = meta->tunnel_vec[ meta->tunnel_hashmap[it->first] ].first;
@@ -504,6 +562,7 @@ void overlayApplication::CentralOrchestration()
                 // std::cout << "Send " << meta->is_received["1 0"] << " " << meta->is_w_probing << " " << StateCheckRecv() << std::endl;
                 ScheduleProbing(Time(MicroSeconds(next_send_time)), t);
                 next_send_time += meta->send_interval_probing;
+                n_still_sent ++;
             }
         }
         // std::cout << meta->m_sent[s][t] << " ";
@@ -526,7 +585,16 @@ void overlayApplication::CentralOrchestration()
             }
         } */
     }
-    Simulator::Schedule(Time(MicroSeconds(std::max(meta->_epoll_time, next_send_time))), &overlayApplication::CentralOrchestration, this);
+    // Simulator::Schedule(Time(MicroSeconds(std::max(meta->_epoll_time, next_send_time))), &overlayApplication::CentralOrchestration, this);
+    if (n_still_sent > 0)
+    {
+        // Simulator::Schedule(Time(MicroSeconds(std::max(meta->_epoll_time, next_send_time))), &overlayApplication::CentralOrchestration, this);
+        Simulator::Schedule(Time(NanoSeconds(meta->target_interval)), &overlayApplication::CentralOrchestration, this);
+        // Simulator::Schedule(Time(MicroSeconds(3)), &overlayApplication::CentralOrchestration, this);
+    }
+    // else is_run = false;
+    
+    // Simulator::Schedule(Time(MicroSeconds(1)), &overlayApplication::CentralOrchestration, this);
     // Simulator::Schedule(Time(MicroSeconds(meta->_epoll_time)), &overlayApplication::CentralOrchestration, this);
 }
 
@@ -569,25 +637,29 @@ void overlayApplication::SendProbeNaive(uint32_t idx)
     
     ++meta->m_sent[m_local_ID][idx];
     Ptr<Packet> p;
-    p = Create<Packet>(ProbeSizeNaive);
+    p = Create<Packet>(meta->probe_pkt_size);
     p->AddPacketTag(tagToSend);
     // std::cout << "Probe: " << m_local_ID << " to " << idx << " with ID " << tagToSend.GetPktID() << " at " << "\t" << Now() << ": " << tagToSend.GetStartTime() << std::endl;
     // m_txTrace(p);
     for (uint32_t i = 0; i < meta->n_perUE[idx]; i++)
     {
+        // tagToSend.SetUeID(i);
         tagToSend.SetUeID(i);
+        tagToSend.SetBwpID(0);
         // std::cout << "Probe: " << m_local_ID << " to " << idx << ": " << uint32_t(tagToSend.GetUeID()) << " with ID " << tagToSend.GetPktID() << " at " << "\t" << Now() << ": " << tagToSend.GetStartTime() << std::endl;
         p->ReplacePacketTag(tagToSend);
         tab_socket[routes[1]]->Send(p);
+        
     }
 
     // tab_socket[routes[1]]->Send(p);
     meta->is_received[keys_] = false;
-    if (is_run == true && meta->m_sent[m_local_ID][idx] < meta->_MAXPKTNUM)
+    
+    /* if (is_run == true && meta->m_sent[m_local_ID][idx] < meta->_MAXPKTNUM)
     {
         // ScheduleProbing(Time(MicroSeconds(meta->probe_normal_interval[meta->tunnel_hashmap[keys_]])), idx);
         // CentralOrchestration();
-    }
+    } */
 }
 
 void overlayApplication::StopApplication()
