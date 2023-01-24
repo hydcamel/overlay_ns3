@@ -75,6 +75,11 @@ void ueApp::HandleRead(Ptr<Socket> socket)
             oa_interface->meta->cnt_delays[keys_][cnt_probes] = Simulator::Now().GetNanoSeconds() - (uint64_t)(tagPktRecv.GetStartTime());
             oa_interface->meta->is_received[keys_] = true;
         }
+        // else
+        // {
+        //     oa_interface->meta->cnt_delays[keys_][cnt_probes] = Simulator::Now().GetNanoSeconds() - (uint64_t)(tagPktRecv.GetStartTime());
+        //     oa_interface->meta->is_received[keys_] = true;
+        // }
         cnt_probes ++;
         // if(cnt_probes >= max_probes) StopApplication();
     }

@@ -45,6 +45,7 @@ netw::netw(name_input_files &fd_setup)
 	read_gnb_coordinate(fd_setup.gnb_coordinate_files);
 	read_hyper_param(fd_setup.hyper_param_files);
 	read_n_UE(fd_setup.nUE_filename);
+	read_bg_ratio(bg_ratio_file);
 }
 
 void netw::read_underlay(std::string filename)
@@ -70,13 +71,17 @@ void netw::read_underlay(std::string filename)
 					iss >> temp >> n_nodes;
 					adj_mat.resize(n_nodes);
 					m_sent.resize(n_nodes);
+					bg_ratio.resize(n_nodes);
+					pareto_wait_time.resize(n_nodes);
 					for (uint32_t i = 0; i < n_nodes; i++)
 					{
 						adj_mat[i].resize(n_nodes, false);
 						m_sent[i].resize(n_nodes, 0);
+						bg_ratio[i].resize(n_nodes, 4.0);
+						pareto_wait_time[i].resize(n_nodes, 0.0);
 					}
 					n_perUE.resize(n_nodes, 0);
-					// cnt_node_received_pkt.resize(n_nodes, 0);
+					cnt_node_received_pkt.resize(n_nodes, 0);
 					// cnt_node_attack_pkt.resize(n_nodes, 0);
 				}
 				else if (line.substr(0, 5).compare("EDGES") == 0)
@@ -329,6 +334,18 @@ void netw::read_probe_profile(std::string filename)
 			int tmp_int_val;
 			iss >> temp >> tmp_int_val;
 			is_w_probing = tmp_int_val >= 1 ? true : false;
+			if (is_w_probing)
+			{
+				is_param_probing = false;
+			}
+			
+		}
+		else if (line.substr(0, 13).compare("bd_ratio_file") == 0)
+		{
+			// std::string bg_ratio_file;
+			iss >> temp >> bg_ratio_file;
+
+			// read_bg_ratio(bg_ratio_file);
 		}
 	}
 	// uint32_t s, t;
@@ -366,7 +383,17 @@ void netw::read_probe_intervals(std::string filename)
 	}
 	min_bw = *std::min_element(bw.begin(), bw.end());
 	send_interval_probing = (long double)(avg_pktSize*8)/ (long double)(min_bw*1000)*USTOS;
+	// avg_pkt_transmission_delay = (long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * 4;
 	avg_pkt_transmission_delay = (long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * 4;
+	// for (uint32_t i = 0; i < n_nodes; i++)
+	// {
+	// 	for (uint32_t j = 0; j < n_nodes; j++)
+	// 	{
+	// 		// pareto_wait_time[i][j] = (uint32_t)((long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * 4);
+	// 		pareto_wait_time[i][j] = (uint32_t)((long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * bg_ratio[i][j]);
+	// 		std::cout << (long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * bg_ratio[i][j] << " ";
+	// 	}
+	// }
 }
 
 void netw::read_n_UE(std::string filename)
@@ -380,6 +407,33 @@ void netw::read_n_UE(std::string filename)
 		for (uint32_t i = 0; i < n_nodes; i++)
 		{
 			iss >> n_perUE[i];
+		}
+	}
+}
+
+void netw::read_bg_ratio(std::string filename)
+{
+	std::ifstream infile(filename);
+    std::string line;
+	// std::string tmp;
+	std::cout << "read_bg_ratio: " << filename << "; is_open = " << infile.is_open() << std::endl;
+	for (uint32_t i = 0; i < n_nodes; i++)
+	{
+		getline(infile, line);
+		std::istringstream iss(line);
+		for (uint32_t j = 0; j < n_nodes; j++)
+		{
+			iss >> bg_ratio[i][j];
+		}
+	}
+	// min_bw = *std::min_element(bw.begin(), bw.end());
+	for (uint32_t i = 0; i < n_nodes; i++)
+	{
+		for (uint32_t j = 0; j < n_nodes; j++)
+		{
+			// pareto_wait_time[i][j] = (uint32_t)((long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * 4);
+			pareto_wait_time[i][j] = (uint32_t)((long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * bg_ratio[i][j]);
+			// std::cout << (long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * bg_ratio[i][j] << " ";
 		}
 	}
 }
@@ -430,15 +484,26 @@ void netw::read_hyper_param(std::string filename)
 		{
 			iss >> temp >> probe_pkt_size;
 		}
+		// else if (line.substr(0, 13).compare("bg_ratio_file") == 0)
+		// {
+		// 	std::string bg_ratio_file;
+		// 	iss >> temp >> bg_ratio_file;
+
+		// 	read_bg_ratio(bg_ratio_file);
+		// }
 		else if (line.substr(0, 3).compare("tau") == 0)
 		{
 			iss >> temp >> tau_attack;
 			std::string keys_ = std::to_string(idx_orchestration) + " " + std::to_string(tau_attack);
 			std::vector<int> route = routing_map[keys_];
-			for (uint32_t i = 0; i < route.size()-1; i++)
+			if (route.size() > 0)
 			{
-				adj_mat[route[i]][route[i+1]] = true;
+				for (uint32_t i = 0; i < route.size()-1; i++)
+				{
+					adj_mat[route[i]][route[i+1]] = true;
+				}
 			}
+			
 		}
 		else if (line.substr(0, 2).compare("tb") == 0)
 		{

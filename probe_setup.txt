@@ -1,7 +1,8 @@
-n_probes 10000
+n_probes 5000
 E_cur_idxlist 3 -1 -1 -1
 e_new_idx 0
 probe_type naive
 len_long_train 1000
 n_uePerGnb 1
-is_w_probing 0
+is_w_probing 10.0
+bd_ratio_file /export/home/Yudi_Huang/ns-3-dev/scratch/Category_inference/bg_ratio_nb10_10.csv

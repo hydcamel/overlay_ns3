@@ -420,7 +420,9 @@ void overlayApplication::SendBackground(uint32_t idx)
         // std::cout << "ON duration: rng_val=" << vec_burst_pkt.size() << ", time_to_sent=" << time_to_sent << "; OFF duration = rng_val=" << rng_val << ", time_to_sent=" << rng_val*meta->avg_pkt_transmission_delay << std::endl;
         if (is_run == true)
         {
-            ScheduleBackground(Time(MicroSeconds(time_to_sent + rng_val*meta->avg_pkt_transmission_delay)), idx);
+            // ScheduleBackground(Time(MicroSeconds(time_to_sent + meta->bg_ratio[m_local_ID][idx] * rng_val*meta->avg_pkt_transmission_delay)), idx);
+            // ScheduleBackground(Time(MicroSeconds(time_to_sent + rng_val*meta->avg_pkt_transmission_delay)), idx);
+            ScheduleBackground(Time(MicroSeconds(time_to_sent + rng_val*meta->pareto_wait_time[m_local_ID][idx])), idx);
         }
     }
     
@@ -548,8 +550,8 @@ void overlayApplication::CentralOrchestration()
     uint32_t n_still_sent = 0;
     if (meta->is_w_probing && StateCheckRecv() == false)
     {
-        std::cout << "cannot send" << std::endl;
-        // Simulator::Schedule(Time(MicroSeconds(meta->_epoll_time)), &overlayApplication::CentralOrchestration, this);
+        // std::cout << "cannot send" << std::endl;
+        Simulator::Schedule(Time(MicroSeconds(meta->_epoll_time)), &overlayApplication::CentralOrchestration, this);
     }
     else
     {
@@ -589,8 +591,14 @@ void overlayApplication::CentralOrchestration()
     if (n_still_sent > 0)
     {
         // Simulator::Schedule(Time(MicroSeconds(std::max(meta->_epoll_time, next_send_time))), &overlayApplication::CentralOrchestration, this);
-        Simulator::Schedule(Time(NanoSeconds(meta->target_interval)), &overlayApplication::CentralOrchestration, this);
-        // Simulator::Schedule(Time(MicroSeconds(3)), &overlayApplication::CentralOrchestration, this);
+        if (meta->is_param_probing)
+        {
+            Simulator::Schedule(Time(NanoSeconds(meta->target_interval)), &overlayApplication::CentralOrchestration, this);
+        }
+        else if (meta->is_w_probing)
+        {
+            Simulator::Schedule(Time(NanoSeconds(100)), &overlayApplication::CentralOrchestration, this);
+        }
     }
     // else is_run = false;
     
@@ -649,7 +657,6 @@ void overlayApplication::SendProbeNaive(uint32_t idx)
         // std::cout << "Probe: " << m_local_ID << " to " << idx << ": " << uint32_t(tagToSend.GetUeID()) << " with ID " << tagToSend.GetPktID() << " at " << "\t" << Now() << ": " << tagToSend.GetStartTime() << std::endl;
         p->ReplacePacketTag(tagToSend);
         tab_socket[routes[1]]->Send(p);
-        
     }
 
     // tab_socket[routes[1]]->Send(p);

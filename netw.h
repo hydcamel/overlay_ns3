@@ -65,6 +65,7 @@ public:
     void read_gnb_coordinate(std::string filename);
     void read_hyper_param(std::string filename);
     void read_n_UE(std::string filename);
+    void read_bg_ratio(std::string filename);
 
     void write_queuing_cnt(std::string filename);
     void write_delays_cnt(std::string filename);
@@ -83,8 +84,11 @@ public:
     uint32_t avg_pkt_transmission_delay;
     std::vector<uint32_t> n_perUE;
     uint32_t distance_ue_from_gnb = 20;
-    std::vector<int> pos_ue_x {1, -1, 0, 0, 1, -1, -1, 1}; // 0: 0, 1: '+', -1: '-'
-    std::vector<int> pos_ue_y {0, 0, -1, 1, 1, 1, -1, -1};
+    std::vector<std::vector<double>> bg_ratio;
+    std::string bg_ratio_file;
+    std::vector<std::vector<uint32_t>> pareto_wait_time;
+    // std::vector<int> pos_ue_x {1, -1, 0, 0, 1, -1, -1, 1}; // 0: 0, 1: '+', -1: '-'
+    // std::vector<int> pos_ue_y {0, 0, -1, 1, 1, 1, -1, -1};
 
     /**
      * overlay network
@@ -126,7 +130,7 @@ public:
     bool is_param_probing = true;
     std::unordered_set<uint32_t> set_tb;
     uint32_t tau_attack;
-    // std::vector<uint32_t> cnt_node_received_pkt;
+    std::vector<uint32_t> cnt_node_received_pkt;
     // std::vector<uint32_t> cnt_node_attack_pkt;
 
 

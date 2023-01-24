@@ -14,7 +14,8 @@ for i = 1 : length(SPR)
 end
 
 %% Run simulation through python
-para_probe = py.dict(pyargs('E_cur_idxlist',E_cur_idxlist, 'shape', pareto_shape, 'tb', [tb]));
+% para_probe = py.dict(pyargs('E_cur_idxlist',E_cur_idxlist, 'shape', pareto_shape, 'tb', [tb]));
+para_probe = py.dict(pyargs('E_cur_idxlist', E_cur_idxlist, 'shape', pareto_shape, 'tb', [ta, tb], 'probe_pkt_size', 50, 'probe_param_interval', 0, 'tau', 0));
 %% Prepare Python Env
 if count(py.sys.path,'') == 0
     insert(py.sys.path,int32(0),'');

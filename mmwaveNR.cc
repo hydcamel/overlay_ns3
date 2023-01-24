@@ -318,34 +318,34 @@ void myNR::init_myNR(coordinate &gnb_coordinate, coordinate &ue_coordinate, uint
         for (uint16_t j = 0; j < ueNumPergNb; ++j)
         {
             double ut_x = 0, ut_y = 0;
-            switch (app_interface.meta->pos_ue_x[j])
-            {
-                case 0:
-                    ut_x = gnb_coordinate.x_val;
-                    break;
-                case 1:
-                    ut_x = gnb_coordinate.x_val + app_interface.meta->distance_ue_from_gnb;
-                    break;
-                case -1:
-                    ut_x = gnb_coordinate.x_val - app_interface.meta->distance_ue_from_gnb;
-                    break;
-                default:
-                    break;
-            }
-            switch (app_interface.meta->pos_ue_y[j])
-            {
-                case 0:
-                    ut_y = gnb_coordinate.y_val;
-                    break;
-                case 1:
-                    ut_y = gnb_coordinate.y_val + app_interface.meta->distance_ue_from_gnb;
-                    break;
-                case -1:
-                    ut_y = gnb_coordinate.y_val - app_interface.meta->distance_ue_from_gnb;
-                    break;
-                default:
-                    break;
-            }
+            // switch (app_interface.meta->pos_ue_x[j])
+            // {
+            //     case 0:
+            //         ut_x = gnb_coordinate.x_val;
+            //         break;
+            //     case 1:
+            //         ut_x = gnb_coordinate.x_val + app_interface.meta->distance_ue_from_gnb;
+            //         break;
+            //     case -1:
+            //         ut_x = gnb_coordinate.x_val - app_interface.meta->distance_ue_from_gnb;
+            //         break;
+            //     default:
+            //         break;
+            // }
+            // switch (app_interface.meta->pos_ue_y[j])
+            // {
+            //     case 0:
+            //         ut_y = gnb_coordinate.y_val;
+            //         break;
+            //     case 1:
+            //         ut_y = gnb_coordinate.y_val + app_interface.meta->distance_ue_from_gnb;
+            //         break;
+            //     case -1:
+            //         ut_y = gnb_coordinate.y_val - app_interface.meta->distance_ue_from_gnb;
+            //         break;
+            //     default:
+            //         break;
+            // }
             // std::cout << "app_interface.meta->pos_ue_x = " << app_interface.meta->pos_ue_x[j] << "ut_x = " << ut_x << "app_interface.meta->pos_ue_y = " << app_interface.meta->pos_ue_y[j] << ", ut_y = " << ut_y << std::endl;
             // ueNodes.Get (j)->GetObject<MobilityModel> ()->SetPosition (Vector (ut_x, ut_y, ueHeight)); // (x, y, z) in m
             utPositionAlloc->Add (Vector (ut_x, ut_y, ueHeight));
