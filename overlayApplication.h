@@ -48,6 +48,7 @@ public:
     void SendProbeNaive(uint32_t idx);
     bool StateCheckRecv();
     void Send_Attack_Flow(uint32_t idx);
+    void Implement_Attack(uint32_t idx);
 
 protected:
     virtual void DoDispose(void);

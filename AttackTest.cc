@@ -21,6 +21,13 @@ using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE ("Category_inference");
 
+enum ProjName
+{
+    WInf = 1,
+    Param = 2,
+    Attack = 3
+};
+
 void stop_NR(std::vector<Ptr<NrHelper>> &vec_nr)
 {
     std::cout << "NR dispose" << std::endl;
@@ -34,6 +41,7 @@ void stop_NR(std::vector<Ptr<NrHelper>> &vec_nr)
 int main (int argc, char *argv[])
 {
     bool logging = false;
+    ProjName cur_prj = ProjName::Attack;
     if (logging)
     {
         LogComponentEnable ("netw", LOG_LEVEL_INFO);
@@ -447,7 +455,7 @@ int main (int argc, char *argv[])
     // std::cout << "NR ID: " << NR_ID << "-PGW ID: " << vec_nr_app[NR_ID].pgw->GetId() << std::endl;
     // NR_ID = 4;
     // std::cout << "NR ID: " << NR_ID << "-PGW ID: " << vec_nr_app[NR_ID].pgw->GetId() << std::endl;
-    // Ptr<OutputStreamWrapper> routingStream = Create<OutputStreamWrapper> (&std::cout);
+    Ptr<OutputStreamWrapper> routingStream = Create<OutputStreamWrapper> (&std::cout);
     // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), underlayNodes.Get(0), routingStream, Time::Unit::NS);
     /* uint32_t node_idx = 3;
     Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), underlayNodes.Get(node_idx), routingStream, Time::Unit::NS);
@@ -472,11 +480,11 @@ int main (int argc, char *argv[])
     {
         std::cout << "device ID: " << i << " with address: " << tmpUE->GetObject<Ipv4> ()->GetAddress( i, 0 ).GetLocal() << std::endl;
     } */
-
-    // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), vec_nr_app[3].pgw, routingStream, Time::Unit::NS);
-    // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), vec_nr_app[3].gNbNodes.Get(0), routingStream, Time::Unit::NS);
-    // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), vec_nr_app[3].epcHelper->GetSgwNode(), routingStream, Time::Unit::NS);
-    // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), vec_nr_app[4].pgw, routingStream, Time::Unit::NS);
+    // std::cout << gNbNodes.GetN() << " " << ueNodes.GetN() << std::endl;
+    // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), pgw, routingStream, Time::Unit::NS);
+    // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), gNbNodes.Get(0), routingStream, Time::Unit::NS);
+    // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), ueNodes.Get(0), routingStream, Time::Unit::NS);
+    // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), epcHelper->GetSgwNode(), routingStream, Time::Unit::NS);
     // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), vec_nr_app[4].gNbNodes.Get(0), routingStream, Time::Unit::NS);
     // Ipv4RoutingHelper::PrintRoutingTableAt (MicroSeconds (5), vec_nr_app[4].epcHelper->GetSgwNode(), routingStream, Time::Unit::NS);
     // Ipv4RoutingHelper::PrintRoutingTableAllAt (Seconds (0.5), routingStream, Time::Unit::S);
@@ -486,7 +494,7 @@ int main (int argc, char *argv[])
     // Config::Connect( "/NodeList/*/$ns3::Ipv4L3Protocol/Tx", MakeCallback(&txTraceIpv4) );
     // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTx", MakeCallback(&p2pDevMacTx) );
     // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacRx", MakeCallback(&p2pDevMacRx) );
-    // // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTxDrop", MakeCallback(&p2pDevMacRx) );
+    // // // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/MacTxDrop", MakeCallback(&p2pDevMacRx) );
 
     // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxBegin", MakeCallback(&trace_PhyTxBegin) );
     // Config::Connect( "/NodeList/*/DeviceList/*/$ns3::PointToPointNetDevice/PhyTxEnd", MakeCallback(&trace_PhyTxEnd) );
@@ -494,19 +502,19 @@ int main (int argc, char *argv[])
 
     // Config::SetDefault ("/NodeList/*/DeviceList/*/$ns3::LteNetDevice/Mtu", UintegerValue (9000));
 
-    FlowMonitorHelper flowmonHelper;
-    NodeContainer endpointNodes;
-    endpointNodes.Add(underlayNodes);
-    // for (auto it = netw_meta.set_tb.begin(); it != netw_meta.set_tb.end(); it++)
-    // {
-    //     endpointNodes.Add (underlayNodes.Get(*it));
-    //     endpointNodes.Add (vec_UE[*it]);
-    // }
+    // FlowMonitorHelper flowmonHelper;
+    // NodeContainer endpointNodes;
+    // endpointNodes.Add(underlayNodes);
+    // // for (auto it = netw_meta.set_tb.begin(); it != netw_meta.set_tb.end(); it++)
+    // // {
+    // //     endpointNodes.Add (underlayNodes.Get(*it));
+    // //     endpointNodes.Add (vec_UE[*it]);
+    // // }
 
-    Ptr<ns3::FlowMonitor> monitor = flowmonHelper.Install (endpointNodes);
-    monitor->SetAttribute ("DelayBinWidth", DoubleValue (0.001));
-    monitor->SetAttribute ("JitterBinWidth", DoubleValue (0.001));
-    monitor->SetAttribute ("PacketSizeBinWidth", DoubleValue (20));
+    // Ptr<ns3::FlowMonitor> monitor = flowmonHelper.Install (endpointNodes);
+    // monitor->SetAttribute ("DelayBinWidth", DoubleValue (0.001));
+    // monitor->SetAttribute ("JitterBinWidth", DoubleValue (0.001));
+    // monitor->SetAttribute ("PacketSizeBinWidth", DoubleValue (20));
 
 
     NS_LOG_INFO("Run Simulation.");
@@ -520,78 +528,93 @@ int main (int argc, char *argv[])
     std::cout << "Before Destroy." << std::endl;
     char *cwd = get_current_dir_name();
     std::string pwd_tmp(cwd, cwd+strlen(cwd));
+    switch (cur_prj)
+    {
+        case ProjName::WInf:
+            netw_meta.write_delays_cnt(pwd_tmp + "/scratch/Category_inference/delays_cnt.csv");
+            break;
+        case ProjName::Param:
+            netw_meta.write_delays_cnt(pwd_tmp + "/scratch/CrossPathParam/delays_cnt.csv");
+            break;
+        case ProjName::Attack:
+            netw_meta.write_delays_cnt(pwd_tmp + "/scratch/AttackTest/delays_cnt.csv");
+            break;
+        default:
+            break;
+    }
+    
     // netw_meta.write_queuing_cnt(pwd_tmp + "/scratch/Category_inference/queuing_cnt.csv");
-    netw_meta.write_delays_cnt(pwd_tmp + "/scratch/Category_inference/delays_cnt.csv");
+    // netw_meta.write_delays_cnt(pwd_tmp + "/scratch/Category_inference/delays_cnt.csv");
     // netw_meta.write_true_delays_cnt(pwd_tmp + "/scratch/Category_inference/true_delays_cnt.csv");
     std::cout << "start Destroy." << std::endl;
 
 
-    // Print per-flow statistics
-    monitor->CheckForLostPackets ();
-    Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier> (flowmonHelper.GetClassifier ());
-    FlowMonitor::FlowStatsContainer stats = monitor->GetFlowStats ();
+    // // Print per-flow statistics
+    // monitor->CheckForLostPackets ();
+    // Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier> (flowmonHelper.GetClassifier ());
+    // FlowMonitor::FlowStatsContainer stats = monitor->GetFlowStats ();
 
-    double averageFlowThroughput = 0.0;
-    double averageFlowDelay = 0.0;
+    // double averageFlowThroughput = 0.0;
+    // double averageFlowDelay = 0.0;
 
-    std::ofstream outFile;
-    std::string simTag = "default";
-    std::string outputDir = "./";
-    std::string filename = outputDir + "/" + simTag;
-    outFile.open (filename.c_str (), std::ofstream::out | std::ofstream::trunc);
-    if (!outFile.is_open ())
-    {
-        std::cerr << "Can't open file " << filename << std::endl;
-        return 1;
-    }
+    // std::ofstream outFile;
+    // std::string simTag = "default";
+    // std::string outputDir = "./";
+    // std::string filename = outputDir + "/" + simTag;
+    // outFile.open (filename.c_str (), std::ofstream::out | std::ofstream::trunc);
+    // if (!outFile.is_open ())
+    // {
+    //     std::cerr << "Can't open file " << filename << std::endl;
+    //     return 1;
+    // }
 
-    outFile.setf (std::ios_base::fixed);
+    // outFile.setf (std::ios_base::fixed);
 
-    double flowDuration = (time_stop_simulation - Time(MicroSeconds(AppStartTime))).GetSeconds ();
-    for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator i = stats.begin (); i != stats.end (); ++i)
-    {
-        Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow (i->first);
-        std::stringstream protoStream;
-        protoStream << (uint16_t) t.protocol;
-        if (t.protocol == 6) protoStream.str ("TCP"); 
-        if (t.protocol == 17) protoStream.str ("UDP");
-        outFile << "Flow " << i->first << " (" << t.sourceAddress << ":" << t.sourcePort << " -> " << t.destinationAddress << ":" << t.destinationPort << ") proto " << protoStream.str () << "\n";
-        outFile << "  Tx Packets: " << i->second.txPackets << "\n";
-        outFile << "  Tx Bytes:   " << i->second.txBytes << "\n";
-        outFile << "  TxOffered:  " << i->second.txBytes * 8.0 / flowDuration / 1000.0 / 1000.0  << " Mbps\n";
-        outFile << "  Rx Bytes:   " << i->second.rxBytes << "\n";
-        outFile << "  Pkts Dropped:   " << i->second.lostPackets << "\n";
-        if (i->second.rxPackets > 0)
-        {
-            // Measure the duration of the flow from receiver's perspective
-            averageFlowThroughput += i->second.rxBytes * 8.0 / flowDuration / 1000 / 1000;
-            averageFlowDelay += 1000 * i->second.delaySum.GetSeconds () / i->second.rxPackets;
+    // double flowDuration = (time_stop_simulation - Time(MicroSeconds(AppStartTime))).GetSeconds ();
+    // for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator i = stats.begin (); i != stats.end (); ++i)
+    // {
+    //     Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow (i->first);
+    //     std::stringstream protoStream;
+    //     protoStream << (uint16_t) t.protocol;
+    //     if (t.protocol == 6) protoStream.str ("TCP"); 
+    //     if (t.protocol == 17) protoStream.str ("UDP");
+    //     outFile << "Flow " << i->first << " (" << t.sourceAddress << ":" << t.sourcePort << " -> " << t.destinationAddress << ":" << t.destinationPort << ") proto " << protoStream.str () << "\n";
+    //     outFile << "  Tx Packets: " << i->second.txPackets << "\n";
+    //     outFile << "  Tx Bytes:   " << i->second.txBytes << "\n";
+    //     outFile << "  TxOffered:  " << i->second.txBytes * 8.0 / flowDuration / 1000.0 / 1000.0  << " Mbps\n";
+    //     outFile << "  Rx Bytes:   " << i->second.rxBytes << "\n";
+    //     outFile << "  Pkts Dropped:   " << i->second.lostPackets << "\n";
+    //     if (i->second.rxPackets > 0)
+    //     {
+    //         // Measure the duration of the flow from receiver's perspective
+    //         averageFlowThroughput += i->second.rxBytes * 8.0 / flowDuration / 1000 / 1000;
+    //         averageFlowDelay += 1000 * i->second.delaySum.GetSeconds () / i->second.rxPackets;
 
-            outFile << "  Throughput: " << i->second.rxBytes * 8.0 / flowDuration / 1000 / 1000  << " Mbps\n";
-            outFile << "  Mean delay:  " << 1000 * i->second.delaySum.GetSeconds () / i->second.rxPackets << " ms\n";
-            //outFile << "  Mean upt:  " << i->second.uptSum / i->second.rxPackets / 1000/1000 << " Mbps \n";
-            outFile << "  Mean jitter:  " << 1000 * i->second.jitterSum.GetSeconds () / i->second.rxPackets  << " ms\n";
-        }
-        else
-        {
-            outFile << "  Throughput:  0 Mbps\n";
-            outFile << "  Mean delay:  0 ms\n";
-            outFile << "  Mean jitter: 0 ms\n";
-        }
-        outFile << "  Rx Packets: " << i->second.rxPackets << "\n";
-    }
+    //         outFile << "  Throughput: " << i->second.rxBytes * 8.0 / flowDuration / 1000 / 1000  << " Mbps\n";
+    //         outFile << "  Mean delay:  " << 1000 * i->second.delaySum.GetSeconds () / i->second.rxPackets << " ms\n";
+    //         //outFile << "  Mean upt:  " << i->second.uptSum / i->second.rxPackets / 1000/1000 << " Mbps \n";
+    //         outFile << "  Mean jitter:  " << 1000 * i->second.jitterSum.GetSeconds () / i->second.rxPackets  << " ms\n";
+    //     }
+    //     else
+    //     {
+    //         outFile << "  Throughput:  0 Mbps\n";
+    //         outFile << "  Mean delay:  0 ms\n";
+    //         outFile << "  Mean jitter: 0 ms\n";
+    //     }
+    //     outFile << "  Rx Packets: " << i->second.rxPackets << "\n";
+    // }
 
-    outFile << "\n\n  Mean flow throughput: " << averageFlowThroughput / stats.size () << "\n";
-    outFile << "  Mean flow delay: " << averageFlowDelay / stats.size () << "\n";
+    // outFile << "\n\n  Mean flow throughput: " << averageFlowThroughput / stats.size () << "\n";
+    // outFile << "  Mean flow delay: " << averageFlowDelay / stats.size () << "\n";
 
-    outFile.close ();
+    // outFile.close ();
 
-    std::ifstream f (filename.c_str ());
+    // std::ifstream f (filename.c_str ());
 
-    if (f.is_open ())
-    {
-        std::cout << f.rdbuf ();
-    }
+    // if (f.is_open ())
+    // {
+    //     std::cout << f.rdbuf ();
+    // }
 
 
     Simulator::Destroy();

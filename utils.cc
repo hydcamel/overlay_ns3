@@ -11,7 +11,9 @@ void read_setup(name_input_files &input_fd)
     char *cwd = get_current_dir_name();
     std::string pwd_tmp(cwd, cwd+strlen(cwd));
     std::cout << pwd_tmp << std::endl;
-    std::ifstream infile( pwd_tmp + "/scratch//Category_inference/setup.txt");
+    // std::ifstream infile( pwd_tmp + "/scratch//Category_inference/setup.txt");
+    // std::ifstream infile( pwd_tmp + "/scratch/CrossPathParam/setup.txt");
+    std::ifstream infile( pwd_tmp + "/scratch/AttackTest/setup.txt");
     // std::ifstream infile("/export/home/Yudi_Huang/ns-allinone-3.36.1/ns-3.36.1/scratch/CategoryQueue/setup.txt");
     std::string line;
     std::string temp;
@@ -79,7 +81,7 @@ void p2pDevMacTx(std::string context, Ptr<const Packet> packet){
     {
         std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
     } */
-    if (tagPktRecv.GetIsProbe() > 0)
+    if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST &&tagPktRecv.GetIsProbe() > 0)
     {
         std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
     }
@@ -97,7 +99,7 @@ void p2pDevMacRx(std::string context, Ptr<const Packet> packet){
     {
         std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
     } */
-    if (tagPktRecv.GetIsProbe() > 0)
+    if (tagPktRecv.GetSourceID() == SRC && tagPktRecv.GetDestID() == DEST && tagPktRecv.GetIsProbe() > 0)
     {
         std::cout << context << "\t" << Now() << ", PktID= " << tagPktRecv.GetPktID()  << ": src:" << (uint32_t)tagPktRecv.GetSourceID() << " dest:" << (uint32_t)tagPktRecv.GetDestID() << std::endl;
     }

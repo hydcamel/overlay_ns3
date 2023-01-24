@@ -2,6 +2,8 @@ n_probes 10000
 E_cur_idxlist 3 -1 -1 -1
 e_new_idx 0
 probe_type naive
-len_long_train 1000
+len_long_train 0
 n_uePerGnb 1
 is_w_probing 0
+attack_interval_file /export/home/Yudi_Huang/ns-3-dev/scratch/AttackTest/attack_interval.txt
+bd_ratio_file /export/home/Yudi_Huang/ns-3-dev/scratch/AttackTest/bg_ratio_nb10_10.csv

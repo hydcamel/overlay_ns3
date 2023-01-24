@@ -1,6 +1,6 @@
-E_cur_idxlist 5 2 5 12 15 16
+E_cur_idxlist 8 2 5 6 7 8 9 11 16
 pareto_shape 2.04
-tb 1 3
-probe_param_interval 7017
+tb 8 3 6 7 8 9 10 12 17
+probe_param_interval 0
 probe_pkt_size 1000
-tau 14
+tau -1

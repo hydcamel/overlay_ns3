@@ -45,6 +45,12 @@ netw::netw(name_input_files &fd_setup)
 	read_gnb_coordinate(fd_setup.gnb_coordinate_files);
 	read_hyper_param(fd_setup.hyper_param_files);
 	read_n_UE(fd_setup.nUE_filename);
+	read_bg_ratio(bg_ratio_file);
+	if (is_attack_test)
+	{
+		read_attack_interval(attack_interval_file);
+	}
+	
 }
 
 void netw::read_underlay(std::string filename)
@@ -330,6 +336,20 @@ void netw::read_probe_profile(std::string filename)
 			iss >> temp >> tmp_int_val;
 			is_w_probing = tmp_int_val >= 1 ? true : false;
 		}
+		else if (line.substr(0, 13).compare("bd_ratio_file") == 0)
+		{
+			// std::string bg_ratio_file;
+			iss >> temp >> bg_ratio_file;
+
+			// read_bg_ratio(bg_ratio_file);
+		}
+		else if (line.substr(0, 20).compare("attack_interval_file") == 0)
+		{
+			iss >> temp >> attack_interval_file;
+			is_attack_test = true;
+			is_param_probing = false;
+			is_w_probing = false;
+		}
 	}
 	// uint32_t s, t;
 	for (auto it = cnt_delays.begin(); it != cnt_delays.end(); it ++)
@@ -384,6 +404,55 @@ void netw::read_n_UE(std::string filename)
 	}
 }
 
+void netw::read_bg_ratio(std::string filename)
+{
+	std::ifstream infile(filename);
+    std::string line;
+	// std::string tmp;
+	std::cout << "read_bg_ratio: " << filename << "; is_open = " << infile.is_open() << std::endl;
+	bg_ratio.resize(n_nodes);
+	pareto_wait_time.resize(n_nodes);
+	for (uint32_t i = 0; i < n_nodes; i++)
+	{
+		bg_ratio[i].resize(n_nodes, 4.0);
+		pareto_wait_time[i].resize(n_nodes, 0.0);
+	}
+	for (uint32_t i = 0; i < n_nodes; i++)
+	{
+		getline(infile, line);
+		std::istringstream iss(line);
+		for (uint32_t j = 0; j < n_nodes; j++)
+		{
+			iss >> bg_ratio[i][j];
+		}
+	}
+	// min_bw = *std::min_element(bw.begin(), bw.end());
+	for (uint32_t i = 0; i < n_nodes; i++)
+	{
+		for (uint32_t j = 0; j < n_nodes; j++)
+		{
+			// pareto_wait_time[i][j] = (uint32_t)((long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * 4);
+			pareto_wait_time[i][j] = (uint32_t)((long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * bg_ratio[i][j]);
+			// std::cout << (long double)(avg_pktSize*8*USTOS)/ (long double)(min_bw*1000) * bg_ratio[i][j] << " ";
+		}
+	}
+}
+
+void netw::read_attack_interval(std::string filename)
+{
+	std::ifstream infile(filename);
+    std::string line;
+	// std::string tmp;
+	std::cout << "read_attack_interval: " << filename << "; is_open = " << infile.is_open() << std::endl;
+	attack_interval.resize(n_nodes, 1);
+	getline(infile, line);
+	std::istringstream iss(line);
+	for (uint32_t i = 0; i < n_nodes; i++)
+	{
+		iss >> attack_interval[i];
+	}
+}
+
 void netw::read_hyper_param(std::string filename)
 {
 	std::ifstream infile(filename);
@@ -435,9 +504,12 @@ void netw::read_hyper_param(std::string filename)
 			iss >> temp >> tau_attack;
 			std::string keys_ = std::to_string(idx_orchestration) + " " + std::to_string(tau_attack);
 			std::vector<int> route = routing_map[keys_];
-			for (uint32_t i = 0; i < route.size()-1; i++)
+			if (route.size() > 0)
 			{
-				adj_mat[route[i]][route[i+1]] = true;
+				for (uint32_t i = 0; i < route.size()-1; i++)
+				{
+					adj_mat[route[i]][route[i+1]] = true;
+				}
 			}
 		}
 		else if (line.substr(0, 2).compare("tb") == 0)

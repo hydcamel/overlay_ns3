@@ -15,8 +15,8 @@
 namespace ns3
 {
 
-#define SRC 17
-#define DEST 3
+#define SRC 1
+#define DEST 4
 #define ISNR true
 
 typedef struct name_files
